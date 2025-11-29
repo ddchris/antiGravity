@@ -2,6 +2,7 @@
 import { useCartStore } from '../stores/cartStore'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import BaseImage from '../components/BaseImage.vue'
 
 const cartStore = useCartStore()
 const { t } = useI18n()
@@ -55,7 +56,8 @@ const captureCart = async () => {
       <div v-if="cartStore.cartItems.length > 0">
         <!-- 截圖區域 - 保留深色模式 -->
         <div id="cart-capture-area" class="mb-6">
-          <table class="w-full">
+          <!-- Desktop Table View -->
+          <table class="w-full hidden md:table">
             <thead>
               <tr class="border-b-2 border-gray-300 dark:border-gray-600">
                 <th class="py-3 px-4 text-left text-gray-700 dark:text-gray-300 font-semibold">{{ $t('cart.productInfo') }}</th>
@@ -68,7 +70,7 @@ const captureCart = async () => {
               <tr v-for="item in cartStore.cartItems" :key="item.id" class="border-b border-gray-200 dark:border-gray-700">
                 <td class="py-4 px-4">
                   <div class="flex items-center space-x-3">
-                    <img :src="item.imageUrl" :alt="item.name" class="w-16 h-16 object-cover rounded-lg">
+                    <BaseImage :src="item.imageUrl" :alt="item.name" class-name="w-16 h-16 object-cover rounded-lg" />
                     <span class="text-gray-800 dark:text-gray-200 font-medium">{{ item.name }}</span>
                   </div>
                 </td>
@@ -112,6 +114,51 @@ const captureCart = async () => {
               </tr>
             </tbody>
           </table>
+
+          <!-- Mobile Card View -->
+          <div class="md:hidden space-y-4">
+            <div v-for="item in cartStore.cartItems" :key="item.id" class="bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-600">
+              <div class="flex items-start space-x-4">
+                <BaseImage :src="item.imageUrl" :alt="item.name" class-name="w-20 h-20 object-cover rounded-lg flex-shrink-0" />
+                <div class="flex-1 min-w-0">
+                  <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-1 truncate">{{ item.name }}</h3>
+                  <p class="text-indigo-600 dark:text-indigo-400 font-bold mb-2">{{ formatPrice(item.price) }}</p>
+                  
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                      <button
+                        @click="cartStore.decrementQuantity(item.id)"
+                        :class="[
+                          'w-8 h-8 rounded-full flex items-center justify-center font-bold text-white transition-all',
+                          item.quantity === 1 
+                            ? 'bg-orange-500 hover:bg-orange-600' 
+                            : 'bg-red-500 hover:bg-red-600'
+                        ]"
+                      >
+                        {{ item.quantity === 1 ? '🗑️' : '−' }}
+                      </button>
+                      
+                      <span class="bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 py-1 px-3 rounded-full font-medium min-w-[2rem] text-center text-sm">
+                        {{ item.quantity }}
+                      </span>
+                      
+                      <button
+                        @click="cartStore.incrementQuantity(item.id)"
+                        class="w-8 h-8 rounded-full bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center font-bold text-white transition-all"
+                      >
+                        +
+                      </button>
+                    </div>
+                    
+                    <div class="text-right">
+                      <p class="text-xs text-gray-500 dark:text-gray-400">{{ $t('cart.subtotal') }}</p>
+                      <p class="font-bold text-indigo-600 dark:text-indigo-400">{{ formatPrice(item.price * item.quantity) }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- 總計 -->
           <div class="mt-6 pt-4 border-t-2 border-gray-300 dark:border-gray-600 text-right">

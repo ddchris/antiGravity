@@ -1,11 +1,12 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import BaseImage from '../components/BaseImage.vue'
 const { t } = useI18n()
 </script>
 
 <template>
   <div class="container mx-auto px-4 py-12 max-w-2xl">
-    <div class="bg-white dark:bg-gray-700 rounded-2xl shadow-xl p-8 md:p-12 transition-colors">
+    <div class="bg-white dark:bg-gray-700 rounded-2xl shadow-xl p-6 md:p-12 transition-colors">
       <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">{{ $t('contact.title') }}</h1>
 
       <!-- 聯絡資訊 -->
@@ -27,11 +28,11 @@ const { t } = useI18n()
       <!-- QR Code -->
       <div class="flex flex-col items-center mb-10">
         <p class="text-gray-600 dark:text-gray-300 mb-2 font-medium">掃描加入官方 Line</p>
-        <img
+        <BaseImage
           src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://antigravity.store"
           alt="QR Code"
-          class="w-32 h-32 border-4 border-white dark:border-gray-600 shadow-lg rounded-lg"
-        >
+          class-name="w-32 h-32 border-4 border-white dark:border-gray-600 shadow-lg rounded-lg"
+        />
       </div>
 
       <!-- 模擬表單 -->

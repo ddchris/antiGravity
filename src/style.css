@@ -11,6 +11,27 @@ body {
   background-attachment: fixed;
   background-size: 200% 200%;
   animation: gradientShift 10s ease infinite;
+
+  /* Disable text cursor and selection */
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Restore cursor for interactive elements */
+input,
+textarea,
+[contenteditable] {
+  cursor: text;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+a,
+button,
+select,
+[role="button"] {
+  cursor: pointer;
 }
 
 /* 漸層動畫效果 */
