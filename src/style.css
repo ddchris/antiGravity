@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 柔和漸層背景 - 提升視覺舒適度 */
+body {
+  background: linear-gradient(135deg,
+      #e0c3fc 0%,
+      #8ec5fc 50%,
+      #fbc2eb 100%);
+  background-attachment: fixed;
+  background-size: 200% 200%;
+  animation: gradientShift 10s ease infinite;
+}
+
+/* 漸層動畫效果 */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}

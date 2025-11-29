@@ -4,16 +4,17 @@ import TheHeader from './components/TheHeader.vue'
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 bg-cover bg-fixed bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1497032628150-a97cdac9b361?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
-    <!-- Overlay for better readability -->
-    <div class="absolute inset-0 bg-white/80 z-0 pointer-events-none fixed"></div>
+  <!-- 全域半透明遮罩 - 提升背景圖與內容的融合度 -->
+  <div class="fixed inset-0 bg-white/70 dark:bg-black/70 z-[-1] pointer-events-none transition-colors"></div>
     
-    <div class="relative z-10">
-      <TheHeader />
-      <main>
+  <div class="relative z-10 min-h-screen">
+    <TheHeader />
+    <main class="container mx-auto px-4 py-8">
+      <!-- 內容容器 - 半透明背景提升閱讀性 -->
+      <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-lg p-6 transition-colors">
         <RouterView />
-      </main>
-    </div>
+      </div>
+    </main>
   </div>
 </template>
 

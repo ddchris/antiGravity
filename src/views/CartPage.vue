@@ -1,8 +1,10 @@
 <script setup>
 import { useCartStore } from '../stores/cartStore'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const cartStore = useCartStore()
+const { t } = useI18n()
 
 // 格式化價格為 USD
 const formatPrice = (price) => {
@@ -12,80 +14,118 @@ const formatPrice = (price) => {
   }).format(price)
 }
 
-// 截圖並下載功能
+// 截圖功能 - 保留深色模式背景
 const captureCart = async () => {
-  // 確保 html2canvas 已載入
   if (typeof window.html2canvas === 'undefined') {
-    alert('截圖功能尚未準備好，請稍後再試或檢查網路連線。')
+    alert(t('cart.screenshot') + ' - 功能尚未準備好')
     return
   }
 
-  const cartElement = document.getElementById('cart-container')
+  const captureElement = document.getElementById('cart-capture-area')
+  
+  // 檢測當前是否為深色模式
+  const isDarkMode = document.documentElement.classList.contains('dark')
+  const backgroundColor = isDarkMode ? '#1f2937' : '#ffffff' // 深色模式用深灰色，淺色模式用白色
   
   try {
-    const canvas = await window.html2canvas(cartElement, {
-      useCORS: true, // 允許跨域圖片 (如果有的話)
-      scale: 2, // 提高解析度
-      backgroundColor: '#ffffff' // 確保背景為白色
+    const canvas = await window.html2canvas(captureElement, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: backgroundColor // 根據當前模式設定背景色
     })
     
-    // 創建下載連結
     const link = document.createElement('a')
-    link.download = 'my-shopping-cart.png'
+    link.download = 'shopping-cart-' + Date.now() + '.png'
     link.href = canvas.toDataURL('image/png')
     link.click()
   } catch (error) {
     console.error('截圖失敗:', error)
-    alert('截圖失敗，請查看控制台錯誤訊息。')
+    alert('截圖失敗：' + error.message)
   }
 }
 </script>
 
 <template>
   <div class="container mx-auto px-4 py-8">
-    <div id="cart-container" class="bg-white/90 backdrop-blur-sm rounded-xl shadow-xl p-8 max-w-4xl mx-auto">
-      <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center border-b pb-4">您的購物車</h1>
+    <div id="cart-container" class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-xl p-8 max-w-4xl mx-auto transition-colors">
+      <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8 text-center border-b dark:border-gray-600 pb-4">{{ $t('cart.title') }}</h1>
 
       <!-- 購物車列表 -->
       <div v-if="cartStore.cartItems.length > 0">
-        <div class="overflow-x-auto">
-          <table class="w-full mb-8">
+        <!-- 截圖區域 - 保留深色模式 -->
+        <div id="cart-capture-area" class="mb-6">
+          <table class="w-full">
             <thead>
-              <tr class="border-b-2 border-gray-200 text-left">
-                <th class="py-4 px-4 text-gray-600 font-semibold">商品資訊</th>
-                <th class="py-4 px-4 text-gray-600 font-semibold text-center">數量</th>
-                <th class="py-4 px-4 text-gray-600 font-semibold text-right">單價</th>
-                <th class="py-4 px-4 text-gray-600 font-semibold text-right">小計</th>
+              <tr class="border-b-2 border-gray-300 dark:border-gray-600">
+                <th class="py-3 px-4 text-left text-gray-700 dark:text-gray-300 font-semibold">{{ $t('cart.productInfo') }}</th>
+                <th class="py-3 px-4 text-center text-gray-700 dark:text-gray-300 font-semibold">{{ $t('cart.quantity') }}</th>
+                <th class="py-3 px-4 text-right text-gray-700 dark:text-gray-300 font-semibold">{{ $t('cart.price') }}</th>
+                <th class="py-3 px-4 text-right text-gray-700 dark:text-gray-300 font-semibold">{{ $t('cart.subtotal') }}</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in cartStore.cartItems" :key="item.id" class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+              <tr v-for="item in cartStore.cartItems" :key="item.id" class="border-b border-gray-200 dark:border-gray-700">
                 <td class="py-4 px-4">
-                  <div class="flex items-center space-x-4">
-                    <img :src="item.imageUrl" :alt="item.name" class="w-16 h-16 object-cover rounded-lg shadow-sm">
-                    <span class="font-medium text-gray-800">{{ item.name }}</span>
+                  <div class="flex items-center space-x-3">
+                    <img :src="item.imageUrl" :alt="item.name" class="w-16 h-16 object-cover rounded-lg">
+                    <span class="text-gray-800 dark:text-gray-200 font-medium">{{ item.name }}</span>
                   </div>
                 </td>
-                <td class="py-4 px-4 text-center">
-                  <span class="bg-gray-100 text-gray-800 py-1 px-3 rounded-full font-medium">{{ item.quantity }}</span>
+                <td class="py-4 px-4">
+                  <div class="flex items-center justify-center space-x-2">
+                    <!-- 減號按鈕 -->
+                    <button
+                      @click="cartStore.decrementQuantity(item.id)"
+                      :class="[
+                        'w-8 h-8 rounded-full flex items-center justify-center font-bold text-white transition-all',
+                        item.quantity === 1 
+                          ? 'bg-orange-500 hover:bg-orange-600' 
+                          : 'bg-red-500 hover:bg-red-600'
+                      ]"
+                      :title="item.quantity === 1 ? t('cart.remove') : t('cart.decrease')"
+                    >
+                      {{ item.quantity === 1 ? '🗑️' : '−' }}
+                    </button>
+                    
+                    <!-- 數量顯示 -->
+                    <span class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-1 px-4 rounded-full font-medium min-w-[3rem] text-center">
+                      {{ item.quantity }}
+                    </span>
+                    
+                    <!-- 加號按鈕 -->
+                    <button
+                      @click="cartStore.incrementQuantity(item.id)"
+                      class="w-8 h-8 rounded-full bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center font-bold text-white transition-all"
+                      :title="t('cart.increase')"
+                    >
+                      +
+                    </button>
+                  </div>
                 </td>
-                <td class="py-4 px-4 text-right text-gray-600">
+                <td class="py-4 px-4 text-right text-gray-600 dark:text-gray-300">
                   {{ formatPrice(item.price) }}
                 </td>
-                <td class="py-4 px-4 text-right font-bold text-indigo-600">
+                <td class="py-4 px-4 text-right font-bold text-indigo-600 dark:text-indigo-400">
                   {{ formatPrice(item.price * item.quantity) }}
                 </td>
               </tr>
             </tbody>
           </table>
+
+          <!-- 總計 -->
+          <div class="mt-6 pt-4 border-t-2 border-gray-300 dark:border-gray-600 text-right">
+            <span class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+              {{ $t('cart.total') }}：
+            </span>
+            <span class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+              {{ formatPrice(cartStore.totalPrice) }}
+            </span>
+          </div>
         </div>
 
-        <!-- 總計與操作 -->
-        <div class="flex flex-col md:flex-row justify-between items-center mt-8 pt-6 border-t border-gray-200">
-          <div class="text-2xl font-bold text-gray-800 mb-4 md:mb-0">
-            總計：<span class="text-indigo-600">{{ formatPrice(cartStore.totalPrice) }}</span>
-          </div>
-          
+        <!-- 截圖按鈕 - 在截圖區域外 -->
+        <div class="flex justify-center mt-6">
           <button 
             @click="captureCart"
             class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium shadow-md hover:shadow-lg transition-all flex items-center space-x-2"
@@ -93,7 +133,7 @@ const captureCart = async () => {
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
-            <span>截圖並下載</span>
+            <span>{{ $t('cart.screenshot') }}</span>
           </button>
         </div>
       </div>
@@ -101,13 +141,13 @@ const captureCart = async () => {
       <!-- 空購物車提示 -->
       <div v-else class="text-center py-12">
         <div class="text-6xl mb-4">🛒</div>
-        <h2 class="text-2xl font-bold text-gray-800 mb-2">購物車是空的！</h2>
-        <p class="text-gray-600 mb-8">看起來您還沒有加入任何商品。</p>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">{{ $t('cart.empty') }}</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-8">{{ $t('cart.emptyDesc') }}</p>
         <RouterLink 
           to="/" 
           class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium shadow-md hover:shadow-lg"
         >
-          去逛逛商品
+          {{ $t('cart.goShopping') }}
         </RouterLink>
       </div>
     </div>

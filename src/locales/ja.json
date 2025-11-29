@@ -1,0 +1,35 @@
+{
+  "header": {
+    "brand": "Antigravity Store",
+    "products": "商品一覧",
+    "contact": "お問い合わせ",
+    "cart": "カート"
+  },
+  "cart": {
+    "title": "ショッピングカート",
+    "empty": "カートは空です！",
+    "emptyDesc": "まだ商品が追加されていないようです。",
+    "goShopping": "買い物を始める",
+    "total": "合計",
+    "screenshot": "スクリーンショット",
+    "quantity": "数量",
+    "price": "単価",
+    "subtotal": "小計",
+    "productInfo": "商品情報",
+    "remove": "クリックして削除",
+    "decrease": "数量を減らす",
+    "increase": "数量を増やす"
+  },
+  "product": {
+    "addToCart": "カートに追加",
+    "added": "追加しました！",
+    "featured": "おすすめ商品"
+  },
+  "contact": {
+    "title": "お問い合わせ",
+    "name": "お名前",
+    "email": "メールアドレス",
+    "message": "メッセージ",
+    "send": "送信"
+  }
+}

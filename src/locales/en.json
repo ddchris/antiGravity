@@ -1,0 +1,35 @@
+{
+  "header": {
+    "brand": "Antigravity Store",
+    "products": "Products",
+    "contact": "Contact Us",
+    "cart": "Cart"
+  },
+  "cart": {
+    "title": "Your Shopping Cart",
+    "empty": "Your cart is empty!",
+    "emptyDesc": "Looks like you haven't added any items yet.",
+    "goShopping": "Start Shopping",
+    "total": "Total",
+    "screenshot": "Screenshot & Download",
+    "quantity": "Quantity",
+    "price": "Price",
+    "subtotal": "Subtotal",
+    "productInfo": "Product Info",
+    "remove": "Click to remove",
+    "decrease": "Decrease quantity",
+    "increase": "Increase quantity"
+  },
+  "product": {
+    "addToCart": "Add to Cart",
+    "added": "Added!",
+    "featured": "Featured Products"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "header": {
+    "brand": "Antigravity Store",
+    "products": "상품 목록",
+    "contact": "문의하기",
+    "cart": "장바구니"
+  },
+  "cart": {
+    "title": "장바구니",
+    "empty": "장바구니가 비어있습니다!",
+    "emptyDesc": "아직 상품을 추가하지 않으신 것 같습니다.",
+    "goShopping": "쇼핑 시작하기",
+    "total": "합계",
+    "screenshot": "스크린샷 다운로드",
+    "quantity": "수량",
+    "price": "단가",
+    "subtotal": "소계",
+    "productInfo": "상품 정보",
+    "remove": "클릭하여 제거",
+    "decrease": "수량 감소",
+    "increase": "수량 증가"
+  },
+  "product": {
+    "addToCart": "장바구니에 담기",
+    "added": "담았습니다!",
+    "featured": "추천 상품"
+  },
+  "contact": {
+    "title": "문의하기",
+    "name": "이름",
+    "email": "이메일",
+    "message": "메시지",
+    "send": "보내기"
+  }
+}
