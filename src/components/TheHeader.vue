@@ -26,6 +26,13 @@ import { RouterLink } from 'vue-router'
         >
           聯絡我們
         </RouterLink>
+        <RouterLink
+          to="/cart"
+          class="text-gray-600 hover:text-indigo-600 font-medium transition-colors"
+          active-class="text-indigo-600 font-bold"
+        >
+          購物車
+        </RouterLink>
       </div>
     </nav>
   </header>

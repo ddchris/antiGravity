@@ -1,5 +1,5 @@
 <script setup>
-defineProps({
+const props = defineProps({
   product: {
     type: Object,
     required: true
@@ -12,6 +12,20 @@ const formatPrice = (price) => {
     style: 'currency',
     currency: 'USD'
   }).format(price)
+}
+
+import { useCartStore } from '../stores/cartStore'
+import { ref } from 'vue'
+
+const cartStore = useCartStore()
+const isAdded = ref(false)
+
+const handleAddToCart = () => {
+  cartStore.addToCart(props.product)
+  isAdded.value = true
+  setTimeout(() => {
+    isAdded.value = false
+  }, 1500)
 }
 </script>
 
@@ -32,8 +46,14 @@ const formatPrice = (price) => {
       <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ product.description }}</p>
       <div class="flex justify-between items-center">
         <span class="text-2xl font-bold text-indigo-600">{{ formatPrice(product.price) }}</span>
-        <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium">
-          加入購物車
+        <button 
+          @click="handleAddToCart"
+          :class="[
+            'px-4 py-2 rounded-lg transition-colors text-sm font-medium',
+            isAdded ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+          ]"
+        >
+          {{ isAdded ? '已加入！' : '加入購物車' }}
         </button>
       </div>
     </div>
