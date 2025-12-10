@@ -25,7 +25,13 @@
     "brand": "Store",
     "cart": "Cart",
     "contact": "Contact Us",
-    "products": "Products"
+    "products": "Products",
+    "about": "About Me"
+  },
+  "about": {
+    "title": "About Me",
+    "experience": "Work Experience",
+    "skills": "Professional Skills"
   },
   "product": {
     "addToCart": "Add to Cart",

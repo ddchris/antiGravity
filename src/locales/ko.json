@@ -25,7 +25,13 @@
     "brand": "Store",
     "cart": "장바구니",
     "contact": "문의하기",
-    "products": "상품 목록"
+    "products": "상품 목록",
+    "about": "내 소개"
+  },
+  "about": {
+    "title": "내 소개",
+    "experience": "경력",
+    "skills": "전문 기술"
   },
   "product": {
     "addToCart": "장바구니에 담기",

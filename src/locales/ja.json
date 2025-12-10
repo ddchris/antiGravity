@@ -25,7 +25,13 @@
     "brand": "Store",
     "cart": "カート",
     "contact": "お問い合わせ",
-    "products": "商品一覧"
+    "products": "商品一覧",
+    "about": "私について"
+  },
+  "about": {
+    "title": "私について",
+    "experience": "職務経歴",
+    "skills": "専門スキル"
   },
   "product": {
     "addToCart": "カートに追加",

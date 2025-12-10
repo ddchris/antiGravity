@@ -25,7 +25,13 @@
     "brand": "Store",
     "cart": "購物車",
     "contact": "聯絡我們",
-    "products": "商品導覽"
+    "products": "商品導覽",
+    "about": "關於我"
+  },
+  "about": {
+    "title": "關於我",
+    "experience": "工作經歷",
+    "skills": "專業技能"
   },
   "product": {
     "addToCart": "加入購物車",
