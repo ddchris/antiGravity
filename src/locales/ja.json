@@ -26,7 +26,7 @@
     "cart": "カート",
     "contact": "お問い合わせ",
     "products": "商品一覧",
-    "chat": "カスタマーサービス",
+    "chat": "AIコンサルタント",
     "about": "私について"
   },
   "about": {
@@ -61,7 +61,7 @@
     "noMore": "--- これ以上商品はありません ---"
   },
   "chat": {
-    "title": "カスタマーサービス",
+    "title": "AIコンサルタント",
     "welcome": "いらっしゃいませ！何かお手伝いしましょうか？",
     "placeholder": "メッセージを入力...",
     "send": "送信",
@@ -69,7 +69,8 @@
     "clearConfirm": "すべてのメッセージを削除してもよろしいですか？",
     "cleared": "チャット履歴をクリアしました",
     "scrollTop": "一番上へ",
-    "scrollBottom": "一番下へ"
+    "scrollBottom": "一番下へ",
+    "cancel": "キャンセル"
   },
   "error": {
     "title": "エラー",

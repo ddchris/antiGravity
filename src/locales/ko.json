@@ -26,7 +26,7 @@
     "cart": "장바구니",
     "contact": "문의하기",
     "products": "상품 목록",
-    "chat": "고객 서비스",
+    "chat": "AI 컨설턴트",
     "about": "내 소개"
   },
   "about": {
@@ -61,7 +61,7 @@
     "noMore": "--- 더 이상 상품이 없습니다 ---"
   },
   "chat": {
-    "title": "고객 서비스",
+    "title": "AI 컨설턴트",
     "welcome": "환영합니다! 무엇을 도와드릴까요?",
     "placeholder": "메세지를 입력하세요...",
     "send": "전송",
@@ -69,7 +69,8 @@
     "clearConfirm": "모든 메시지를 삭제하시겠습니까?",
     "cleared": "대화 기록이 삭제되었습니다",
     "scrollTop": "맨 위로",
-    "scrollBottom": "맨 아래로"
+    "scrollBottom": "맨 아래로",
+    "cancel": "취소"
   },
   "error": {
     "title": "오류",

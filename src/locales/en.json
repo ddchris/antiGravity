@@ -26,7 +26,7 @@
     "cart": "Cart",
     "contact": "Contact Us",
     "products": "Products",
-    "chat": "Online Service",
+    "chat": "AI Consultant",
     "about": "About Me"
   },
   "about": {
@@ -61,7 +61,7 @@
     "noMore": "--- No more products ---"
   },
   "chat": {
-    "title": "Online Service",
+    "title": "AI Consultant",
     "welcome": "Welcome! How can I help you?",
     "placeholder": "Type a message...",
     "send": "Send",
@@ -69,7 +69,8 @@
     "clearConfirm": "Are you sure you want to delete all messages?",
     "cleared": "Chat history cleared",
     "scrollTop": "Scroll to Top",
-    "scrollBottom": "Scroll to Bottom"
+    "scrollBottom": "Scroll to Bottom",
+    "cancel": "Cancel"
   },
   "error": {
     "title": "Error",

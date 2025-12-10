@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import BaseImage from '../components/BaseImage.vue'
 import * as htmlToImage from 'html-to-image'
+import { ElMessageBox } from 'element-plus'
 
 const cartStore = useCartStore()
 const { t } = useI18n()
@@ -20,7 +21,10 @@ const formatPrice = (price) => {
 const captureCart = async () => {
   const target = document.getElementById('cart-capture-area')
   if (!target) {
-    alert('找不到截圖區域')
+    ElMessageBox.alert(t('cart.captureAreaNotFound') || '找不到截圖區域', t('error.title') || '錯誤', {
+      type: 'error',
+      confirmButtonText: t('error.confirm') || '確定'
+    })
     return
   }
 
@@ -47,7 +51,10 @@ const captureCart = async () => {
 
   } catch (err) {
     console.error(err)
-    alert(`截圖失敗：${err.message}`)
+    ElMessageBox.alert(`截圖失敗：${err.message}`, t('error.title') || '錯誤', {
+      type: 'error',
+      confirmButtonText: t('error.confirm') || '確定'
+    })
   }
 }
 </script>

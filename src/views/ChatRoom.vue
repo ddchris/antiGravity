@@ -5,6 +5,7 @@ import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, getDoc
 import { useI18n } from 'vue-i18n'
 import { initWebComponent } from '../utils/web-component-proxy'
 import axios from 'axios' // Axios for API calls
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 const { t, locale } = useI18n()
 
@@ -12,6 +13,7 @@ const { t, locale } = useI18n()
 const messages = ref([])
 const inputMessage = ref('')
 const isTyping = ref(false)
+const isStreaming = ref(false) // For typing cursor animation
 const messagesContainer = ref(null)
 const isWebComponentLoaded = ref(false)
 
@@ -30,6 +32,20 @@ const currentUser = 'User' // Display name (could be dynamic later)
 // Firebase Collection Reference
 // Note: Ensure your Firestore security rules allow read/write for this collection
 const chatCollection = collection(db, 'chat')
+
+// Format bold text: **text** -> <strong>text</strong>
+const formatBold = (text) => {
+  if (!text) return ''
+  // Escape HTML first to prevent XSS
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+  // Convert **text** to <strong>text</strong>
+  return escaped
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/__(.+?)__/g, '<strong>$1</strong>')
+}
 
 // Scroll to bottom helper
 const scrollToBottom = async () => {
@@ -55,7 +71,20 @@ const handleScrollBottom = () => {
 
 // Clear Messages
 const clearMessages = async () => {
-    if (!confirm(t('chat.clearConfirm'))) return
+    try {
+        await ElMessageBox.confirm(
+            t('chat.clearConfirm'),
+            t('chat.clear'),
+            {
+                confirmButtonText: t('error.confirm') || '確定',
+                cancelButtonText: t('chat.cancel') || '取消',
+                type: 'warning'
+            }
+        )
+    } catch {
+        // User cancelled
+        return
+    }
     
     try {
         const querySnapshot = await getDocs(chatCollection)
@@ -182,7 +211,20 @@ const callRealGemini = async (text) => {
         try {
             const response = await axios.post(url, {
                 systemInstruction: {
-                    parts: [{ text: `你是一位友善且專業的AI助手。請使用${currentLang}回覆。在每個主要標題前加上適當的emoji圖示（如 🏛️ 文化、🍜 美食、🌿 自然、💡 建議等），讓內容更生動有趣。使用 Markdown 格式，包含標題、列表和粗體文字。` }]
+                    parts: [{ text: `你是一位超級親切、活潑又專業的AI助手！😊 請使用${currentLang}回覆。
+
+回覆風格指南：
+🎨 每個段落或重點前面加上相關的 emoji
+🗣️ 用輕鬆口語化的語氣，像朋友聊天一樣
+📝 使用清晰的換行，讓內容易讀
+✅ 可以用 **粗體** 來強調重要的詞彙
+✅ 列表項目用 • 圓點或 emoji 開頭（不要用 * 或 -）
+🎉 多用表情符號讓對話更生動！
+
+正確範例：
+• 這是 **重點** 說明
+• 第二點說明
+👉 **推薦** 去這裡玩！` }]
                 },
                 contents: [{ parts: [{ text: text }] }]
             })
@@ -260,69 +302,98 @@ const triggerAIResponse = async (userText) => {
   
   isTyping.value = false
 
-  // 3. Create Placeholder Message
+  // 3. Create Placeholder Message with unique ID
+  const messageId = Date.now()
   const newMessage = {
-    id: Date.now(),
+    id: messageId,
     userId: 'bot',
     from: 'Bot',
     text: '', // Start Empty
-    timestamp: new Date()
+    timestamp: new Date(),
+    isStreaming: true // Flag for cursor animation
   }
   
   // Push to local view immediately
   messages.value.push(newMessage)
+  isStreaming.value = true
   scrollToBottom()
 
-  // 4. Typing Effect (Stream)
+  // 4. Typing Effect (Stream) - Using array index for reactivity
   let i = 0
-  const streamSpeed = 10 // ms per char (was 40, now 4x faster)
+  const streamSpeed = 15 // ms per char (slower, more natural)
+  const charsPerTick = 2 // Type 2 chars per tick
   
-  const streamInterval = setInterval(async () => {
-    // Append char
-    newMessage.text += responseText.charAt(i)
-    i++
+  const streamInterval = setInterval(() => {
+    // Find the message in the array by ID
+    const msgIndex = messages.value.findIndex(m => m.id === messageId)
+    if (msgIndex === -1) {
+      clearInterval(streamInterval)
+      isStreaming.value = false
+      return
+    }
+    
+    // Append multiple characters per tick
+    const endIndex = Math.min(i + charsPerTick, responseText.length)
+    const newText = messages.value[msgIndex].text + responseText.substring(i, endIndex)
+    
+    // Update using Vue reactivity
+    messages.value[msgIndex] = {
+      ...messages.value[msgIndex],
+      text: newText
+    }
+    
+    i = endIndex
     
     // Auto Scroll
-    if (messagesContainer.value) { // Ensure container exists
+    if (messagesContainer.value) {
       messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
     }
     
     // Finish
     if (i >= responseText.length) {
       clearInterval(streamInterval)
+      
+      // Remove streaming flag
+      messages.value[msgIndex] = {
+        ...messages.value[msgIndex],
+        isStreaming: false
+      }
+      isStreaming.value = false
             
             // 5. Finalize (Optional: Save to DB for persistence)
             // We save the FULL message at the end. 
             // Note: onSnapshot might cause a slight flicker when it syncs back, but it ensures persistence.
-            try {
-                if (navigator.onLine) {
-                 await addDoc(chatCollection, {
-                    userId: 'bot',
-                    from: 'Bot',
-                    text: responseText,
-                    timestamp: serverTimestamp(),
-                    createdAt: Date.now()
-                 })
-                 // Remove the local "draft" to avoid duplicates (Snapshot will replace it)
-                 // Actually, we can just let snapshot replace it based on ID/Logic, 
-                 // but since ID is different, we might get duplicates. 
-                 // A simple way for Demo: Don't save to DB if we want smooth demo, 
-                 // OR remove the local one right before saving.
-                 
-                 // Let's remove the draft message we just typed out, letting the Snapshot take over
-                 // This causes a blink.
-                 // BETTER DEMO UX: Don't save to DB for 'Simulated' bots to avoid blink. 
-                 // User can clear chat to reset. 
-                 // (Reverting to original logic: Only save if necessary. For ChatGPT feel, 'Smooth' is better than 'Persist')
-                 // UNLESS user strictly wants persistence. Given 'Demo', Smoothness wins.
-                 // Commenting out DB save for Bot to prevent 'Blinking/Duplicate'.
-                 /* 
-                 await addDoc(...) 
-                 */
-                }
-            } catch (e) {
-                console.error("Failed to save bot response", e)
-            }
+            (async () => {
+              try {
+                  if (navigator.onLine) {
+                   await addDoc(chatCollection, {
+                      userId: 'bot',
+                      from: 'Bot',
+                      text: responseText,
+                      timestamp: serverTimestamp(),
+                      createdAt: Date.now()
+                   })
+                   // Remove the local "draft" to avoid duplicates (Snapshot will replace it)
+                   // Actually, we can just let snapshot replace it based on ID/Logic, 
+                   // but since ID is different, we might get duplicates. 
+                   // A simple way for Demo: Don't save to DB if we want smooth demo, 
+                   // OR remove the local one right before saving.
+                   
+                   // Let's remove the draft message we just typed out, letting the Snapshot take over
+                   // This causes a blink.
+                   // BETTER DEMO UX: Don't save to DB for 'Simulated' bots to avoid blink. 
+                   // User can clear chat to reset. 
+                   // (Reverting to original logic: Only save if necessary. For ChatGPT feel, 'Smooth' is better than 'Persist')
+                   // UNLESS user strictly wants persistence. Given 'Demo', Smoothness wins.
+                   // Commenting out DB save for Bot to prevent 'Blinking/Duplicate'.
+                   /* 
+                   await addDoc(...) 
+                   */
+                  }
+              } catch (e) {
+                  console.error("Failed to save bot response", e)
+              }
+            })()
         }
     }, streamSpeed)
     
@@ -450,7 +521,7 @@ const IconSend = {
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
-                {{ $t('chat.title') || 'Online Service' }}
+                {{ $t('chat.title') || 'AI Consultant' }}
             </h2>
             <span class="ml-3 text-xs bg-indigo-500 px-2 py-1 rounded-full text-indigo-100 flex items-center">
                 <span class="w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse"></span>
@@ -515,19 +586,17 @@ const IconSend = {
                 </div>
 
                 <div 
-                    class="px-4 py-2 rounded-2xl shadow-sm text-sm break-words relative"
+                    class="text-sm break-words relative"
                     :class="{
-                        'bg-indigo-600 text-white rounded-br-none': msg.userId === currentUserId,
-                        'bg-green-100 text-green-900 border border-green-200 rounded-bl-none': msg.from === 'Bot',
-                        'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-bl-none': msg.userId !== currentUserId && msg.from !== 'Bot'
+                        'px-4 py-2 rounded-2xl shadow-sm bg-indigo-600 text-white rounded-br-none': msg.userId === currentUserId,
+                        'text-gray-800 dark:text-gray-100': msg.from === 'Bot',
+                        'px-4 py-2 rounded-2xl shadow-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-bl-none': msg.userId !== currentUserId && msg.from !== 'Bot'
                     }"
                 >
-                    <div v-if="msg.userId !== currentUserId" class="text-xs opacity-75 mb-1 font-bold"
-                        :class="msg.from === 'Bot' ? 'text-green-700' : 'text-gray-500 dark:text-gray-400'"
-                    >
+                    <div v-if="msg.userId !== currentUserId && msg.from !== 'Bot'" class="text-xs opacity-75 mb-1 font-bold text-gray-500 dark:text-gray-400">
                         {{ msg.from }}
                     </div>
-                    <p class="whitespace-pre-wrap leading-relaxed">{{ msg.text }}</p>
+                    <p class="whitespace-pre-wrap leading-relaxed" v-html="formatBold(msg.text)"></p><span v-if="msg.isStreaming" class="inline-block ml-1 animate-pulse text-green-600 font-bold">...</span>
                     
                     <div 
                         class="text-[10px] mt-1 text-right"
