@@ -32,7 +32,25 @@
   "about": {
     "title": "私について",
     "experience": "職務経歴",
-    "skills": "専門スキル"
+    "skills": "専門スキル",
+    "education": "学歴",
+    "contact": "連絡先",
+    "downloadResume": "履歴書をダウンロード",
+    "phone": "電話",
+    "email": "メール",
+    "address": "住所",
+    "degree": {
+      "master": "修士",
+      "bachelor": "学士"
+    },
+    "university": {
+      "nthu": "国立清華大学",
+      "nctu": "国立交通大学"
+    },
+    "major": {
+      "materials": "材料学科",
+      "mse": "材料科学工学科"
+    }
   },
   "product": {
     "addToCart": "カートに追加",
@@ -52,5 +70,23 @@
     "cleared": "チャット履歴をクリアしました",
     "scrollTop": "一番上へ",
     "scrollBottom": "一番下へ"
+  },
+  "error": {
+    "title": "エラー",
+    "unknown": "不明なエラーが発生しました",
+    "badRequest": "リクエストパラメータが無効です",
+    "unauthorized": "セッションの有効期限が切れました。再度ログインしてください",
+    "authTitle": "認証失敗",
+    "forbidden": "この操作を実行する権限がありません",
+    "forbiddenTitle": "アクセス拒否",
+    "notFound": "リクエストされたリソースが見つかりません",
+    "serverError": "サーバー内部エラーが発生しました。後でもう一度お試しください",
+    "serverErrorTitle": "サーバーエラー",
+    "serviceUnavailable": "サービスは一時的に利用できません。後でもう一度お試しください",
+    "requestFailed": "リクエスト失敗",
+    "networkError": "サーバーに接続できません。ネットワーク接続を確認してください",
+    "networkErrorTitle": "ネットワークエラー",
+    "sendFailed": "リクエストの送信に失敗しました",
+    "confirm": "OK"
   }
 }

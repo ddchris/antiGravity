@@ -48,3 +48,115 @@ select,
     background-position: 0% 50%;
   }
 }
+
+/* Print styles - Header only on first page */
+@media print {
+
+  /* Page settings to minimize blank pages */
+  @page {
+    margin: 0.5cm;
+  }
+
+  /* Change header from fixed to static so it only appears once */
+  header {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    z-index: auto !important;
+  }
+
+  /* Hide background gradient */
+  body {
+    background: white !important;
+    animation: none !important;
+  }
+
+  /* Remove download button from print */
+  .download-resume-btn,
+  button:has(svg) {
+    display: none !important;
+  }
+
+  /* Prevent extra blank page at the end */
+  html,
+  body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Remove min-h-screen that causes extra page */
+  .min-h-screen {
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  /* Hide fixed and absolute positioned elements EXCEPT images */
+  .fixed:not(header),
+  .about-page>div:first-child
+
+  /* Background container only */
+    {
+    position: static !important;
+    display: none !important;
+  }
+
+  /* Keep images visible during print */
+  img,
+  .rounded-full {
+    display: block !important;
+    position: static !important;
+  }
+
+  /* But keep main content visible */
+  .about-page,
+  .relative.z-10,
+  .max-w-4xl {
+    position: static !important;
+    display: block !important;
+  }
+
+  /* Keep header visible but static */
+  header {
+    display: block !important;
+    position: static !important;
+  }
+
+  /* Reduce vertical spacing */
+  .space-y-8>*+* {
+    margin-top: 1rem !important;
+  }
+
+  .space-y-4>*+* {
+    margin-top: 0.5rem !important;
+  }
+
+  /* Remove any trailing space */
+  .about-page {
+    margin: 0 !important;
+    padding: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  main {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  #app {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Remove transform scaling that may affect page calculation */
+  .space-y-8 {
+    transform: none !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+}

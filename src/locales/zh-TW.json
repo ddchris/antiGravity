@@ -32,7 +32,25 @@
   "about": {
     "title": "關於我",
     "experience": "工作經歷",
-    "skills": "專業技能"
+    "skills": "專業技能",
+    "education": "學歷背景",
+    "contact": "聯絡方式",
+    "downloadResume": "下載履歷",
+    "phone": "手機",
+    "email": "電子郵件",
+    "address": "通訊地址",
+    "degree": {
+      "master": "碩士",
+      "bachelor": "學士"
+    },
+    "university": {
+      "nthu": "國立清華大學",
+      "nctu": "國立交通大學"
+    },
+    "major": {
+      "materials": "材料系",
+      "mse": "材料科學與工程學系"
+    }
   },
   "product": {
     "addToCart": "加入購物車",
@@ -52,5 +70,23 @@
     "cleared": "對話紀錄已清除",
     "scrollTop": "捲動至頂部",
     "scrollBottom": "捲動至底部"
+  },
+  "error": {
+    "title": "錯誤",
+    "unknown": "發生未知錯誤",
+    "badRequest": "請求參數錯誤",
+    "unauthorized": "登入已過期，請重新登入",
+    "authTitle": "認證失敗",
+    "forbidden": "您沒有權限執行此操作",
+    "forbiddenTitle": "權限不足",
+    "notFound": "請求的資源不存在",
+    "serverError": "伺服器內部錯誤，請稍後再試",
+    "serverErrorTitle": "伺服器錯誤",
+    "serviceUnavailable": "服務暫時不可用，請稍後再試",
+    "requestFailed": "請求失敗",
+    "networkError": "無法連接伺服器，請檢查網路連線",
+    "networkErrorTitle": "網路錯誤",
+    "sendFailed": "請求發送失敗",
+    "confirm": "確定"
   }
 }

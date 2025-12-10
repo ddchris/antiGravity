@@ -10,7 +10,10 @@
     "i18n:check": "node ./scripts/i18n-check.cjs"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
     "autoprefixer": "^10.4.22",
+    "axios": "^1.13.2",
+    "element-plus": "^2.12.0",
     "firebase": "^12.6.0",
     "html-to-image": "^1.11.13",
     "pinia": "^3.0.4",

@@ -50,6 +50,35 @@ const experiences = [
     description: '在辰城的時候，主要接觸到的技術包含 HTML、JS、CSS(scss)，Vue2(含 Vuex 狀態管理、npm、pnpm 做套件管理、Webpack打包、Jenkins部屬)、git版控、element UI。這段期間在資深同仁指導下，除了穩定地提升Vue2框架、JS ES6 新語法跟 RESRful API 串接熟練度之外，實務上的經驗還包含了如何處理跨瀏覽器相容性問題及 RWD 網頁的製作。整體而言這個時段是我前端基礎能力快速累積的階段。'
   }
 ]
+
+const educationHistory = [
+  {
+    degree: 'master',
+    university: 'nthu',
+    major: 'materials',
+    period: '2010/7~2012/6',
+    isHighest: true
+  },
+  {
+    degree: 'bachelor',
+    university: 'nctu',
+    major: 'mse',
+    period: '2006/9~2010/7',
+    isHighest: false
+  }
+]
+
+const contactInfo = {
+  phone: '0908-589-207',
+  email: 'evilkillerice@gmail.com',
+  address: '台北市松山區寶清街***'
+}
+
+const downloadResume = () => {
+  // Trigger browser print dialog (can save as PDF)
+  window.print()
+}
+
 </script>
 
 <template>
@@ -57,8 +86,8 @@ const experiences = [
     
     <!-- Background Image (Watermark Style with Parallax) -->
     <div class="absolute inset-0 z-0 pointer-events-none">
-      <div class="fixed inset-0 bg-cover bg-center opacity-70 pointer-events-none"
-          style="background-image: url('https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=2070&auto=format&fit=crop&q=50&w=1200'); z-index: 0; ; background-attachment: scroll;">
+      <div class="fixed inset-0 bg-center bg-no-repeat opacity-70 pointer-events-none"
+          style="background-image: url('https://images.unsplash.com/photo-1526657782461-9fe13402a841?q=80&w=2070&auto=format&fit=crop'); background-size: 100% auto; z-index: 0; background-attachment: scroll;">
       </div>
     </div>
     <!-- Content Wrapper with Animation -->
@@ -70,15 +99,24 @@ const experiences = [
       <!-- Hero Section -->
       <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transform hover:scale-[1.01] transition-transform duration-300">
         <div class="md:flex">
-          <div class="md:flex-shrink-0 bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center p-8 md:w-1/3">
+          <div class="md:flex-shrink-0 bg-indigo-50 dark:bg-indigo-900/20 flex flex-col items-center justify-center p-8 md:w-1/3">
             <div class="relative w-48 h-48 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-lg">
               <img class="absolute inset-0 w-full h-full object-cover" src="/me.png" alt="Profile Photo">
             </div>
+            <!-- Download Resume Button -->
+            <button 
+              @click="downloadResume"
+              class="mt-6 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-medium transition-colors duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              {{ $t('about.downloadResume') }}
+            </button>
           </div>
           <div class="p-8 md:w-2/3 flex flex-col justify-center">
             <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold mb-1">{{ $t('about.title') }}</div>
-            <h1 class="block mt-1 text-3xl leading-tight font-bold text-gray-900 dark:text-white">Yi Fan Liang</h1>
-            <p class="mt-2 text-gray-600 dark:text-gray-300">國立清華大學材料系 碩士畢業</p>
+            <h1 class="block mt-1 text-3xl leading-tight font-bold text-gray-900 dark:text-white">Chris (Yi Fan Liang)</h1>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">{{ $t('about.university.nthu') }} {{ $t('about.degree.master') }}畢業</p>
             <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">台北市松山區 | 6~7年工作經驗</p>
             
             <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -97,6 +135,77 @@ const experiences = [
               <div class="flex items-start">
                 <span class="text-indigo-500 mr-2">🎯</span>
                 <span class="text-gray-600 dark:text-gray-300 text-sm">具責任感 - 重視品質與時程</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Education Section -->
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          {{ $t('about.education') }}
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div v-for="(edu, index) in educationHistory" :key="index" 
+               class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
+               :class="{ 'border-2 border-indigo-500': edu.isHighest }">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                {{ $t(`about.degree.${edu.degree}`) }}
+                <span v-if="edu.isHighest" class="ml-2 text-xs bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 px-2 py-1 rounded">最高學歷</span>
+              </h3>
+              <span class="text-sm text-gray-500 dark:text-gray-400">{{ edu.period }}</span>
+            </div>
+            <p class="text-gray-900 dark:text-white font-medium">{{ $t(`about.university.${edu.university}`) }}</p>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mt-1">{{ $t(`about.major.${edu.major}`) }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Information Section -->
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          {{ $t('about.contact') }}
+        </h2>
+        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-md p-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="flex items-start space-x-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">{{ $t('about.phone') }}</p>
+                <a :href="`tel:${contactInfo.phone}`" class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                  {{ contactInfo.phone }}
+                </a>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+              </svg>
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">{{ $t('about.email') }}</p>
+                <a :href="`mailto:${contactInfo.email}`" class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors break-all">
+                  {{ contactInfo.email }}
+                </a>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">{{ $t('about.address') }}</p>
+                <p class="text-gray-900 dark:text-white">{{ contactInfo.address }}</p>
               </div>
             </div>
           </div>
@@ -161,3 +270,50 @@ const experiences = [
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Print-friendly styles */
+@media print {
+  /* Make header appear only on first page (change from fixed to static) */
+  :deep(header) {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: auto !important;
+    z-index: auto !important;
+  }
+  
+  /* Hide elements that shouldn't appear in PDF */
+  :deep(.download-resume-btn),
+  .about-page > div:first-child /* Background image container */ {
+    display: none !important;
+  }
+  
+  /* Remove page margins and adjust layout */
+  .about-page {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  /* Ensure content fits properly */
+  .max-w-4xl {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+  }
+  
+  /* Avoid page breaks inside cards */
+  .bg-white\/90,
+  .bg-white\/80 {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  
+  /* Adjust text for better readability */
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+}
+</style>

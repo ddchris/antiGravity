@@ -32,7 +32,25 @@
   "about": {
     "title": "About Me",
     "experience": "Work Experience",
-    "skills": "Professional Skills"
+    "skills": "Professional Skills",
+    "education": "Education",
+    "contact": "Contact Information",
+    "downloadResume": "Download Resume",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "degree": {
+      "master": "Master's Degree",
+      "bachelor": "Bachelor's Degree"
+    },
+    "university": {
+      "nthu": "National Tsing Hua University",
+      "nctu": "National Chiao Tung University"
+    },
+    "major": {
+      "materials": "Department of Materials Science",
+      "mse": "Department of Materials Science and Engineering"
+    }
   },
   "product": {
     "addToCart": "Add to Cart",
@@ -52,5 +70,23 @@
     "cleared": "Chat history cleared",
     "scrollTop": "Scroll to Top",
     "scrollBottom": "Scroll to Bottom"
+  },
+  "error": {
+    "title": "Error",
+    "unknown": "An unknown error occurred",
+    "badRequest": "Invalid request parameters",
+    "unauthorized": "Session expired, please log in again",
+    "authTitle": "Authentication Failed",
+    "forbidden": "You do not have permission to perform this action",
+    "forbiddenTitle": "Access Denied",
+    "notFound": "The requested resource was not found",
+    "serverError": "Internal server error, please try again later",
+    "serverErrorTitle": "Server Error",
+    "serviceUnavailable": "Service temporarily unavailable, please try again later",
+    "requestFailed": "Request failed",
+    "networkError": "Unable to connect to server, please check your network",
+    "networkErrorTitle": "Network Error",
+    "sendFailed": "Failed to send request",
+    "confirm": "OK"
   }
 }

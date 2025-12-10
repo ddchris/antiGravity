@@ -32,7 +32,25 @@
   "about": {
     "title": "내 소개",
     "experience": "경력",
-    "skills": "전문 기술"
+    "skills": "전문 기술",
+    "education": "학력",
+    "contact": "연락처",
+    "downloadResume": "이력서 다운로드",
+    "phone": "전화",
+    "email": "이메일",
+    "address": "주소",
+    "degree": {
+      "master": "석사",
+      "bachelor": "학사"
+    },
+    "university": {
+      "nthu": "국립 칭화대학교",
+      "nctu": "국립 교통대학교"
+    },
+    "major": {
+      "materials": "재료학과",
+      "mse": "재료과학공학과"
+    }
   },
   "product": {
     "addToCart": "장바구니에 담기",
@@ -52,5 +70,23 @@
     "cleared": "대화 기록이 삭제되었습니다",
     "scrollTop": "맨 위로",
     "scrollBottom": "맨 아래로"
+  },
+  "error": {
+    "title": "오류",
+    "unknown": "알 수 없는 오류가 발생했습니다",
+    "badRequest": "잘못된 요청 매개변수입니다",
+    "unauthorized": "세션이 만료되었습니다. 다시 로그인해 주세요",
+    "authTitle": "인증 실패",
+    "forbidden": "이 작업을 수행할 권한이 없습니다",
+    "forbiddenTitle": "접근 거부",
+    "notFound": "요청한 리소스를 찾을 수 없습니다",
+    "serverError": "내부 서버 오류가 발생했습니다. 나중에 다시 시도해 주세요",
+    "serverErrorTitle": "서버 오류",
+    "serviceUnavailable": "서비스를 일시적으로 사용할 수 없습니다. 나중에 다시 시도해 주세요",
+    "requestFailed": "요청 실패",
+    "networkError": "서버에 연결할 수 없습니다. 네트워크 연결을 확인해 주세요",
+    "networkErrorTitle": "네트워크 오류",
+    "sendFailed": "요청을 보내지 못했습니다",
+    "confirm": "확인"
   }
 }
