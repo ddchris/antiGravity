@@ -11,7 +11,18 @@ const messages = ref([])
 const inputMessage = ref('')
 const isTyping = ref(false)
 const messagesContainer = ref(null)
-const currentUser = 'Me'
+
+// Current Session ID (for differentiating users in different tabs)
+const getSessionId = () => {
+    let id = localStorage.getItem('chatSessionId')
+    if (!id) {
+        id = 'user-' + Date.now() + '-' + Math.floor(Math.random() * 1000)
+        localStorage.setItem('chatSessionId', id)
+    }
+    return id
+}
+const currentUserId = getSessionId()
+const currentUser = 'User' // Display name (could be dynamic later)
 
 // Firebase Collection Reference
 // Note: Ensure your Firestore security rules allow read/write for this collection
@@ -84,6 +95,7 @@ const sendMessage = async () => {
   try {
     // 1. Add User Message to Firestore
     await addDoc(chatCollection, {
+      userId: currentUserId,
       from: currentUser,
       text: text,
       timestamp: serverTimestamp(),
@@ -98,6 +110,7 @@ const sendMessage = async () => {
     // Fallback for demo if Firebase fails (e.g. invalid config)
     messages.value.push({
         id: Date.now(),
+        userId: currentUserId,
         from: currentUser,
         text: text,
         timestamp: new Date()
@@ -108,6 +121,10 @@ const sendMessage = async () => {
 
 // AI Response Logic
 const triggerAIResponse = async (userText) => {
+  // Only trigger AI response if the message was sent by THIS client
+  // But strictly speaking, AI response could be cloud function. 
+  // For client-side calc, we'll just check if we just sent a message.
+  
   isTyping.value = true
   
   // Simulate network delay
@@ -130,6 +147,7 @@ const triggerAIResponse = async (userText) => {
         const randomResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)]
         
         await addDoc(chatCollection, {
+            userId: 'bot', // Special ID for Bot
             from: 'Bot',
             text: `[AI] ${randomResponse}`,
             timestamp: serverTimestamp(),
@@ -139,6 +157,7 @@ const triggerAIResponse = async (userText) => {
         // Fallback if local
         messages.value.push({
             id: Date.now() + 1,
+            userId: 'bot',
             from: 'Bot',
             text: `[AI (Local)] I received: "${userText}"`,
             timestamp: new Date()
@@ -163,7 +182,7 @@ onMounted(() => {
       }))
       setTimeout(scrollToBottom, 100) // Small delay to ensure render
     }, (error) => {
-        console.warn("Firestore access failed (likely missing config). Using local mode.", error)
+        console.warn("Firestore access failed. Using local mode.", error)
     })
   } catch (e) {
       console.warn("Firebase not initialized correctly.")
@@ -243,9 +262,9 @@ watch(messages, () => {
       <!-- Messages Area -->
       <div 
         ref="messagesContainer" 
-        class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-900/50 scroll-smooth"
+        class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-900 scroll-smooth"
       >
-        <div v-if="messages.length === 0" class="text-center text-gray-400 mt-10">
+        <div v-if="messages.length === 0" class="text-center text-gray-500 mt-10">
             <p>{{ $t('chat.welcome') || 'Start a conversation...' }}</p>
         </div>
 
@@ -253,58 +272,80 @@ watch(messages, () => {
           v-for="msg in messages" 
           :key="msg.id" 
           class="flex flex-col"
-          :class="msg.from === currentUser ? 'items-end' : 'items-start'"
+          :class="{
+            'items-end': msg.userId === currentUserId,
+            'items-start': msg.userId !== currentUserId
+          }"
         >
-            <div 
-                class="max-w-[70%] rounded-2xl px-4 py-2 shadow-sm text-sm relative"
-                :class="[
-                    msg.from === currentUser 
-                        ? 'bg-indigo-600 text-white rounded-br-none' 
-                        : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-none border border-gray-100 dark:border-gray-600'
-                ]"
-            >
-                <div v-if="msg.from !== currentUser" class="text-xs text-gray-400 dark:text-gray-400 mb-1 font-bold">
-                    {{ msg.from === 'Bot' ? '🤖 AI Support' : msg.from }}
-                </div>
-                <p class="whitespace-pre-wrap leading-relaxed">{{ msg.text }}</p>
-                <div 
-                    class="text-[10px] mt-1 text-right opacity-70"
-                    :class="msg.from === currentUser ? 'text-indigo-200' : 'text-gray-400'"
+            <div class="flex items-end max-w-[80%]">
+                <!-- Avatar (Optional for others/bot) -->
+                <div v-if="msg.userId !== currentUserId" class="w-8 h-8 rounded-full flex-shrink-0 mr-2 flex items-center justify-center text-xs font-bold text-white shadow-sm"
+                     :class="msg.from === 'Bot' ? 'bg-green-500' : 'bg-gray-400'"
                 >
-                    {{ formatTime(msg.timestamp) }}
+                    {{ msg.from === 'Bot' ? 'AI' : msg.from.charAt(0) }}
+                </div>
+
+                <div 
+                    class="px-4 py-2 rounded-2xl shadow-sm text-sm break-words relative"
+                    :class="{
+                        'bg-indigo-600 text-white rounded-br-none': msg.userId === currentUserId,
+                        'bg-green-100 text-green-900 border border-green-200 rounded-bl-none': msg.from === 'Bot',
+                        'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-bl-none': msg.userId !== currentUserId && msg.from !== 'Bot'
+                    }"
+                >
+                    <div v-if="msg.userId !== currentUserId" class="text-xs opacity-75 mb-1 font-bold"
+                        :class="msg.from === 'Bot' ? 'text-green-700' : 'text-gray-500 dark:text-gray-400'"
+                    >
+                        {{ msg.from }}
+                    </div>
+                    <p class="whitespace-pre-wrap leading-relaxed">{{ msg.text }}</p>
+                    
+                    <div 
+                        class="text-[10px] mt-1 text-right"
+                        :class="{
+                            'text-indigo-200': msg.userId === currentUserId,
+                            'text-green-700': msg.from === 'Bot',
+                            'text-gray-400': msg.userId !== currentUserId && msg.from !== 'Bot'
+                        }"
+                    >
+                        {{ formatTime(msg.timestamp) }}
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- AI Typing Indicator -->
         <div v-if="isTyping" class="flex items-start">
-            <div class="bg-white dark:bg-gray-700 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm border border-gray-100 dark:border-gray-600">
+             <div class="w-8 h-8 rounded-full bg-green-500 flex-shrink-0 mr-2 flex items-center justify-center text-xs font-bold text-white shadow-sm">
+                AI
+            </div>
+            <div class="bg-green-50 border border-green-100 dark:bg-gray-700 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm">
                 <div class="flex space-x-1">
-                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
-                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
-                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+                    <div class="w-2 h-2 bg-green-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+                    <div class="w-2 h-2 bg-green-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+                    <div class="w-2 h-2 bg-green-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
                 </div>
             </div>
         </div>
       </div>
 
       <!-- Input Area -->
-      <div class="p-4 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
+      <div class="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
         <div class="flex space-x-2">
             <input 
                 v-model="inputMessage"
                 @keyup.enter="sendMessage"
                 type="text" 
                 :placeholder="$t('chat.placeholder') || 'Type a message...'"
-                class="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow"
+                class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white transition-shadow"
             />
             <button 
                 @click="sendMessage"
                 :disabled="!inputMessage.trim()"
-                class="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl px-6 py-2 transition-colors flex items-center justify-center font-medium"
+                class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-medium transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
             >
                 <span>{{ $t('chat.send') || 'Send' }}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                 </svg>
             </button>

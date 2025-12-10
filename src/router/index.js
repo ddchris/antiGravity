@@ -31,7 +31,14 @@ const router = createRouter({
       name: 'chat',
       component: () => import('../views/ChatRoom.vue')
     }
-  ]
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0, behavior: 'smooth' }
+    }
+  }
 })
 
 export default router

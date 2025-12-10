@@ -3,7 +3,7 @@ import { RouterLink } from 'vue-router'
 import { useCartStore } from '../stores/cartStore'
 import { useThemeStore } from '../stores/themeStore'
 import { useI18n } from 'vue-i18n'
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 // 導入購物車 store 以讀取總數量
 const cartStore = useCartStore()
@@ -17,6 +17,29 @@ const changeLocale = (newLocale) => {
 }
 
 const isMobileMenuOpen = ref(false)
+
+// Clock Logic
+const currentTime = ref('')
+let timer = null
+
+const updateTime = () => {
+  const now = new Date()
+  currentTime.value = now.toLocaleTimeString('en-US', { 
+    hour12: false, 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    second: '2-digit' 
+  })
+}
+
+onMounted(() => {
+  updateTime()
+  timer = setInterval(updateTime, 1000)
+})
+
+onUnmounted(() => {
+  if (timer) clearInterval(timer)
+})
 </script>
 
 <template>
@@ -77,6 +100,12 @@ const isMobileMenuOpen = ref(false)
             >
               {{ $t('header.about') }}
             </RouterLink>
+          </div>
+
+
+          <!-- Clock -->
+          <div class="hidden md:flex items-center justify-center mr-4 px-3 py-1 bg-gray-900 dark:bg-black rounded border border-gray-700 dark:border-gray-800 shadow-inner">
+            <span class="font-mono text-sm font-bold text-green-400 tracking-widest">{{ currentTime }}</span>
           </div>
 
           <!-- Always Visible Controls (Language & Theme) -->
