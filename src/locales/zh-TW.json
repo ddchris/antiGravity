@@ -37,6 +37,8 @@
     "addToCart": "加入購物車",
     "added": "已加入！",
     "featured": "精選商品",
-    "deleted": "商品已刪除"
+    "deleted": "商品已刪除",
+    "loading": "正在載入更多商品...",
+    "noMore": "--- 沒有更多商品了 ---"
   }
 }

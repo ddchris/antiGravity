@@ -46,14 +46,6 @@ const isMobileMenuOpen = ref(false)
             >
               {{ $t('header.contact') }}
             </RouterLink>
-            <RouterLink
-              to="/about"
-              class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
-              active-class="text-indigo-600 dark:text-indigo-400 font-bold"
-            >
-              {{ $t('header.about') }}
-            </RouterLink>
-            
             <!-- 購物車連結 - 帶有數量角標 -->
             <RouterLink
               to="/cart"
@@ -68,6 +60,14 @@ const isMobileMenuOpen = ref(false)
               >
                 {{ cartStore.cartItems.length }}
               </span>
+            </RouterLink>
+
+            <RouterLink
+              to="/about"
+              class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
+              active-class="text-indigo-600 dark:text-indigo-400 font-bold"
+            >
+              {{ $t('header.about') }}
             </RouterLink>
           </div>
 
@@ -132,15 +132,6 @@ const isMobileMenuOpen = ref(false)
             {{ $t('header.contact') }}
           </RouterLink>
           <RouterLink
-            to="/about"
-            class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors px-2 py-1"
-            active-class="text-indigo-600 dark:text-indigo-400 font-bold bg-gray-100 dark:bg-gray-800 rounded"
-            @click="isMobileMenuOpen = false"
-          >
-            {{ $t('header.about') }}
-          </RouterLink>
-          
-          <RouterLink
             to="/cart"
             class="flex items-center justify-between text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors px-2 py-1"
             active-class="text-indigo-600 dark:text-indigo-400 font-bold bg-gray-100 dark:bg-gray-800 rounded"
@@ -153,6 +144,15 @@ const isMobileMenuOpen = ref(false)
             >
               {{ cartStore.cartItems.length }}
             </span>
+          </RouterLink>
+
+          <RouterLink
+            to="/about"
+            class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors px-2 py-1"
+            active-class="text-indigo-600 dark:text-indigo-400 font-bold bg-gray-100 dark:bg-gray-800 rounded"
+            @click="isMobileMenuOpen = false"
+          >
+            {{ $t('header.about') }}
           </RouterLink>
         </div>
       </div>

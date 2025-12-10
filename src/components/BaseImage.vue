@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps({
   src: {
@@ -18,6 +18,14 @@ const props = defineProps({
 
 const isLoading = ref(true)
 const hasError = ref(false)
+const currentSrc = ref(props.src)
+
+// Watch for src changes to reset state
+watch(() => props.src, (newSrc) => {
+  isLoading.value = true
+  hasError.value = false
+  currentSrc.value = newSrc
+})
 
 const handleLoad = () => {
   isLoading.value = false
@@ -25,7 +33,11 @@ const handleLoad = () => {
 
 const handleError = () => {
   isLoading.value = false
-  hasError.value = true
+  if (!hasError.value) {
+    hasError.value = true
+    // Fallback image (Placeholder)
+    currentSrc.value = 'https://placehold.co/600x400/e2e8f0/475569?text=No+Image'
+  }
 }
 </script>
 
@@ -44,20 +56,12 @@ const handleError = () => {
 
     <!-- Image -->
     <img
-      :src="src"
+      :src="currentSrc"
       :alt="alt"
       @load="handleLoad"
       @error="handleError"
       class="w-full h-full object-cover transition-opacity duration-500"
       :class="{ 'opacity-0': isLoading, 'opacity-100': !isLoading }"
     >
-    
-    <!-- Error State (Optional) -->
-    <div 
-      v-if="hasError" 
-      class="absolute inset-0 flex items-center justify-center bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
-    >
-      <span class="text-sm">Image Error</span>
-    </div>
   </div>
 </template>

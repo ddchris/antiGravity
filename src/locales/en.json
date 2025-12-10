@@ -37,6 +37,8 @@
     "addToCart": "Add to Cart",
     "added": "Added!",
     "featured": "Featured Products",
-    "deleted": "Deleted!"
+    "deleted": "Deleted!",
+    "loading": "Loading more products...",
+    "noMore": "--- No more products ---"
   }
 }

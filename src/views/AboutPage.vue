@@ -53,11 +53,22 @@ const experiences = [
 </script>
 
 <template>
-  <div class="min-h-screen pt-20 pb-12 px-4 sm:px-6 lg:px-8 transition-opacity duration-700 ease-out" :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'">
-    <div class="max-w-4xl mx-auto space-y-12">
+  <div class="about-page relative overflow-x-hidden text-sm md:text-base mt-12">
+    
+    <!-- Background Image (Watermark Style with Parallax) -->
+    <div class="absolute inset-0 z-0 pointer-events-none">
+      <div class="fixed inset-0 bg-cover bg-center opacity-70 pointer-events-none"
+          style="background-image: url('https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=2070&auto=format&fit=crop&q=50&w=1200'); z-index: 0; ; background-attachment: scroll;">
+      </div>
+    </div>
+    <!-- Content Wrapper with Animation -->
+    <div class="max-w-4xl mx-auto relative z-10 transition-opacity duration-700 ease-out"
+         :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'">
+      
+      <div class="space-y-8" style="transform: scale(0.9); transform-origin: top center; width: 111.11%; margin-left: -5.555%;">
       
       <!-- Hero Section -->
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transform hover:scale-[1.01] transition-transform duration-300">
+      <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transform hover:scale-[1.01] transition-transform duration-300">
         <div class="md:flex">
           <div class="md:flex-shrink-0 bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center p-8 md:w-1/3">
             <div class="relative w-48 h-48 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-lg">
@@ -94,19 +105,21 @@ const experiences = [
 
       <!-- Experience Section -->
       <div>
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-          <span class="bg-indigo-600 w-2 h-8 mr-3 rounded-full"></span>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
           {{ $t('about.experience') }}
         </h2>
-        <div class="space-y-6">
+        <div class="space-y-4">
           <div v-for="(exp, index) in experiences" :key="index" 
-               class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border-l-4 border-indigo-500 hover:shadow-lg transition-shadow duration-300">
+               class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-md p-6 border-l-4 border-indigo-500 hover:shadow-lg transition-shadow duration-300">
             <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
               <div>
                 <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ exp.title }}</h3>
                 <p class="text-indigo-600 dark:text-indigo-400 font-medium">{{ exp.company }}</p>
               </div>
-              <div class="mt-2 md:mt-0 text-right">
+              <div class="md:mt-0 text-right">
                 <span class="inline-block bg-gray-100 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-600 dark:text-gray-300">
                   {{ exp.period }}
                 </span>
@@ -122,13 +135,15 @@ const experiences = [
 
       <!-- Skills Section -->
       <div>
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-          <span class="bg-indigo-600 w-2 h-8 mr-3 rounded-full"></span>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
           {{ $t('about.skills') }}
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div v-for="(items, category) in skills" :key="category" 
-               class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover:translate-y-[-2px] transition-transform duration-300">
+               class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-md p-6 hover:translate-y-[-2px] transition-transform duration-300">
             <h3 class="text-lg font-bold text-indigo-600 dark:text-indigo-400 mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">
               {{ category }}
             </h3>
@@ -140,6 +155,7 @@ const experiences = [
             </div>
           </div>
         </div>
+      </div>
       </div>
 
     </div>
