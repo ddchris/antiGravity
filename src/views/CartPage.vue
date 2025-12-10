@@ -3,6 +3,7 @@ import { useCartStore } from '../stores/cartStore'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import BaseImage from '../components/BaseImage.vue'
+import * as htmlToImage from 'html-to-image'
 
 const cartStore = useCartStore()
 const { t } = useI18n()
@@ -17,32 +18,36 @@ const formatPrice = (price) => {
 
 // 截圖功能 - 保留深色模式背景
 const captureCart = async () => {
-  if (typeof window.html2canvas === 'undefined') {
-    alert(t('cart.screenshot') + ' - 功能尚未準備好')
+  const target = document.getElementById('cart-capture-area')
+  if (!target) {
+    alert('找不到截圖區域')
     return
   }
 
-  const captureElement = document.getElementById('cart-capture-area')
-  
-  // 檢測當前是否為深色模式
-  const isDarkMode = document.documentElement.classList.contains('dark')
-  const backgroundColor = isDarkMode ? '#1f2937' : '#ffffff' // 深色模式用深灰色，淺色模式用白色
-  
+  const isDark = document.documentElement.classList.contains('dark')
+  const bg = isDark ? '#1f2937' : '#ffffff'
+
   try {
-    const canvas = await window.html2canvas(captureElement, {
-      scale: 2,
-      useCORS: true,
-      logging: false,
-      backgroundColor: backgroundColor // 根據當前模式設定背景色
+    const dataUrl = await htmlToImage.toPng(target, {
+      backgroundColor: bg,
+      cacheBust: true,
+      pixelRatio: window.devicePixelRatio * 1.5, // 更乾淨的輸出  
+      style: {
+        transform: 'scale(1)',      // 修 html-to-image 偶爾 scale 錯誤
+        'transform-origin': 'top left'
+      },
+      // 完整保留 Shadow DOM / filter / SVG 支援
+      includeShadowRoots: true,
     })
-    
+
     const link = document.createElement('a')
-    link.download = 'shopping-cart-' + Date.now() + '.png'
-    link.href = canvas.toDataURL('image/png')
+    link.download = `shopping-cart-${Date.now()}.png`
+    link.href = dataUrl
     link.click()
-  } catch (error) {
-    console.error('截圖失敗:', error)
-    alert('截圖失敗：' + error.message)
+
+  } catch (err) {
+    console.error(err)
+    alert(`截圖失敗：${err.message}`)
   }
 }
 </script>
