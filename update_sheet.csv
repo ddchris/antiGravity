@@ -23,4 +23,5 @@ header.contact,聯絡我們,Contact Us,お問い合わせ,문의하기,Auto-dete
 header.products,商品導覽,Products,商品一覧,상품 목록,Auto-detected
 product.addToCart,加入購物車,Add to Cart,カートに追加,장바구니에 담기,Auto-detected
 product.added,已加入！,Added!,追加しました！,담았습니다!,Auto-detected
+product.deleted,商品已刪除,Deleted!,商品は削除されました,상품이 삭제되었습니다,Auto-detected
 product.featured,精選商品,Featured Products,おすすめ商品,추천 상품,Auto-detected

@@ -1,35 +1,36 @@
 {
-  "header": {
-    "brand": "Store",
-    "products": "Products",
-    "contact": "Contact Us",
-    "cart": "Cart"
-  },
   "cart": {
-    "title": "Your Shopping Cart",
+    "decrease": "Decrease quantity",
     "empty": "Your cart is empty!",
     "emptyDesc": "Looks like you haven't added any items yet.",
     "goShopping": "Start Shopping",
-    "total": "Total",
-    "screenshot": "Screenshot & Download",
-    "quantity": "Quantity",
+    "increase": "Increase quantity",
     "price": "Price",
-    "subtotal": "Subtotal",
     "productInfo": "Product Info",
+    "quantity": "Quantity",
     "remove": "Click to remove",
-    "decrease": "Decrease quantity",
-    "increase": "Increase quantity"
+    "screenshot": "Screenshot & Download",
+    "subtotal": "Subtotal",
+    "title": "Your Shopping Cart",
+    "total": "Total"
+  },
+  "contact": {
+    "email": "Email",
+    "message": "Message",
+    "name": "Name",
+    "send": "Send",
+    "title": "Contact Us"
+  },
+  "header": {
+    "brand": "Store",
+    "cart": "Cart",
+    "contact": "Contact Us",
+    "products": "Products"
   },
   "product": {
     "addToCart": "Add to Cart",
     "added": "Added!",
-    "featured": "Featured Products"
-  },
-  "contact": {
-    "title": "Contact Us",
-    "name": "Name",
-    "email": "Email",
-    "message": "Message",
-    "send": "Send"
+    "featured": "Featured Products",
+    "deleted": "Deleted!"
   }
 }

@@ -19,7 +19,7 @@ const localesDir = 'src/locales'
 const vueFilesGlob = 'src/**/*.vue'
 
 // Google Sheet CSV 連結（需公開分享 CSV）
-const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQySaoDhMqziKblX3BLhISn2AlT8hduKpnUxdG45kKxnTeL6KgyjgoaLipDeAbqjYcJc-ZEbAPlKkl/pub?output=csv'
+const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRbktmnM6PFtl6XKvfJVmWJstJRCnH7pSmf3-c6IIm0toSBaw3V6FeVJUWqaaqYi5d1FxcMCLZykgk0/pub?output=csv'
 
 // ----------------------
 // 工具函數：安全設定巢狀 key
@@ -71,7 +71,16 @@ async function importGoogleSheet() {
   const dataLines = lines.slice(1)
 
   const locales = {}
-  headers.slice(1, -1).forEach(lang => (locales[lang] = {}))
+  // Map headers to correct language codes (e.g., kr -> ko)
+  const langMap = {
+    'kr': 'ko'
+  }
+  
+  const langHeaders = headers.slice(1, -1)
+  langHeaders.forEach(lang => {
+    const mappedLang = langMap[lang] || lang
+    locales[mappedLang] = {}
+  })
 
   dataLines.forEach((line) => {
     const cols = parseCsvLine(line)
@@ -79,9 +88,24 @@ async function importGoogleSheet() {
     if (!key)
       return
 
-    headers.slice(1, -1).forEach((lang, idx) => {
+    // 忽略 key 看起來像 JSON 的行
+    if (key.startsWith('{') && key.endsWith('}'))
+        return
+
+    // 檢查是否有任何語言的值看起來像 JSON，如果有則忽略整行
+    const hasJsonValue = langHeaders.some((lang, idx) => {
+        const value = (cols[idx + 1] || '').trim()
+        return value.startsWith('{') && value.endsWith('}')
+    })
+
+    if (hasJsonValue) {
+        return
+    }
+
+    langHeaders.forEach((lang, idx) => {
       const value = (cols[idx + 1] || '').trim()
-      setNestedValue(locales[lang], key, value)
+      const mappedLang = langMap[lang] || lang
+      setNestedValue(locales[mappedLang], key, value)
     })
 
     const detail = cols[cols.length - 1]?.trim()
@@ -92,6 +116,19 @@ async function importGoogleSheet() {
   for (const lang of Object.keys(locales)) {
     const safeLang = lang.replace(/[<>:"/\\|?*{}();]/g, '_')
     const filePath = path.join(localesDir, `${safeLang}.json`)
+    
+    // Read existing file to preserve keys not in Sheet (optional, but good practice if Sheet is partial)
+    // But user wants Sheet to be source of truth for these keys. 
+    // If we want to keep existing keys that are NOT in sheet, we should load them first.
+    // However, the previous logic was overwriting. Let's stick to overwriting for now as per "Import" logic, 
+    // OR better: merge with existing to avoid losing keys that might be local-only temporarily.
+    // But usually "Import from Sheet" implies Sheet is master. 
+    // Let's overwrite to ensure "deleted" keys in Sheet (if any) are reflected? 
+    // No, the user just added a key. Overwriting is safer to ensure exact match with Sheet for the keys present.
+    // Wait, if I overwrite, I might lose keys that are NOT in the sheet but ARE in the local files (if any).
+    // The user's Sheet seems to have all keys.
+    // Let's stick to the original logic: create object from Sheet and write it.
+    
     fs.writeFileSync(filePath, JSON.stringify(locales[lang], null, 2), 'utf8')
     console.log(`✅ Updated ${filePath} from Google Sheet`)
   }
@@ -253,12 +290,12 @@ function removeUnusedKeysRecursively(obj, prefix, usedKeys) {
 // ----------------------
 ;(async () => {
   try {
-    // const langs = await importGoogleSheet()
+    const langs = await importGoogleSheet()
     // const missingKeys = scanVueFiles()
 
     // 1. Get languages from local files
-    const files = fs.readdirSync(localesDir)
-    const langs = files.filter(f => f.endsWith('.json')).map(f => f.replace('.json', ''))
+    // const files = fs.readdirSync(localesDir)
+    // const langs = files.filter(f => f.endsWith('.json')).map(f => f.replace('.json', ''))
     
     const localesData = loadLocales(langs)
     // await processMissingKeys(missingKeys, localesData, langs)

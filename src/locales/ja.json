@@ -1,35 +1,36 @@
 {
-  "header": {
-    "brand": "Store",
-    "products": "商品一覧",
-    "contact": "お問い合わせ",
-    "cart": "カート"
-  },
   "cart": {
-    "title": "ショッピングカート",
+    "decrease": "数量を減らす",
     "empty": "カートは空です！",
     "emptyDesc": "まだ商品が追加されていないようです。",
     "goShopping": "買い物を始める",
-    "total": "合計",
-    "screenshot": "スクリーンショット",
-    "quantity": "数量",
+    "increase": "数量を増やす",
     "price": "単価",
-    "subtotal": "小計",
     "productInfo": "商品情報",
+    "quantity": "数量",
     "remove": "クリックして削除",
-    "decrease": "数量を減らす",
-    "increase": "数量を増やす"
+    "screenshot": "スクリーンショット",
+    "subtotal": "小計",
+    "title": "ショッピングカート",
+    "total": "合計"
+  },
+  "contact": {
+    "email": "メールアドレス",
+    "message": "メッセージ",
+    "name": "お名前",
+    "send": "送信",
+    "title": "お問い合わせ"
+  },
+  "header": {
+    "brand": "Store",
+    "cart": "カート",
+    "contact": "お問い合わせ",
+    "products": "商品一覧"
   },
   "product": {
     "addToCart": "カートに追加",
     "added": "追加しました！",
-    "featured": "おすすめ商品"
-  },
-  "contact": {
-    "title": "お問い合わせ",
-    "name": "お名前",
-    "email": "メールアドレス",
-    "message": "メッセージ",
-    "send": "送信"
+    "featured": "おすすめ商品",
+    "deleted": "商品は削除されました"
   }
 }
