@@ -1,4 +1,7 @@
 key,zh-TW,en,ja,kr,detail
+about.experience,工作經歷,Work Experience,職務経歴,경력,Auto-detected
+about.skills,專業技能,Professional Skills,専門スキル,전문 기술,Auto-detected
+about.title,關於我,About Me,私について,내 소개,Auto-detected
 cart.decrease,減少數量,Decrease quantity,数量を減らす,수량 감소,Auto-detected
 cart.empty,購物車是空的！,Your cart is empty!,カートは空です！,장바구니가 비어있습니다!,Auto-detected
 cart.emptyDesc,看起來您還沒有加入任何商品。,Looks like you haven't added any items yet.,まだ商品が追加されていないようです。,아직 상품을 추가하지 않으신 것 같습니다.,Auto-detected
@@ -12,16 +15,29 @@ cart.screenshot,截圖並下載,Screenshot & Download,スクリーンショッ�
 cart.subtotal,小計,Subtotal,小計,소계,Auto-detected
 cart.title,您的購物車,Your Shopping Cart,ショッピングカート,장바구니,Auto-detected
 cart.total,總計,Total,合計,합계,Auto-detected
+chat.clear,清除對話,Clear Chat,チャットをクリア,대화 지우기,Auto-detected
+chat.clearConfirm,確定要刪除所有訊息嗎？,Are you sure you want to delete all messages?,すべてのメッセージを削除してもよろしいですか？,모든 메시지를 삭제하시겠습니까?,Auto-detected
+chat.cleared,對話紀錄已清除,Chat history cleared,チャット履歴をクリアしました,대화 기록이 삭제되었습니다,Auto-detected
+chat.placeholder,輸入訊息...,Type a message...,メッセージを入力...,메세지를 입력하세요...,Auto-detected
+chat.scrollBottom,捲動至底部,Scroll to Bottom,一番下へ,맨 아래로,Auto-detected
+chat.scrollTop,捲動至頂部,Scroll to Top,一番上へ,맨 위로,Auto-detected
+chat.send,發送,Send,送信,전송,Auto-detected
+chat.title,線上客服,Online Service,カスタマーサービス,고객 서비스,Auto-detected
+chat.welcome,歡迎！有什麼我可以幫您的嗎？,Welcome! How can I help you?,いらっしゃいませ！何かお手伝いしましょうか？,환영합니다! 무엇을 도와드릴까요?,Auto-detected
 contact.email,電子郵件,Email,メールアドレス,이메일,Auto-detected
 contact.message,訊息,Message,メッセージ,메시지,Auto-detected
 contact.name,姓名,Name,お名前,이름,Auto-detected
 contact.send,送出,Send,送信,보내기,Auto-detected
 contact.title,聯絡我們,Contact Us,お問い合わせ,문의하기,Auto-detected
+header.about,關於我,About Me,私について,내 소개,Auto-detected
 header.brand,Store,Store,Store,Store,Auto-detected
 header.cart,購物車,Cart,カート,장바구니,Auto-detected
+header.chat,線上客服,Online Service,カスタマーサービス,고객 서비스,Auto-detected
 header.contact,聯絡我們,Contact Us,お問い合わせ,문의하기,Auto-detected
 header.products,商品導覽,Products,商品一覧,상품 목록,Auto-detected
 product.addToCart,加入購物車,Add to Cart,カートに追加,장바구니에 담기,Auto-detected
 product.added,已加入！,Added!,追加しました！,담았습니다!,Auto-detected
 product.deleted,商品已刪除,Deleted!,商品は削除されました,상품이 삭제되었습니다,Auto-detected
 product.featured,精選商品,Featured Products,おすすめ商品,추천 상품,Auto-detected
+product.loading,正在載入更多商品...,Loading more products...,商品を読み込み中...,더 많은 상품을 불러오는 중...,Auto-detected
+product.noMore,--- 沒有更多商品了 ---,--- No more products ---,--- これ以上商品はありません ---,--- 더 이상 상품이 없습니다 ---,Auto-detected

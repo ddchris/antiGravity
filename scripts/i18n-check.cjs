@@ -79,7 +79,19 @@ async function importGoogleSheet() {
   const langHeaders = headers.slice(1, -1)
   langHeaders.forEach(lang => {
     const mappedLang = langMap[lang] || lang
-    locales[mappedLang] = {}
+    const filePath = path.join(localesDir, `${mappedLang}.json`)
+    
+    // Load existing file to preserve keys not in CSV
+    if (fs.existsSync(filePath)) {
+      try {
+        locales[mappedLang] = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+      } catch (e) {
+        console.warn(`⚠️ Failed to parse existing ${filePath}, starting with empty object.`)
+        locales[mappedLang] = {}
+      }
+    } else {
+      locales[mappedLang] = {}
+    }
   })
 
   dataLines.forEach((line) => {
