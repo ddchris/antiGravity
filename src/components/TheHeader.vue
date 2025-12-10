@@ -63,6 +63,14 @@ const isMobileMenuOpen = ref(false)
             </RouterLink>
 
             <RouterLink
+              to="/chat"
+              class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
+              active-class="text-indigo-600 dark:text-indigo-400 font-bold"
+            >
+              {{ $t('header.chat') }}
+            </RouterLink>
+
+            <RouterLink
               to="/about"
               class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
               active-class="text-indigo-600 dark:text-indigo-400 font-bold"
@@ -144,6 +152,15 @@ const isMobileMenuOpen = ref(false)
             >
               {{ cartStore.cartItems.length }}
             </span>
+          </RouterLink>
+
+          <RouterLink
+            to="/chat"
+            class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors px-2 py-1"
+            active-class="text-indigo-600 dark:text-indigo-400 font-bold bg-gray-100 dark:bg-gray-800 rounded"
+            @click="isMobileMenuOpen = false"
+          >
+            {{ $t('header.chat') }}
           </RouterLink>
 
           <RouterLink

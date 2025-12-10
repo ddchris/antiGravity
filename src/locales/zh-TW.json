@@ -26,6 +26,7 @@
     "cart": "購物車",
     "contact": "聯絡我們",
     "products": "商品導覽",
+    "chat": "線上客服",
     "about": "關於我"
   },
   "about": {
@@ -40,5 +41,16 @@
     "deleted": "商品已刪除",
     "loading": "正在載入更多商品...",
     "noMore": "--- 沒有更多商品了 ---"
+  },
+  "chat": {
+    "title": "線上客服",
+    "welcome": "歡迎！有什麼我可以幫您的嗎？",
+    "placeholder": "輸入訊息...",
+    "send": "發送",
+    "clear": "清除對話",
+    "clearConfirm": "確定要刪除所有訊息嗎？",
+    "cleared": "對話紀錄已清除",
+    "scrollTop": "捲動至頂部",
+    "scrollBottom": "捲動至底部"
   }
 }
