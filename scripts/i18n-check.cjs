@@ -253,13 +253,21 @@ function removeUnusedKeysRecursively(obj, prefix, usedKeys) {
 // ----------------------
 ;(async () => {
   try {
-    const langs = await importGoogleSheet()
-    const missingKeys = scanVueFiles()
+    // const langs = await importGoogleSheet()
+    // const missingKeys = scanVueFiles()
+
+    // 1. Get languages from local files
+    const files = fs.readdirSync(localesDir)
+    const langs = files.filter(f => f.endsWith('.json')).map(f => f.replace('.json', ''))
+    
     const localesData = loadLocales(langs)
     // await processMissingKeys(missingKeys, localesData, langs)
 
-    const vueFiles = glob.sync(vueFilesGlob).map(f => f.replace(/\\/g, '/'))
-    cleanUnusedKeys(localesData, vueFiles)
+    // const vueFiles = glob.sync(vueFilesGlob).map(f => f.replace(/\\/g, '/'))
+    // cleanUnusedKeys(localesData, vueFiles)
+
+    // 8️⃣ 匯出 CSV
+    exportToCSV(localesData)
 
     console.log('🎉 i18n process completed!')
   }
@@ -268,6 +276,74 @@ function removeUnusedKeysRecursively(obj, prefix, usedKeys) {
     process.exit(1)
   }
 })()
+
+// ----------------------
+// 8️⃣ 匯出 CSV
+// ----------------------
+function exportToCSV(localesData) {
+  const allKeys = new Set()
+  // Ensure we have the specific languages user wants, map ko to kr
+  const targetLangs = ['zh-TW', 'en', 'ja', 'kr']
+  const langMap = {
+    'zh-TW': 'zh-TW',
+    'en': 'en',
+    'ja': 'ja',
+    'kr': 'ko' // Map kr column to ko.json data
+  }
+
+  // 收集所有 key (flatten)
+  function collectKeys(obj, prefix) {
+    Object.keys(obj).forEach((key) => {
+      const fullKey = prefix ? `${prefix}.${key}` : key
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        collectKeys(obj[key], fullKey)
+      }
+      else {
+        allKeys.add(fullKey)
+      }
+    })
+  }
+
+  Object.values(localesData).forEach(data => collectKeys(data, ''))
+
+  const sortedKeys = Array.from(allKeys).sort()
+  const header = ['key', ...targetLangs, 'detail']
+  const rows = [header.join(',')]
+
+  sortedKeys.forEach((key) => {
+    const row = [key]
+    targetLangs.forEach((langCol) => {
+      const dataLang = langMap[langCol] || langCol
+      const val = getNestedValue(localesData[dataLang] || {}, key) || ''
+      // 如果值包含逗號或引號，需要用引號包起來，並處理內部的引號
+      if (val.includes(',') || val.includes('"')) {
+        row.push(`"${val.replace(/"/g, '""')}"`)
+      }
+      else {
+        row.push(val)
+      }
+    })
+    row.push('Auto-detected') // detail
+    rows.push(row.join(','))
+  })
+
+  fs.writeFileSync('update_sheet.csv', rows.join('\n'), 'utf8')
+  console.log('✅ Generated update_sheet.csv')
+}
+
+function getNestedValue(obj, keyPath) {
+  const keys = keyPath.split('.')
+  let current = obj
+  for (const k of keys) {
+    if (current && typeof current === 'object' && k in current) {
+      current = current[k]
+    }
+    else {
+      return undefined
+    }
+  }
+  return typeof current === 'string' ? current : undefined
+}
 
 /*
 ================================================================================

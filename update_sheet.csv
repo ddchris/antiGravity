@@ -1,30 +1,26 @@
 key,zh-TW,en,ja,kr,detail
-"product.featured","product.featured","product.featured","product.featured","product.featured","Auto-detected"
-"contact.title","contact.title","contact.title","contact.title","contact.title","Auto-detected"
-"contact.name","contact.name","contact.name","contact.name","contact.name","Auto-detected"
-"contact.email","contact.email","contact.email","contact.email","contact.email","Auto-detected"
-"contact.message","contact.message","contact.message","contact.message","contact.message","Auto-detected"
-"contact.send","contact.send","contact.send","contact.send","contact.send","Auto-detected"
-"cart.title","cart.title","cart.title","cart.title","cart.title","Auto-detected"
-"cart.productInfo","cart.productInfo","cart.productInfo","cart.productInfo","cart.productInfo","Auto-detected"
-"cart.quantity","cart.quantity","cart.quantity","cart.quantity","cart.quantity","Auto-detected"
-"cart.price","cart.price","cart.price","cart.price","cart.price","Auto-detected"
-"cart.subtotal","cart.subtotal","cart.subtotal","cart.subtotal","cart.subtotal","Auto-detected"
-"cart.remove","cart.remove","cart.remove","cart.remove","cart.remove","Auto-detected"
-"cart.decrease","cart.decrease","cart.decrease","cart.decrease","cart.decrease","Auto-detected"
-"cart.increase","cart.increase","cart.increase","cart.increase","cart.increase","Auto-detected"
-"cart.total","cart.total","cart.total","cart.total","cart.total","Auto-detected"
-"cart.screenshot","cart.screenshot","cart.screenshot","cart.screenshot","cart.screenshot","Auto-detected"
-"cart.empty","cart.empty","cart.empty","cart.empty","cart.empty","Auto-detected"
-"cart.emptyDesc","cart.emptyDesc","cart.emptyDesc","cart.emptyDesc","cart.emptyDesc","Auto-detected"
-"cart.goShopping","cart.goShopping","cart.goShopping","cart.goShopping","cart.goShopping","Auto-detected"
-"header.brand","header.brand","header.brand","header.brand","header.brand","Auto-detected"
-"header.products","header.products","header.products","header.products","header.products","Auto-detected"
-"header.contact","header.contact","header.contact","header.contact","header.contact","Auto-detected"
-"header.cart","header.cart","header.cart","header.cart","header.cart","Auto-detected"
-"product.added","product.added","product.added","product.added","product.added","Auto-detected"
-"product.addToCart","product.addToCart","product.addToCart","product.addToCart","product.addToCart","Auto-detected"
-"header","{""brand"":""Store"",""products"":""商品導覽"",""contact"":""聯絡我們"",""cart"":""購物車""}","{""brand"":""Store"",""products"":""Products"",""contact"":""Contact Us"",""cart"":""Cart""}","{""brand"":""Store"",""products"":""商品一覧"",""contact"":""お問い合わせ"",""cart"":""カート""}","","Auto-detected"
-"cart","{""title"":""您的購物車"",""empty"":""購物車是空的！"",""emptyDesc"":""看起來您還沒有加入任何商品。"",""goShopping"":""去逛逛商品"",""total"":""總計"",""screenshot"":""截圖並下載"",""quantity"":""數量"",""price"":""單價"",""subtotal"":""小計"",""productInfo"":""商品資訊"",""remove"":""點擊移除商品"",""decrease"":""減少數量"",""increase"":""增加數量""}","{""title"":""Your Shopping Cart"",""empty"":""Your cart is empty!"",""emptyDesc"":""Looks like you haven't added any items yet."",""goShopping"":""Start Shopping"",""total"":""Total"",""screenshot"":""Screenshot & Download"",""quantity"":""Quantity"",""price"":""Price"",""subtotal"":""Subtotal"",""productInfo"":""Product Info"",""remove"":""Click to remove"",""decrease"":""Decrease quantity"",""increase"":""Increase quantity""}","{""title"":""ショッピングカート"",""empty"":""カートは空です！"",""emptyDesc"":""まだ商品が追加されていないようです。"",""goShopping"":""買い物を始める"",""total"":""合計"",""screenshot"":""スクリーンショット"",""quantity"":""数量"",""price"":""単価"",""subtotal"":""小計"",""productInfo"":""商品情報"",""remove"":""クリックして削除"",""decrease"":""数量を減らす"",""increase"":""数量を増やす""}","","Auto-detected"
-"product","{""addToCart"":""加入購物車"",""added"":""已加入！"",""featured"":""精選商品""}","{""addToCart"":""Add to Cart"",""added"":""Added!"",""featured"":""Featured Products""}","{""addToCart"":""カートに追加"",""added"":""追加しました！"",""featured"":""おすすめ商品""}","","Auto-detected"
-"contact","{""title"":""聯絡我們"",""name"":""姓名"",""email"":""電子郵件"",""message"":""訊息"",""send"":""送出""}","{""title"":""Contact Us"",""name"":""Name"",""email"":""Email"",""message"":""Message"",""send"":""Send""}","{""title"":""お問い合わせ"",""name"":""お名前"",""email"":""メールアドレス"",""message"":""メッセージ"",""send"":""送信""}","","Auto-detected"
+cart.decrease,減少數量,Decrease quantity,数量を減らす,수량 감소,Auto-detected
+cart.empty,購物車是空的！,Your cart is empty!,カートは空です！,장바구니가 비어있습니다!,Auto-detected
+cart.emptyDesc,看起來您還沒有加入任何商品。,Looks like you haven't added any items yet.,まだ商品が追加されていないようです。,아직 상품을 추가하지 않으신 것 같습니다.,Auto-detected
+cart.goShopping,去逛逛商品,Start Shopping,買い物を始める,쇼핑 시작하기,Auto-detected
+cart.increase,增加數量,Increase quantity,数量を増やす,수량 증가,Auto-detected
+cart.price,單價,Price,単価,단가,Auto-detected
+cart.productInfo,商品資訊,Product Info,商品情報,상품 정보,Auto-detected
+cart.quantity,數量,Quantity,数量,수량,Auto-detected
+cart.remove,點擊移除商品,Click to remove,クリックして削除,클릭하여 제거,Auto-detected
+cart.screenshot,截圖並下載,Screenshot & Download,スクリーンショット,스크린샷 다운로드,Auto-detected
+cart.subtotal,小計,Subtotal,小計,소계,Auto-detected
+cart.title,您的購物車,Your Shopping Cart,ショッピングカート,장바구니,Auto-detected
+cart.total,總計,Total,合計,합계,Auto-detected
+contact.email,電子郵件,Email,メールアドレス,이메일,Auto-detected
+contact.message,訊息,Message,メッセージ,메시지,Auto-detected
+contact.name,姓名,Name,お名前,이름,Auto-detected
+contact.send,送出,Send,送信,보내기,Auto-detected
+contact.title,聯絡我們,Contact Us,お問い合わせ,문의하기,Auto-detected
+header.brand,Store,Store,Store,Store,Auto-detected
+header.cart,購物車,Cart,カート,장바구니,Auto-detected
+header.contact,聯絡我們,Contact Us,お問い合わせ,문의하기,Auto-detected
+header.products,商品導覽,Products,商品一覧,상품 목록,Auto-detected
+product.addToCart,加入購物車,Add to Cart,カートに追加,장바구니에 담기,Auto-detected
+product.added,已加入！,Added!,追加しました！,담았습니다!,Auto-detected
+product.featured,精選商品,Featured Products,おすすめ商品,추천 상품,Auto-detected
