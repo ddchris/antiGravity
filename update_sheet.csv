@@ -1,7 +1,21 @@
 key,zh-TW,en,ja,kr,detail
+about.address,通訊地址,Address,住所,주소,Auto-detected
+about.contact,聯絡方式,Contact Information,連絡先,연락처,Auto-detected
+about.copyNotSupported,您的瀏覽器不支援複製功能,Your browser does not support copy functionality,お使いのブラウザはコピー機能をサポートしていません,브라우저가 복사 기능을 지원하지 않습니다,Auto-detected
+about.copySuccess,已複製 {type}: {text},Copied {type}: {text},{type}をコピーしました: {text},{type} 복사됨: {text},Auto-detected
+about.degree.bachelor,學士,Bachelor's Degree,学士,학사,Auto-detected
+about.degree.master,碩士,Master's Degree,修士,석사,Auto-detected
+about.downloadResume,下載履歷,Download Resume,履歴書をダウンロード,이력서 다운로드,Auto-detected
+about.education,學歷背景,Education,学歴,학력,Auto-detected
+about.email,電子郵件,Email,メール,이메일,Auto-detected
 about.experience,工作經歷,Work Experience,職務経歴,경력,Auto-detected
+about.major.materials,材料系,Department of Materials Science,材料学科,재료학과,Auto-detected
+about.major.mse,材料科學與工程學系,Department of Materials Science and Engineering,材料科学工学科,재료과학공학과,Auto-detected
+about.phone,手機,Phone,電話,전화,Auto-detected
 about.skills,專業技能,Professional Skills,専門スキル,전문 기술,Auto-detected
 about.title,關於我,About Me,私について,내 소개,Auto-detected
+about.university.nctu,國立交通大學,National Chiao Tung University,国立交通大学,국립 교통대학교,Auto-detected
+about.university.nthu,國立清華大學,National Tsing Hua University,国立清華大学,국립 칭화대학교,Auto-detected
 cart.decrease,減少數量,Decrease quantity,数量を減らす,수량 감소,Auto-detected
 cart.empty,購物車是空的！,Your cart is empty!,カートは空です！,장바구니가 비어있습니다!,Auto-detected
 cart.emptyDesc,看起來您還沒有加入任何商品。,Looks like you haven't added any items yet.,まだ商品が追加されていないようです。,아직 상품을 추가하지 않으신 것 같습니다.,Auto-detected
@@ -15,6 +29,7 @@ cart.screenshot,截圖並下載,Screenshot & Download,スクリーンショッ�
 cart.subtotal,小計,Subtotal,小計,소계,Auto-detected
 cart.title,您的購物車,Your Shopping Cart,ショッピングカート,장바구니,Auto-detected
 cart.total,總計,Total,合計,합계,Auto-detected
+chat.cancel,取消,Cancel,キャンセル,취소,Auto-detected
 chat.clear,清除對話,Clear Chat,チャットをクリア,대화 지우기,Auto-detected
 chat.clearConfirm,確定要刪除所有訊息嗎？,Are you sure you want to delete all messages?,すべてのメッセージを削除してもよろしいですか？,모든 메시지를 삭제하시겠습니까?,Auto-detected
 chat.cleared,對話紀錄已清除,Chat history cleared,チャット履歴をクリアしました,대화 기록이 삭제되었습니다,Auto-detected
@@ -27,17 +42,78 @@ chat.welcome,歡迎！有什麼我可以幫您的嗎？,Welcome! How can I help 
 contact.email,電子郵件,Email,メールアドレス,이메일,Auto-detected
 contact.message,訊息,Message,メッセージ,메시지,Auto-detected
 contact.name,姓名,Name,お名前,이름,Auto-detected
+contact.required,此欄位為必填,This field is required,,,Auto-detected
 contact.send,送出,Send,送信,보내기,Auto-detected
+contact.successMessage,您的訊息已送出！,Your message has been sent!,,,Auto-detected
+contact.successTitle,發送成功,Success,,,Auto-detected
 contact.title,聯絡我們,Contact Us,お問い合わせ,문의하기,Auto-detected
+contact.validationError,請確認所有欄位都已填寫,Please check all fields,,,Auto-detected
+error.authTitle,認證失敗,Authentication Failed,認証失敗,인증 실패,Auto-detected
+error.badRequest,請求參數錯誤,Invalid request parameters,リクエストパラメータが無効です,잘못된 요청 매개변수입니다,Auto-detected
+error.confirm,確定,OK,OK,확인,Auto-detected
+error.forbidden,您沒有權限執行此操作,You do not have permission to perform this action,この操作を実行する権限がありません,이 작업을 수행할 권한이 없습니다,Auto-detected
+error.forbiddenTitle,權限不足,Access Denied,アクセス拒否,접근 거부,Auto-detected
+error.networkError,無法連接伺服器，請檢查網路連線,"Unable to connect to server, please check your network",サーバーに接続できません。ネットワーク接続を確認してください,서버에 연결할 수 없습니다. 네트워크 연결을 확인해 주세요,Auto-detected
+error.networkErrorTitle,網路錯誤,Network Error,ネットワークエラー,네트워크 오류,Auto-detected
+error.notFound,請求的資源不存在,The requested resource was not found,リクエストされたリソースが見つかりません,요청한 리소스를 찾을 수 없습니다,Auto-detected
+error.requestFailed,請求失敗,Request failed,リクエスト失敗,요청 실패,Auto-detected
+error.sendFailed,請求發送失敗,Failed to send request,リクエストの送信に失敗しました,요청을 보내지 못했습니다,Auto-detected
+error.serverError,伺服器內部錯誤，請稍後再試,"Internal server error, please try again later",サーバー内部エラーが発生しました。後でもう一度お試しください,내부 서버 오류가 발생했습니다. 나중에 다시 시도해 주세요,Auto-detected
+error.serverErrorTitle,伺服器錯誤,Server Error,サーバーエラー,서버 오류,Auto-detected
+error.serviceUnavailable,服務暫時不可用，請稍後再試,"Service temporarily unavailable, please try again later",サービスは一時的に利用できません。後でもう一度お試しください,서비스를 일시적으로 사용할 수 없습니다. 나중에 다시 시도해 주세요,Auto-detected
+error.title,錯誤,Error,エラー,오류,Auto-detected
+error.unauthorized,登入已過期，請重新登入,"Session expired, please log in again",セッションの有効期限が切れました。再度ログインしてください,세션이 만료되었습니다. 다시 로그인해 주세요,Auto-detected
+error.unknown,發生未知錯誤,An unknown error occurred,不明なエラーが発生しました,알 수 없는 오류가 발생했습니다,Auto-detected
 header.about,關於我,About Me,私について,내 소개,Auto-detected
 header.brand,Store,Store,Store,Store,Auto-detected
 header.cart,購物車,Cart,カート,장바구니,Auto-detected
 header.chat,線上客服,Online Service,カスタマーサービス,고객 서비스,Auto-detected
 header.contact,聯絡我們,Contact Us,お問い合わせ,문의하기,Auto-detected
 header.products,商品導覽,Products,商品一覧,상품 목록,Auto-detected
+header.stats,銷售統計,Sales Statistics,,,Auto-detected
+management.colAction,操作,Actions,操作,작업,Auto-detected
+management.colBrand,品牌,Brand,ブランド,브랜드,Auto-detected
+management.colCategory,分類,Category,カテゴリ,카테고리,Auto-detected
+management.colDesc,描述,Description,説明,설명,Auto-detected
+management.colDimensions,尺寸,Dimensions,寸法,크기,Auto-detected
+management.colImage,圖片,Image,画像,이미지,Auto-detected
+management.colName,商品名稱,Product Name,商品名,상품명,Auto-detected
+management.colPrice,價格,Price,価格,가격,Auto-detected
+management.colRating,評分,Rating,評価,평점,Auto-detected
+management.colSku,貨號 (SKU),SKU,SKU,SKU,Auto-detected
+management.colStatus,狀態,Status,ステータス,상태,Auto-detected
+management.colStock,庫存,Stock,在庫,재고,Auto-detected
+management.colWeight,重量,Weight,重量,무게,Auto-detected
+management.columns,顯示欄位,Visible Columns,表示カラム,표시 열,Auto-detected
+management.delete,刪除,Delete,削除,삭제,Auto-detected
+management.edit,編輯,Edit,編集,편집,Auto-detected
+management.pageSize,每頁筆數,Items per page,1ページあたりの件数,페이지 당 항목 수,Auto-detected
+management.searchPlaceholder,搜尋商品名稱...,Search product name...,商品名を検索...,상품명 검색...,Auto-detected
+management.title,商品管理,Product Management,商品管理,상품 관리,Auto-detected
+management.view,查看,View,表示,보기,Auto-detected
 product.addToCart,加入購物車,Add to Cart,カートに追加,장바구니에 담기,Auto-detected
 product.added,已加入！,Added!,追加しました！,담았습니다!,Auto-detected
 product.deleted,商品已刪除,Deleted!,商品は削除されました,상품이 삭제되었습니다,Auto-detected
 product.featured,精選商品,Featured Products,おすすめ商品,추천 상품,Auto-detected
 product.loading,正在載入更多商品...,Loading more products...,商品を読み込み中...,더 많은 상품을 불러오는 중...,Auto-detected
 product.noMore,--- 沒有更多商品了 ---,--- No more products ---,--- これ以上商品はありません ---,--- 더 이상 상품이 없습니다 ---,Auto-detected
+stats.averageOrder,,,平均注文額,평균 주문액,Auto-detected
+stats.barChartTitle,各類別總銷售額比較,Total Sales by Category,,,Auto-detected
+stats.categories.Books,書籍,Books,,,Auto-detected
+stats.categories.Clothing,服飾,Clothing,,,Auto-detected
+stats.categories.Electronics,電子產品,Electronics,,,Auto-detected
+stats.categories.Home,居家用品,Home,,,Auto-detected
+stats.category.Books,,,書籍,도서,Auto-detected
+stats.category.Clothing,,,衣類,의류,Auto-detected
+stats.category.Electronics,,,電子機器,전자기기,Auto-detected
+stats.category.Home,,,ホーム,홈/리빙,Auto-detected
+stats.category.Others,,,その他,기타,Auto-detected
+stats.categorySales,,,カテゴリ別売上,카테고리별 매출,Auto-detected
+stats.growth,,,成長率,성장률,Auto-detected
+stats.lineChartTitle,每日銷售趨勢,Daily Sales Trend,,,Auto-detected
+stats.monthlySales,,,月間売上推移,월별 매출 추이,Auto-detected
+stats.orders,,,注文数,주문 수,Auto-detected
+stats.pieChartTitle,各類別銷售佔比,Sales Share by Category,,,Auto-detected
+stats.subTitle,查看過去 6 個月的銷售數據分析,Analysis of sales data for the past 6 months,,,Auto-detected
+stats.title,銷售統計儀表板,Sales Statistics Dashboard,,,Auto-detected
+stats.totalSales,,,総売上,총 매출,Auto-detected

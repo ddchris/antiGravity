@@ -30,7 +30,7 @@
     "cart": "Cart",
     "contact": "Contact Us",
     "products": "Products",
-    "chat": "AI Consultant",
+    "chat": "Online Service",
     "stats": "Sales Statistics",
     "about": "About Me"
   },
@@ -103,7 +103,7 @@
     "noMore": "--- No more products ---"
   },
   "chat": {
-    "title": "AI Consultant",
+    "title": "Online Service",
     "welcome": "Welcome! How can I help you?",
     "placeholder": "Type a message...",
     "send": "Send",

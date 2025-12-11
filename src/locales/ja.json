@@ -14,20 +14,51 @@
     "title": "ショッピングカート",
     "total": "合計"
   },
+  "stats": {
+    "title": "",
+    "totalSales": "総売上",
+    "orders": "注文数",
+    "averageOrder": "平均注文額",
+    "growth": "成長率",
+    "monthlySales": "月間売上推移",
+    "categorySales": "カテゴリ別売上",
+    "category": {
+      "Electronics": "電子機器",
+      "Clothing": "衣類",
+      "Home": "ホーム",
+      "Books": "書籍",
+      "Others": "その他"
+    },
+    "barChartTitle": "",
+    "categories": {
+      "Books": "",
+      "Clothing": "",
+      "Electronics": "",
+      "Home": ""
+    },
+    "lineChartTitle": "",
+    "pieChartTitle": "",
+    "subTitle": ""
+  },
   "contact": {
     "email": "メールアドレス",
     "message": "メッセージ",
     "name": "お名前",
     "send": "送信",
-    "title": "お問い合わせ"
+    "title": "お問い合わせ",
+    "required": "",
+    "successMessage": "",
+    "successTitle": "",
+    "validationError": ""
   },
   "header": {
     "brand": "Store",
     "cart": "カート",
     "contact": "お問い合わせ",
     "products": "商品一覧",
-    "chat": "AIコンサルタント",
-    "about": "私について"
+    "chat": "カスタマーサービス",
+    "about": "私について",
+    "stats": ""
   },
   "about": {
     "title": "私について",
@@ -85,7 +116,7 @@
     "noMore": "--- これ以上商品はありません ---"
   },
   "chat": {
-    "title": "AIコンサルタント",
+    "title": "カスタマーサービス",
     "welcome": "いらっしゃいませ！何かお手伝いしましょうか？",
     "placeholder": "メッセージを入力...",
     "send": "送信",

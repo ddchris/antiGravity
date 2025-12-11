@@ -30,7 +30,7 @@
     "cart": "購物車",
     "contact": "聯絡我們",
     "products": "商品導覽",
-    "chat": "AI顧問",
+    "chat": "線上客服",
     "stats": "銷售統計",
     "about": "關於我"
   },
@@ -103,7 +103,7 @@
     "noMore": "--- 沒有更多商品了 ---"
   },
   "chat": {
-    "title": "AI顧問",
+    "title": "線上客服",
     "welcome": "歡迎！有什麼我可以幫您的嗎？",
     "placeholder": "輸入訊息...",
     "send": "發送",

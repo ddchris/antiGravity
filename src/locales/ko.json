@@ -14,20 +14,51 @@
     "title": "장바구니",
     "total": "합계"
   },
+  "stats": {
+    "title": "",
+    "totalSales": "총 매출",
+    "orders": "주문 수",
+    "averageOrder": "평균 주문액",
+    "growth": "성장률",
+    "monthlySales": "월별 매출 추이",
+    "categorySales": "카테고리별 매출",
+    "category": {
+      "Electronics": "전자기기",
+      "Clothing": "의류",
+      "Home": "홈/리빙",
+      "Books": "도서",
+      "Others": "기타"
+    },
+    "barChartTitle": "",
+    "categories": {
+      "Books": "",
+      "Clothing": "",
+      "Electronics": "",
+      "Home": ""
+    },
+    "lineChartTitle": "",
+    "pieChartTitle": "",
+    "subTitle": ""
+  },
   "contact": {
     "email": "이메일",
     "message": "메시지",
     "name": "이름",
     "send": "보내기",
-    "title": "문의하기"
+    "title": "문의하기",
+    "required": "",
+    "successMessage": "",
+    "successTitle": "",
+    "validationError": ""
   },
   "header": {
     "brand": "Store",
     "cart": "장바구니",
     "contact": "문의하기",
     "products": "상품 목록",
-    "chat": "AI 컨설턴트",
-    "about": "내 소개"
+    "chat": "고객 서비스",
+    "about": "내 소개",
+    "stats": ""
   },
   "about": {
     "title": "내 소개",
@@ -85,7 +116,7 @@
     "noMore": "--- 더 이상 상품이 없습니다 ---"
   },
   "chat": {
-    "title": "AI 컨설턴트",
+    "title": "고객 서비스",
     "welcome": "환영합니다! 무엇을 도와드릴까요?",
     "placeholder": "메세지를 입력하세요...",
     "send": "전송",
