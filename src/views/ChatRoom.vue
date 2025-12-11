@@ -534,24 +534,24 @@ const IconSend = {
              <!-- Web Components Replacing Original Buttons -->
              <base-button 
                 @click="handleScrollTop" 
+                type="primary"
                 :title="$t('chat.scrollTop')"
                 class="!p-2 !rounded-full !h-auto"
-                style="--el-button-bg-color: transparent; --el-button-border-color: transparent; --el-button-text-color: white; --el-button-hover-text-color: white; --el-button-hover-bg-color: rgba(255,255,255,0.2); --el-button-active-bg-color: rgba(255,255,255,0.3);"
                 :icon="IconScrollTop"
              />
              <base-button 
-                @click="handleScrollBottom" 
+                @click="handleScrollBottom"
+                type="primary"  
                 :title="$t('chat.scrollBottom')"
                 class="!p-2 !rounded-full !h-auto"
-                style="--el-button-bg-color: transparent; --el-button-border-color: transparent; --el-button-text-color: white; --el-button-hover-text-color: white; --el-button-hover-bg-color: rgba(255,255,255,0.2); --el-button-active-bg-color: rgba(255,255,255,0.3);"
                 :icon="IconScrollBottom"
              />
             <div class="w-px h-6 bg-indigo-400 mx-1"></div>
             <base-button 
                 @click="clearMessages" 
+                type="danger"
                 :title="$t('chat.clear')"
                 class="!p-2 !rounded-full !h-auto"
-                style="--el-button-bg-color: transparent; --el-button-border-color: transparent; --el-button-text-color: white; --el-button-hover-text-color: white; --el-button-hover-bg-color: rgba(239, 68, 68, 0.2); --el-button-active-bg-color: rgba(239, 68, 68, 0.3); --el-button-hover-border-color: transparent;"
                 :icon="IconClear"
              />
         </div>
@@ -641,13 +641,12 @@ const IconSend = {
             <base-button 
                 v-if="isWebComponentLoaded"
                 @click="sendMessage"
-                type="primary"
+                type="success"
                 :name="$t('chat.send') || 'Send'"
                 :icon="IconSend"
                 :disabled="!inputMessage.trim()"
                 round
-                style="--el-button-bg-color: transparent; --el-button-border-color: transparent; --el-button-text-color: white; --el-button-hover-text-color: white; --el-button-hover-bg-color: transparent; --el-button-hover-border-color: transparent; --el-button-active-bg-color: transparent; --el-button-active-border-color: transparent; --el-button-disabled-bg-color: transparent; --el-button-outline-color: transparent;"
-                class="!h-12 !w-40 !rounded-full flex items-center justify-center shadow-sm !bg-[#6366f1] hover:!bg-[#4f46e5] transition-colors cursor-pointer"
+                class="!h-12 !w-40 text-xl !rounded-full flex items-center justify-center shadow-sm transition-colors cursor-pointer"
             />
         </div>
       </div>

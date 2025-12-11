@@ -291,3 +291,4 @@ onUnmounted(() => {
 <style scoped>
 /* Scoped styles if needed, but Tailwind handles most */
 </style>
+
