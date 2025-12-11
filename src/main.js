@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'
 import * as ElementPlusNamespace from 'element-plus'
 import 'element-plus/dist/index.css'
+import 'element-plus/theme-chalk/dark/css-vars.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import App from './App.vue'
@@ -11,11 +12,17 @@ import router from './router'
 import './style.css'
 import { setupCartPersistence } from './stores/cartStore'
 import i18n from './i18n'
+import { initWebComponent } from '@/utils/web-component-proxy'
 
 // Expose globals for Remote Web Components (IIFE build expects these)
 window.Vue = Vue
 window.ElementPlus = ElementPlusNamespace // MUST be the namespace object containing named exports like ElButton
 window.ElementPlusIconsVue = ElementPlusIconsVue
+
+// Initialize Remote Components
+
+
+initWebComponent()
 
 const app = createApp(App)
 

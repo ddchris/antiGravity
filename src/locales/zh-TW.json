@@ -54,6 +54,20 @@
     "copySuccess": "已複製 {type}: {text}",
     "copyNotSupported": "您的瀏覽器不支援複製功能"
   },
+  "management": {
+    "title": "商品管理",
+    "searchPlaceholder": "搜尋商品名稱...",
+    "pageSize": "每頁筆數",
+    "columns": "顯示欄位",
+    "colName": "商品名稱",
+    "colImage": "圖片",
+    "colPrice": "價格",
+    "colDesc": "描述",
+    "colAction": "操作",
+    "view": "查看",
+    "edit": "編輯",
+    "delete": "刪除"
+  },
   "product": {
     "addToCart": "加入購物車",
     "added": "已加入！",

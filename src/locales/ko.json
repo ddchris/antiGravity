@@ -54,6 +54,20 @@
     "copySuccess": "{type} 복사됨: {text}",
     "copyNotSupported": "브라우저가 복사 기능을 지원하지 않습니다"
   },
+  "management": {
+    "title": "상품 관리",
+    "searchPlaceholder": "상품명 검색...",
+    "pageSize": "페이지 당 항목 수",
+    "columns": "표시 열",
+    "colName": "상품명",
+    "colImage": "이미지",
+    "colPrice": "가격",
+    "colDesc": "설명",
+    "colAction": "작업",
+    "view": "보기",
+    "edit": "편집",
+    "delete": "삭제"
+  },
   "product": {
     "addToCart": "장바구니에 담기",
     "added": "담았습니다!",

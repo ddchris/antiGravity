@@ -4,9 +4,9 @@
 // 3. Local Fallback (public/base-all.js)
 const REMOTE_BASE = 'https://ddchris.github.io/my-widget'
 const CANDIDATES = [
+  '/base-all.js', // Local fallback (Prioritized for Dev/Fixing)
   `${REMOTE_BASE}/base-all.js`,
-  `${REMOTE_BASE}/dist/base-all.js`,
-  '/base-all.js' // Local fallback
+  `${REMOTE_BASE}/dist/base-all.js`
 ]
 
 function loadScript(url) {

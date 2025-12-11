@@ -54,6 +54,20 @@
     "copySuccess": "{type}をコピーしました: {text}",
     "copyNotSupported": "お使いのブラウザはコピー機能をサポートしていません"
   },
+  "management": {
+    "title": "商品管理",
+    "searchPlaceholder": "商品名を検索...",
+    "pageSize": "1ページあたりの件数",
+    "columns": "表示カラム",
+    "colName": "商品名",
+    "colImage": "画像",
+    "colPrice": "価格",
+    "colDesc": "説明",
+    "colAction": "操作",
+    "view": "表示",
+    "edit": "編集",
+    "delete": "削除"
+  },
   "product": {
     "addToCart": "カートに追加",
     "added": "追加しました！",

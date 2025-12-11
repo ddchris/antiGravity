@@ -35,8 +35,8 @@ const handleError = () => {
   isLoading.value = false
   if (!hasError.value) {
     hasError.value = true
-    // Fallback image (Placeholder)
-    currentSrc.value = 'https://placehold.co/600x400/e2e8f0/475569?text=No+Image'
+    // Fallback image (Text Placeholder)
+    currentSrc.value = 'https://placehold.co/400x300/e2e8f0/64748b?text=No+Image&font=roboto'
   }
 }
 </script>

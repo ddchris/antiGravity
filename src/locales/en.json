@@ -54,6 +54,20 @@
     "copySuccess": "Copied {type}: {text}",
     "copyNotSupported": "Your browser does not support copy functionality"
   },
+  "management": {
+    "title": "Product Management",
+    "searchPlaceholder": "Search product name...",
+    "pageSize": "Items per page",
+    "columns": "Visible Columns",
+    "colName": "Product Name",
+    "colImage": "Image",
+    "colPrice": "Price",
+    "colDesc": "Description",
+    "colAction": "Actions",
+    "view": "View",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
   "product": {
     "addToCart": "Add to Cart",
     "added": "Added!",

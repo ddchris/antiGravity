@@ -4,6 +4,8 @@ import { useCartStore } from '../stores/cartStore'
 import { useThemeStore } from '../stores/themeStore'
 import { useI18n } from 'vue-i18n'
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useResizeObserver } from '@vueuse/core'
+import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
 
 // 導入購物車 store 以讀取總數量
 const cartStore = useCartStore()
@@ -32,10 +34,47 @@ const updateTime = () => {
   })
 }
 
+
+// ... existing imports ...
+
+// Scroll Logic for Desktop Nav
+const scrollContainer = ref(null)
+const showLeftArrow = ref(false)
+const showRightArrow = ref(false)
+
+const checkScroll = () => {
+  const el = scrollContainer.value
+  if (!el) return
+  
+  // Create a tolerance (e.g. 1px) to avoid floating point issues
+  showLeftArrow.value = el.scrollLeft > 0
+  showRightArrow.value = Math.ceil(el.scrollLeft + el.clientWidth) < el.scrollWidth
+}
+
+const scroll = (direction) => {
+  const el = scrollContainer.value
+  if (!el) return
+  const scrollAmount = 200
+  if (direction === 'left') {
+    el.scrollBy({ left: -scrollAmount, behavior: 'smooth' })
+  } else {
+    el.scrollBy({ left: scrollAmount, behavior: 'smooth' })
+  }
+}
+
 onMounted(() => {
   updateTime()
   timer = setInterval(updateTime, 1000)
+  
+  // Check scroll initially
+  setTimeout(checkScroll, 100)
 })
+
+// Observe resize to update arrows
+useResizeObserver(scrollContainer, checkScroll)
+
+// ... existing unmounted ...
+
 
 onUnmounted(() => {
   if (timer) clearInterval(timer)
@@ -53,53 +92,86 @@ onUnmounted(() => {
 
         <div class="flex items-center space-x-2 md:space-x-6">
           <!-- Desktop Navigation -->
-          <div class="hidden md:flex items-center space-x-6">
-            <!-- 導航連結 -->
-            <RouterLink
-              to="/"
-              class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
-              active-class="text-indigo-600 dark:text-indigo-400 font-bold"
+          <div class="hidden md:flex items-center group max-w-[45vw] lg:max-w-[700px]">
+            <!-- Left Arrow -->
+            <button 
+              v-show="showLeftArrow"
+              @click="scroll('left')"
+              class="flex-shrink-0 mr-1 p-1.5 bg-white dark:bg-gray-800 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 text-indigo-600 dark:text-indigo-400 border border-gray-200 dark:border-gray-700 transition-colors z-10"
+              title="Scroll Left"
             >
-              {{ $t('header.products') }}
-            </RouterLink>
-            <RouterLink
-              to="/contact"
-              class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
-              active-class="text-indigo-600 dark:text-indigo-400 font-bold"
+              <el-icon><ArrowLeft /></el-icon>
+            </button>
+
+            <div 
+              ref="scrollContainer"
+              @scroll="checkScroll"
+              class="flex-1 flex items-center space-x-6 overflow-x-auto scroll-smooth px-2"
+              style="scrollbar-width: none; -ms-overflow-style: none;"
             >
-              {{ $t('header.contact') }}
-            </RouterLink>
-            <!-- 購物車連結 - 帶有數量角標 -->
-            <RouterLink
-              to="/cart"
-              class="relative inline-block text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
-              active-class="text-indigo-600 dark:text-indigo-400 font-bold"
-            >
-              {{ $t('header.cart') }}
-              <!-- 數量角標 - 只在有商品時顯示 -->
-              <span 
-                v-if="cartStore.cartItems.length > 0"
-                class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full text-xs h-5 w-5 flex items-center justify-center font-bold"
+              <!-- 導航連結 -->
+              <RouterLink
+                to="/"
+                class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
+                active-class="text-indigo-600 dark:text-indigo-400 font-bold"
               >
-                {{ cartStore.cartItems.length }}
-              </span>
-            </RouterLink>
+                {{ $t('header.products') }}
+              </RouterLink>
+              <RouterLink
+                to="/admin/products"
+                class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
+                active-class="text-indigo-600 dark:text-indigo-400 font-bold"
+              >
+                {{ $t('management.title') }}
+              </RouterLink>
+              <RouterLink
+                to="/contact"
+                class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
+                active-class="text-indigo-600 dark:text-indigo-400 font-bold"
+              >
+                {{ $t('header.contact') }}
+              </RouterLink>
+              <!-- 購物車連結 -->
+              <RouterLink
+                to="/cart"
+                class="relative inline-block text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
+                active-class="text-indigo-600 dark:text-indigo-400 font-bold"
+              >
+                {{ $t('header.cart') }}
+                <span 
+                  v-if="cartStore.cartItems.length > 0"
+                  class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full text-xs h-5 w-5 flex items-center justify-center font-bold"
+                >
+                  {{ cartStore.cartItems.length }}
+                </span>
+              </RouterLink>
 
-            <RouterLink
-              to="/chat"
-              class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
-              active-class="text-indigo-600 dark:text-indigo-400 font-bold"
-            >
-              {{ $t('header.chat') }}
-            </RouterLink>
+              <RouterLink
+                to="/chat"
+                class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
+                active-class="text-indigo-600 dark:text-indigo-400 font-bold"
+              >
+                {{ $t('header.chat') }}
+              </RouterLink>
 
-            <RouterLink
-              to="/about"
-              class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
-              active-class="text-indigo-600 dark:text-indigo-400 font-bold"
+              <RouterLink
+                to="/about"
+                class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
+                active-class="text-indigo-600 dark:text-indigo-400 font-bold"
+              >
+                {{ $t('header.about') }}
+              </RouterLink>
+            </div>
+
+            <!-- Right Arrow -->
+             <button 
+              v-show="showRightArrow"
+              @click="scroll('right')"
+              class="flex-shrink-0 ml-1 p-1.5 bg-white dark:bg-gray-800 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 text-indigo-600 dark:text-indigo-400 border border-gray-200 dark:border-gray-700 transition-colors z-10"
+              title="Scroll Right"
             >
-              {{ $t('header.about') }}
-            </RouterLink>
+              <el-icon><ArrowRight /></el-icon>
+            </button>
           </div>
 
 
@@ -159,6 +231,14 @@ onUnmounted(() => {
             @click="isMobileMenuOpen = false"
           >
             {{ $t('header.products') }}
+          </RouterLink>
+          <RouterLink
+            to="/admin/products"
+            class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors px-2 py-1"
+            active-class="text-indigo-600 dark:text-indigo-400 font-bold bg-gray-100 dark:bg-gray-800 rounded"
+            @click="isMobileMenuOpen = false"
+          >
+            {{ $t('management.title') }}
           </RouterLink>
           <RouterLink
             to="/contact"
