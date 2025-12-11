@@ -218,4 +218,13 @@ select,
     line-height: 28px !important;
     margin: 0 2px !important;
   }
+
+  /* Enforce Strict Mobile Viewport Width */
+  html,
+  body,
+  #app {
+    max-width: 100dvw !important;
+    overflow-x: hidden !important;
+    width: 100dvw !important;
+  }
 }
