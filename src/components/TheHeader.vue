@@ -82,7 +82,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header class="fixed top-0 left-0 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-md z-50 transition-colors">
+  <header class="sticky top-0 left-0 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-md z-50 transition-colors">
     <nav class="container mx-auto px-4 py-4">
       <div class="flex justify-between items-center">
         <!-- Logo / Brand Name -->
@@ -301,8 +301,6 @@ onUnmounted(() => {
       </div>
     </nav>
   </header>
-  <!-- Spacer to prevent content from being hidden behind fixed header -->
-  <div class="h-16"></div>
 </template>
 
 <style scoped>
