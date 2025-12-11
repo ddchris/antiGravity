@@ -5,8 +5,8 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const productStore = useProductStore()
 
-// Lazy Loading Logic
-const displayedCount = ref(12) // Initial number of items to show
+// 懶加載邏輯
+const displayedCount = ref(12) // 初始顯示的項目數量
 const loading = ref(false)
 const trigger = ref(null)
 
@@ -20,7 +20,7 @@ const loadMore = (entries) => {
   const [entry] = entries
   if (entry.isIntersecting && displayedCount.value < productStore.products.length) {
     loading.value = true
-    // Simulate a small delay for better UX (optional, but requested "loading effect")
+    // 模擬一個短暫延遲以獲得更好的使用體驗 (UX)
     setTimeout(() => {
         displayedCount.value += 8
         loading.value = false
@@ -64,7 +64,7 @@ onUnmounted(() => {
       />
     </div>
     
-    <!-- Infinite Scroll Trigger & Loading Indicator -->
+    <!-- 無限捲動觸發器 & 載入指示器 -->
     <div ref="trigger" class="py-8 text-center">
       <div v-if="loading" class="inline-flex items-center text-indigo-600 dark:text-indigo-400">
         <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

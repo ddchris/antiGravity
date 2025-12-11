@@ -1,10 +1,8 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-// Stores
 // 匯入 Store
 import { useProductStore } from '../stores/productStore'
 
-// I18n
 // 國際化
 import { useI18n } from 'vue-i18n'
 import { Search } from '@element-plus/icons-vue'
@@ -12,7 +10,6 @@ import { Search } from '@element-plus/icons-vue'
 const { t } = useI18n()
 const productStore = useProductStore()
 
-// State
 // 狀態
 const loading = ref(false)
 const searchText = ref('')
@@ -21,7 +18,6 @@ const pageSize = ref(4) // Default 4 items per page (預設每頁 4 筆)
 const sortProp = ref('')
 const sortOrder = ref('') // 'ascending' or 'descending'
 
-// Column Visibility State
 // 欄位顯示狀態
 const allColumns = [
   { key: 'name', label: 'management.colName' }, // Fixed Left 1
@@ -39,7 +35,6 @@ const allColumns = [
 ]
 const visibleColumns = ref(['name', 'imageUrl', 'category', 'brand', 'sku', 'stock', 'weight', 'dimensions', 'description', 'rating', 'status', 'price'])
 
-// Initial Data Fetch
 // 初始化資料獲取
 onMounted(async () => {
   loading.value = true
@@ -47,7 +42,6 @@ onMounted(async () => {
   loading.value = false
 })
 
-// Reset to page 1 when page size changes
 // 當頁面大小改變時重置為第 1 頁
 watch(pageSize, () => {
   loading.value = true
@@ -58,12 +52,10 @@ watch(pageSize, () => {
   }, 300)
 })
 
-// Filtering & Sorting Logic
 // 過濾與排序邏輯
 const processedProducts = computed(() => {
   let result = [...productStore.products]
 
-  // 1. Search Filter (Group logic implied as simple filtering here, or strict grouping?)
   // 1. 搜尋過濾
   // User asked for "Array.prototype.group" but that's experimental/newer. 
   // Standard filtering is usually sufficient unless "grouping" meant UI grouping.
@@ -76,20 +68,17 @@ const processedProducts = computed(() => {
     )
   }
 
-  // 2. Custom Sorting
   // 2. 自定義排序
   if (sortProp.value && sortOrder.value) {
     result.sort((a, b) => {
       let valA = a[sortProp.value]
       let valB = b[sortProp.value]
 
-      // Handle numbers
       // 處理數字
       if (!isNaN(parseFloat(valA)) && !isNaN(parseFloat(valB))) {
         valA = parseFloat(valA)
         valB = parseFloat(valB)
       } else {
-        // Strings case-insensitive
         // 字串不區分大小寫
         valA = String(valA).toLowerCase()
         valB = String(valB).toLowerCase()
@@ -104,7 +93,6 @@ const processedProducts = computed(() => {
   return result
 })
 
-// Pagination Logic
 // 分頁邏輯
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value
@@ -112,7 +100,6 @@ const paginatedData = computed(() => {
   return processedProducts.value.slice(start, end)
 })
 
-// Handlers
 // 事件處理
 const handleSortChange = ({ prop, order }) => {
   sortProp.value = prop

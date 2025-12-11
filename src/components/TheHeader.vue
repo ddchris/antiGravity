@@ -186,7 +186,7 @@ onUnmounted(() => {
             <select 
               v-model="locale" 
               @change="changeLocale(locale)"
-              class="px-2 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer text-sm w-28"
+              class="text-white px-2 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer text-sm w-28"
             >
               <option value="zh-TW">繁體中文</option>
               <option value="en">English</option>

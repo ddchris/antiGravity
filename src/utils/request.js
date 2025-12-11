@@ -7,6 +7,7 @@
  * - `quiet` 選項: 支援靜默模式 (Skip auto-error dialog)，適合自定義錯誤處理
  * - 完整的 i18n 錯誤訊息支援
  * 
+ * 
  * 使用方式 (Usage):
  *   import request from '@/utils/request'
  *   
@@ -21,11 +22,9 @@ import axios from 'axios'
 import { ElMessageBox } from 'element-plus'
 import i18n from '../i18n'
 
-// Helper to get translated text
 // 取得翻譯文字的輔助函式
 const t = (key) => i18n.global.t(key)
 
-// Create axios instance
 // 建立 Axios 實例
 const service = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '',
@@ -35,18 +34,15 @@ const service = axios.create({
   }
 })
 
-// Request Interceptor
 // 請求攔截器
 service.interceptors.request.use(
   (config) => {
-    // Add token from localStorage if available
     // 如果 localStorage 中有 token，則將其加入 Header
     const token = localStorage.getItem('token')
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
     }
     
-    // Add timestamp to prevent caching (optional)
     // 加入時間戳記以防止快取 (可選)
     if (config.method === 'get') {
       config.params = {
@@ -63,20 +59,16 @@ service.interceptors.request.use(
   }
 )
 
-// Response Interceptor
 // 回應攔截器
 service.interceptors.response.use(
   (response) => {
-    // Return data directly for convenience
     // 為了方便，直接回傳 data
     return response.data
   },
   async (error) => {
     const config = error.config || {}
     
-    // --- Auto-retry Logic ---
     // --- 自動重試邏輯 ---
-    // Default: 3 retries, 1000ms delay
     // 預設：重試 3 次，延遲 1000ms
     const retryTotal = config.retry ?? 3
     const retryDelay = config.retryDelay ?? 1000
@@ -90,11 +82,9 @@ service.interceptors.response.use(
       config.__retryCount += 1
       console.log(`[Axios Retry] Attempt ${config.__retryCount}/${retryTotal} for ${config.url}...`)
       
-      // Wait for delay
       // 等待延遲
       await new Promise(resolve => setTimeout(resolve, retryDelay))
       
-      // Retry request
       // 重試請求
       return service(config)
     }
@@ -102,13 +92,11 @@ service.interceptors.response.use(
 
     const quiet = config.quiet || false
     
-    // Extract error message using i18n
     // 使用 i18n 取得錯誤訊息
     let message = t('error.unknown')
     let title = t('error.title')
     
     if (error.response) {
-      // Server responded with error
       // 伺服器回傳錯誤
       const status = error.response.status
       const data = error.response.data
@@ -120,7 +108,6 @@ service.interceptors.response.use(
         case 401:
           message = t('error.unauthorized')
           title = t('error.authTitle')
-          // Optionally redirect to login
           // 可選擇重導向至登入頁
           // window.location.href = '/login'
           break
@@ -142,17 +129,14 @@ service.interceptors.response.use(
           message = data?.message || `${t('error.requestFailed')} (${status})`
       }
     } else if (error.request) {
-      // Request made but no response
       // 請求已發出但沒有回應
       message = t('error.networkError')
       title = t('error.networkErrorTitle')
     } else {
-      // Something else happened
       // 發生其他錯誤
       message = error.message || t('error.sendFailed')
     }
     
-    // Show error dialog unless quiet mode is enabled
     // 除非啟用靜默模式，否則顯示錯誤對話框
     if (!quiet) {
       try {
@@ -161,12 +145,10 @@ service.interceptors.response.use(
           type: 'error'
         })
       } catch {
-        // User closed dialog, ignore
         // 使用者關閉對話框，忽略
       }
     }
     
-    // Attach parsed message to error for component use
     // 將解析後的訊息附加到錯誤物件，供元件使用
     error.displayMessage = message
     error.displayTitle = title
@@ -176,7 +158,6 @@ service.interceptors.response.use(
 )
 
 /**
- * Request wrapper with quiet option support
  * 支援靜默選項的請求封裝
  * 
  * @param {Object} config - Axios config + { quiet: boolean }
@@ -186,7 +167,6 @@ export function request(config) {
   return service(config)
 }
 
-// Convenience methods
 // 便捷方法
 request.get = (url, config = {}) => service.get(url, config)
 request.post = (url, data, config = {}) => service.post(url, data, config)
@@ -194,7 +174,6 @@ request.put = (url, data, config = {}) => service.put(url, data, config)
 request.delete = (url, config = {}) => service.delete(url, config)
 request.patch = (url, data, config = {}) => service.patch(url, data, config)
 
-// Export raw axios instance for advanced use
 // 匯出原始 axios 實例供進階使用
 export { service as axios }
 

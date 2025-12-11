@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import * as Vue from 'vue' // Expose Vue for remote components
+import * as Vue from 'vue' // 暴露 Vue 供遠端組件使用
 import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'
 import * as ElementPlusNamespace from 'element-plus'
@@ -19,7 +19,6 @@ window.Vue = Vue
 window.ElementPlus = ElementPlusNamespace // 必須是包含 ElButton 等具名匯出的命名空間物件
 window.ElementPlusIconsVue = ElementPlusIconsVue
 
-// Initialize Remote Components
 // 初始化遠端組件
 
 
@@ -35,7 +34,6 @@ app.use(ElementPlus) // 可選：如果需要本地使用則引入，但為了�
 // 設置購物車持久化 - 啟用 localStorage 自動儲存
 setupCartPersistence()
 
-// Custom Directives
 // 自定義指令
 import fixCol from './directives/fixCol'
 app.directive('fixCol', fixCol)
