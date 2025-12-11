@@ -159,3 +159,63 @@ select,
     margin-left: 0 !important;
   }
 }
+
+/* Custom Animation Overrides */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.3s ease-out !important;
+}
+
+/* Mobile Pagination Fix */
+@media (max-width: 768px) {
+
+  base-pagination,
+  .el-pagination {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    /* 不換行 */
+    justify-content: center !important;
+    gap: 4px !important;
+    /* 縮小間距 */
+    height: auto !important;
+    overflow-x: auto !important;
+    /* 允許橫向捲動以防萬一 */
+  }
+
+  /* Hide Total and Jumper on mobile to save space */
+  .el-pagination__total,
+  .el-pagination__jump {
+    display: none !important;
+  }
+
+  /* Make input smaller on mobile (if visible) */
+  .el-pagination .el-input {
+    width: 50px !important;
+  }
+
+  /* Ensure pagination container allows wrapping */
+  base-pagination>div {
+    flex-wrap: nowrap !important;
+  }
+
+  /* Adjust pager button size */
+  .el-pagination .btn-prev,
+  .el-pagination .btn-next,
+  .el-pagination .el-pager li {
+    min-width: 28px !important;
+    height: 28px !important;
+    line-height: 28px !important;
+    margin: 0 2px !important;
+  }
+}

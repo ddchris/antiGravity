@@ -6,9 +6,14 @@ import { useProductStore } from '../stores/productStore'
 // 國際化
 import { useI18n } from 'vue-i18n'
 import { Search } from '@element-plus/icons-vue'
+import { useWindowSize } from '@vueuse/core'
 
 const { t } = useI18n()
 const productStore = useProductStore()
+
+// 視窗寬度偵測
+const { width } = useWindowSize()
+const isMobile = computed(() => width.value < 768)
 
 // 狀態
 const loading = ref(false)
@@ -121,6 +126,20 @@ const handlePageChange = (val) => {
   }, 300)
 }
 
+// 決定欄位鎖定狀態
+const getColumnFixed = (key) => {
+  if (isMobile.value) {
+    // 手機版：鎖定左側 Name，右側 Price
+    if (key === 'name') return 'left'
+    return key === 'price' ? 'right' : false
+  } else {
+    // 電腦版：鎖定左側 Name/Image，右側 Rating/Status/Price
+    if (['name', 'imageUrl'].includes(key)) return 'left'
+    if (['rating', 'status', 'price'].includes(key)) return 'right'
+  }
+  return false
+}
+
 </script>
 
 <template>
@@ -164,7 +183,6 @@ const handlePageChange = (val) => {
       <!-- 表格區塊 -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
         <el-table 
-          v-fix-col="{ l: 2, r: 3 }"
           :data="paginatedData" 
           style="width: 100%" 
           v-loading="loading"
@@ -178,6 +196,7 @@ const handlePageChange = (val) => {
               v-if="visibleColumns.includes(col.key)"
               :prop="col.key"
               :label="$t(col.label)"
+              :fixed="getColumnFixed(col.key)"
               :sortable="['imageUrl', 'description'].includes(col.key) ? false : 'custom'"
               :min-width="col.key === 'name' ? '180' : (col.key === 'description' ? '250' : (['imageUrl', 'stock'].includes(col.key) ? '80' : (['weight', 'status', 'brand', 'price'].includes(col.key) ? '100' : '130')))"
             >
@@ -278,9 +297,9 @@ const handlePageChange = (val) => {
 <style scoped>
 /* Element Plus Dark Mode Overrides for specific parts if needed */
 :global(.dark .el-table) {
-  --el-table-bg-color: transparent;
-  --el-table-tr-bg-color: transparent;
-  --el-table-header-bg-color: #374151;
+  --el-table-bg-color: #1f2937; /* gray-800 to match container */
+  --el-table-tr-bg-color: #1f2937;
+  --el-table-header-bg-color: #374151; /* gray-700 */
   --el-table-text-color: #e5e7eb;
   --el-table-header-text-color: #e5e7eb;
   --el-table-row-hover-bg-color: #4b5563;
