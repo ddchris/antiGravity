@@ -33,9 +33,9 @@ const handleAddToCart = () => {
 </script>
 
 <template>
-  <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
+  <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col">
     <!-- 商品圖片 -->
-    <div class="h-48 overflow-hidden bg-gray-200 dark:bg-gray-600">
+    <div class="h-48 overflow-hidden bg-gray-200 dark:bg-gray-600 flex-shrink-0">
       <BaseImage
         :src="product.imageUrl"
         :alt="product.name"
@@ -44,11 +44,11 @@ const handleAddToCart = () => {
     </div>
 
     <!-- 商品資訊 -->
-    <div class="p-6">
+    <div class="p-4 flex flex-col flex-1">
       <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">{{ product.name }}</h3>
       <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">{{ product.description }}</p>
-      <div class="flex justify-between items-center">
-        <span class="text-xl font-bold text-indigo-600 dark:text-indigo-400">{{ formatPrice(product.price) }}</span>
+      <div class="flex justify-between items-center gap-4 mt-auto">
+        <span class="text-lg font-bold text-indigo-600 dark:text-indigo-400">{{ formatPrice(product.price) }}</span>
         <button 
           @click="handleAddToCart"
           :class="[
