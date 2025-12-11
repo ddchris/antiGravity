@@ -29,6 +29,8 @@ const loadMore = (entries) => {
 }
 
 onMounted(() => {
+  productStore.fetchProducts()
+
   const options = {
     root: null,
     rootMargin: '100px',
