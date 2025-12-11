@@ -643,7 +643,7 @@ const IconSend = {
                 :icon="IconSend"
                 :disabled="!inputMessage.trim() || isTyping || isStreaming"
                 round
-                class="!h-12 !w-40 text-xl !rounded-full flex items-center justify-center shadow-sm transition-colors cursor-pointer"
+                class="!h-12 !w-24 md:!w-40 text-sm md:text-xl !rounded-full flex items-center justify-center shadow-sm transition-colors cursor-pointer"
             />
         </div>
       </div>
