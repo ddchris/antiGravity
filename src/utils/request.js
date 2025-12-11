@@ -66,6 +66,29 @@ service.interceptors.response.use(
   },
   async (error) => {
     const config = error.config || {}
+    
+    // --- Auto-retry Logic ---
+    // Default: 3 retries, 1000ms delay
+    const retryTotal = config.retry ?? 3
+    const retryDelay = config.retryDelay ?? 1000
+    
+    config.__retryCount = config.__retryCount || 0
+    
+    const isNetworkError = !error.response
+    const isServerError = error.response && error.response.status >= 500
+    
+    if ((isNetworkError || isServerError) && config.__retryCount < retryTotal) {
+      config.__retryCount += 1
+      console.log(`[Axios Retry] Attempt ${config.__retryCount}/${retryTotal} for ${config.url}...`)
+      
+      // Wait for delay
+      await new Promise(resolve => setTimeout(resolve, retryDelay))
+      
+      // Retry request
+      return service(config)
+    }
+    // ------------------------
+
     const quiet = config.quiet || false
     
     // Extract error message using i18n
