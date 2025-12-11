@@ -13,6 +13,14 @@ body {
   animation: gradientShift 10s ease infinite;
 }
 
+/* Dark mode background override */
+.dark body {
+  background: linear-gradient(135deg,
+      #1f1f1f 0%,
+      #2d2d2d 50%,
+      #1a1a1a 100%);
+}
+
 /* Restore cursor for interactive elements */
 input,
 textarea,
