@@ -1,3 +1,4 @@
+import '@unocss/reset/tailwind.css'
 import { createApp } from 'vue'
 import * as Vue from 'vue' // 暴露 Vue 供遠端組件使用
 import { createPinia } from 'pinia'
@@ -9,6 +10,8 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import App from './App.vue'
 import router from './router'
+// UnoCSS
+import 'virtual:uno.css'
 import './style.css'
 import { setupCartPersistence } from './stores/cartStore'
 import i18n from './i18n'

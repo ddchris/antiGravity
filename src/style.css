@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* UnoCSS replaces Tailwind directives */
 
 /* 柔和漸層背景 - 提升視覺舒適度 */
 body {
