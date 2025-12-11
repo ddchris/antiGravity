@@ -194,6 +194,7 @@ onUnmounted(() => {
             <select 
               v-model="locale" 
               @change="changeLocale(locale)"
+              aria-label="Select Language"
               class="text-white px-2 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer text-sm w-28"
             >
               <option value="zh-TW">繁體中文</option>
@@ -207,6 +208,7 @@ onUnmounted(() => {
               @click="themeStore.toggleTheme"
               class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               :title="themeStore.isDark ? '切換到淺色模式' : '切換到深色模式'"
+              :aria-label="themeStore.isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
             >
               <span v-if="themeStore.isDark" class="text-xl md:text-2xl">☀️</span>
               <span v-else class="text-xl md:text-2xl">🌙</span>
@@ -217,6 +219,7 @@ onUnmounted(() => {
           <button 
             @click="isMobileMenuOpen = !isMobileMenuOpen"
             class="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 focus:outline-none"
+            :aria-label="isMobileMenuOpen ? 'Close Menu' : 'Open Menu'"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path v-if="!isMobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
