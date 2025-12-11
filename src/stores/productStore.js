@@ -6,14 +6,14 @@ export const useProductStore = defineStore('products', () => {
   const products = ref([])
 
   const fetchProducts = async () => {
-    // Simple cache: don't fetch if we already have data
+    // 簡單快取：如果我們已經有資料，就不再重新 fetch
     // if (products.value.length > 0) return
 
     try {
-      const response = await request.get('https://mocki.io/v1/8405da4e-5514-4d18-ae89-8251372a5a98')
+      const response = await request.get('https://mocki.io/v1/5f9cbcfe-4eef-4a25-bc94-99e52390a5bd')
       
-      // API returns { "data": [...] }, so we need to access result.data
-      const productList = response.data
+      // API 直接回傳 [...] (物件陣列 Array)
+      const productList = response
 
       if (Array.isArray(productList)) {
         products.value = productList
@@ -22,7 +22,7 @@ export const useProductStore = defineStore('products', () => {
       }
     } catch (error) {
       console.error('Failed to fetch products:', error)
-      // Error handling is managed by request.js interceptor
+      // 錯誤處理已由 request.js 的 interceptor 管理
     }
   }
 

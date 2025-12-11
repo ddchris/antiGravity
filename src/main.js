@@ -14,12 +14,13 @@ import { setupCartPersistence } from './stores/cartStore'
 import i18n from './i18n'
 import { initWebComponent } from '@/utils/web-component-proxy'
 
-// Expose globals for Remote Web Components (IIFE build expects these)
+// 暴露全域變數供遠端 Web Components 使用 (IIFE 建置預期有這些)
 window.Vue = Vue
-window.ElementPlus = ElementPlusNamespace // MUST be the namespace object containing named exports like ElButton
+window.ElementPlus = ElementPlusNamespace // 必須是包含 ElButton 等具名匯出的命名空間物件
 window.ElementPlusIconsVue = ElementPlusIconsVue
 
 // Initialize Remote Components
+// 初始化遠端組件
 
 
 initWebComponent()
@@ -29,9 +30,14 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(i18n)
-app.use(ElementPlus) // Optional: Use locally if needed, but critical to include code in bundle if not tree-shaken out (though we exposed the whole lib object above)
+app.use(ElementPlus) // 可選：如果需要本地使用則引入，但為了確保程式碼包含在 bundle 中 (雖然上面已暴露整個庫物件)
 
 // 設置購物車持久化 - 啟用 localStorage 自動儲存
 setupCartPersistence()
+
+// Custom Directives
+// 自定義指令
+import fixCol from './directives/fixCol'
+app.directive('fixCol', fixCol)
 
 app.mount('#app')
