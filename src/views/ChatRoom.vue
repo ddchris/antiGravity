@@ -318,17 +318,42 @@ const triggerAIResponse = async (userText) => {
   isStreaming.value = true
   scrollToBottom()
 
-  // 4. Typing Effect (Stream) - Using array index for reactivity
+  // 4. Typing Effect (Stream) - Robust Persistent Version
   let i = 0
-  const streamSpeed = 15 // ms per char (slower, more natural)
-  const charsPerTick = 2 // Type 2 chars per tick
+  const streamSpeed = 15 
+  const charsPerTick = 2 
   
+  // Helper to ensure we save exactly once
+  let hasSaved = false
+  const saveToDb = async () => {
+      if (hasSaved) return
+      hasSaved = true
+      
+      try {
+          // Save to Firestore (Persistence)
+          await addDoc(chatCollection, {
+              userId: 'bot',
+              from: 'Bot',
+              text: responseText,
+              timestamp: serverTimestamp(),
+              createdAt: Date.now()
+          })
+          console.log("Bot response saved to Firestore")
+      } catch (e) {
+          console.error("Failed to save bot response", e)
+      }
+  }
+
   const streamInterval = setInterval(() => {
     // Find the message in the array by ID
     const msgIndex = messages.value.findIndex(m => m.id === messageId)
+    
+    // Safety Check: If message lost from UI (e.g. race condition with snapshot), 
+    // FORCE SAVE the full text and stop typing loop.
     if (msgIndex === -1) {
       clearInterval(streamInterval)
       isStreaming.value = false
+      saveToDb() // Critical: Save data even if UI is out of sync
       return
     }
     
@@ -360,42 +385,9 @@ const triggerAIResponse = async (userText) => {
       }
       isStreaming.value = false
             
-            // 5. Finalize (Optional: Save to DB for persistence)
-            // We save the FULL message at the end. 
-            // Note: onSnapshot might cause a slight flicker when it syncs back, but it ensures persistence.
-            (async () => {
-              try {
-                  if (navigator.onLine) {
-                   await addDoc(chatCollection, {
-                      userId: 'bot',
-                      from: 'Bot',
-                      text: responseText,
-                      timestamp: serverTimestamp(),
-                      createdAt: Date.now()
-                   })
-                   // Remove the local "draft" to avoid duplicates (Snapshot will replace it)
-                   // Actually, we can just let snapshot replace it based on ID/Logic, 
-                   // but since ID is different, we might get duplicates. 
-                   // A simple way for Demo: Don't save to DB if we want smooth demo, 
-                   // OR remove the local one right before saving.
-                   
-                   // Let's remove the draft message we just typed out, letting the Snapshot take over
-                   // This causes a blink.
-                   // BETTER DEMO UX: Don't save to DB for 'Simulated' bots to avoid blink. 
-                   // User can clear chat to reset. 
-                   // (Reverting to original logic: Only save if necessary. For ChatGPT feel, 'Smooth' is better than 'Persist')
-                   // UNLESS user strictly wants persistence. Given 'Demo', Smoothness wins.
-                   // Commenting out DB save for Bot to prevent 'Blinking/Duplicate'.
-                   /* 
-                   await addDoc(...) 
-                   */
-                  }
-              } catch (e) {
-                  console.error("Failed to save bot response", e)
-              }
-            })()
-        }
-    }, streamSpeed)
+      saveToDb() // Normal save on completion
+    }
+  }, streamSpeed)
     
 
 }
@@ -407,10 +399,14 @@ onMounted(() => {
   try {
     const q = query(chatCollection, orderBy('createdAt', 'asc'))
     unsubscribe = onSnapshot(q, (snapshot) => {
-      messages.value = snapshot.docs.map(doc => ({
+      const serverMessages = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }))
+      // Preserve local streaming messages (typing effect) so they aren't wiped out by updates
+      const localMessages = messages.value.filter(m => m.isStreaming)
+      messages.value = [...serverMessages, ...localMessages]
+      
       setTimeout(scrollToBottom, 100) // Small delay to ensure render
     }, (error) => {
         console.warn("Firestore access failed. Using local mode.", error)
@@ -515,7 +511,7 @@ const IconSend = {
     <div class="max-w-4xl mx-auto h-[80vh] flex flex-col bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
         
       <!-- Header -->
-      <div class="p-4 bg-indigo-600 border-b border-indigo-700 flex justify-between items-center text-white">
+      <div class="px-4 py-1 bg-indigo-600 border-b border-indigo-700 flex justify-between items-center text-white">
         <div class="flex items-center">
             <h2 class="text-lg font-bold flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -632,10 +628,11 @@ const IconSend = {
         <div class="flex space-x-2">
             <input 
                 v-model="inputMessage"
-                @keyup.enter="sendMessage"
+                @keyup.enter="!isTyping && !isStreaming && sendMessage()"
                 type="text" 
-                :placeholder="$t('chat.placeholder') || 'Type a message...'"
-                class="flex-1 px-4 h-12 border border-gray-300 dark:border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white transition-shadow"
+                :disabled="isTyping || isStreaming"
+                :placeholder="isTyping || isStreaming ? 'AI is thinking...' : ($t('chat.placeholder') || 'Type a message...')"
+                class="flex-1 px-4 h-12 border border-gray-300 dark:border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white transition-shadow disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:cursor-not-allowed"
             />
             <!-- Notice: Using Container Strategy (Works for Shadow:True or False) -->
             <base-button 
@@ -644,7 +641,7 @@ const IconSend = {
                 type="success"
                 :name="$t('chat.send') || 'Send'"
                 :icon="IconSend"
-                :disabled="!inputMessage.trim()"
+                :disabled="!inputMessage.trim() || isTyping || isStreaming"
                 round
                 class="!h-12 !w-40 text-xl !rounded-full flex items-center justify-center shadow-sm transition-colors cursor-pointer"
             />
