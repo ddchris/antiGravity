@@ -31,7 +31,21 @@
     "contact": "聯絡我們",
     "products": "商品導覽",
     "chat": "AI顧問",
+    "stats": "銷售統計",
     "about": "關於我"
+  },
+  "stats": {
+    "title": "銷售統計儀表板",
+    "subTitle": "查看過去 6 個月的銷售數據分析",
+    "lineChartTitle": "每日銷售趨勢",
+    "pieChartTitle": "各類別銷售佔比",
+    "barChartTitle": "各類別總銷售額比較",
+    "categories": {
+      "Electronics": "電子產品",
+      "Clothing": "服飾",
+      "Home": "居家用品",
+      "Books": "書籍"
+    }
   },
   "about": {
     "title": "關於我",

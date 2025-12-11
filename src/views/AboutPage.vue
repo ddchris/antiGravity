@@ -86,9 +86,9 @@ const educationHistory = [
 ]
 
 const contactInfo = {
-  phone: '0908-589-207',
-  email: 'evilkillerice@gmail.com',
-  address: '台北市松山區寶清街***'
+  phone: '0908-589-XXX',
+  email: 'XXXXXXXXX@gmail.com',
+  address: '台北市松山區XXXXXX'
 }
 
 const downloadResume = () => {

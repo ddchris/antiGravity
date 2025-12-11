@@ -19,7 +19,11 @@
     "message": "Message",
     "name": "Name",
     "send": "Send",
-    "title": "Contact Us"
+    "title": "Contact Us",
+    "required": "This field is required",
+    "successTitle": "Success",
+    "successMessage": "Your message has been sent!",
+    "validationError": "Please check all fields"
   },
   "header": {
     "brand": "Store",
@@ -27,7 +31,21 @@
     "contact": "Contact Us",
     "products": "Products",
     "chat": "AI Consultant",
+    "stats": "Sales Statistics",
     "about": "About Me"
+  },
+  "stats": {
+    "title": "Sales Statistics Dashboard",
+    "subTitle": "Analysis of sales data for the past 6 months",
+    "lineChartTitle": "Daily Sales Trend",
+    "pieChartTitle": "Sales Share by Category",
+    "barChartTitle": "Total Sales by Category",
+    "categories": {
+      "Electronics": "Electronics",
+      "Clothing": "Clothing",
+      "Home": "Home",
+      "Books": "Books"
+    }
   },
   "about": {
     "title": "About Me",
