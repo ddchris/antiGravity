@@ -1,7 +1,24 @@
 <script setup>
 import { onMounted, ref } from 'vue'
+import { useClipboard } from '@vueuse/core'
+import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n'
 
 const isVisible = ref(false)
+const { copy, isSupported } = useClipboard()
+const { t } = useI18n()
+
+const handleCopy = (text, type) => {
+  if (!isSupported.value) {
+    ElMessage.warning(t('about.copyNotSupported'))
+    return
+  }
+  copy(text)
+  ElMessage.success({
+    message: t('about.copySuccess', { type, text }),
+    duration: 2000
+  })
+}
 
 onMounted(() => {
   setTimeout(() => {
@@ -182,9 +199,14 @@ const downloadResume = () => {
               </svg>
               <div>
                 <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">{{ $t('about.phone') }}</p>
-                <a :href="`tel:${contactInfo.phone}`" class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-                  {{ contactInfo.phone }}
-                </a>
+                <div class="flex items-center gap-2">
+                  <span class="text-gray-900 dark:text-white">{{ contactInfo.phone }}</span>
+                  <button @click="handleCopy(contactInfo.phone, $t('about.phone'))" class="text-gray-500 hover:text-indigo-600 transition-colors p-1" :title="$t('about.phone')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
             <div class="flex items-start space-x-3">
@@ -193,9 +215,14 @@ const downloadResume = () => {
               </svg>
               <div>
                 <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">{{ $t('about.email') }}</p>
-                <a :href="`mailto:${contactInfo.email}`" class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors break-all">
-                  {{ contactInfo.email }}
-                </a>
+                <div class="flex items-center gap-2">
+                  <span class="text-gray-900 dark:text-white break-all">{{ contactInfo.email }}</span>
+                  <button @click="handleCopy(contactInfo.email, $t('about.email'))" class="text-gray-500 hover:text-indigo-600 transition-colors p-1" :title="$t('about.email')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
             <div class="flex items-start space-x-3">
