@@ -50,7 +50,9 @@
     "major": {
       "materials": "재료학과",
       "mse": "재료과학공학과"
-    }
+    },
+    "copySuccess": "{type} 복사됨: {text}",
+    "copyNotSupported": "브라우저가 복사 기능을 지원하지 않습니다"
   },
   "product": {
     "addToCart": "장바구니에 담기",

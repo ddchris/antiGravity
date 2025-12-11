@@ -50,7 +50,9 @@
     "major": {
       "materials": "Department of Materials Science",
       "mse": "Department of Materials Science and Engineering"
-    }
+    },
+    "copySuccess": "Copied {type}: {text}",
+    "copyNotSupported": "Your browser does not support copy functionality"
   },
   "product": {
     "addToCart": "Add to Cart",
