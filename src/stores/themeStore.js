@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useThemeStore = defineStore('theme', () => {
-  // 從 localStorage 讀取，預設為深色模式
+  // 從 localStorage 讀取，若無設定則預設為深色 (light 以外皆視為 dark)
   const isDark = ref(localStorage.getItem('theme') !== 'light')
 
   const toggleTheme = () => {
