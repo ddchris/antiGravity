@@ -1,8 +1,9 @@
-import { defineConfig, presetUno, presetAttributify } from 'unocss'
+import { defineConfig, presetAttributify } from 'unocss'
+import { presetWind3 } from '@unocss/preset-wind3'
 
 export default defineConfig({
   presets: [
-    presetUno(), // 預設 Preset，完全相容 Tailwind CSS
+    presetWind3(), // 替代 presetUno, 相容 Tailwind CSS
     presetAttributify(), // 屬性化模式 (可選)
   ],
   // 保持與 Tailwind 相同的 Dark Mode 策略

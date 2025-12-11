@@ -19,7 +19,11 @@
     "message": "訊息",
     "name": "姓名",
     "send": "送出",
-    "title": "聯絡我們"
+    "title": "聯絡我們",
+    "required": "此欄位為必填",
+    "successTitle": "發送成功",
+    "successMessage": "您的訊息已送出！",
+    "validationError": "請確認所有欄位都已填寫"
   },
   "header": {
     "brand": "Store",
