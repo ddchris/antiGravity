@@ -1,11 +1,33 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { Close } from '@element-plus/icons-vue' // Optional: use SVG or Element icon
+
+const router = useRouter()
+
+const closePresentation = () => {
+  router.push('/')
+}
+
+const handleKeydown = (e) => {
+  if (e.key === 'Escape') {
+    closePresentation()
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+})
 
 const slides = [
   {
     type: 'cover',
-    title: '福能股份有限公司面試簡報',
-    subtitle: '講者:Yi Fan Liang',
+    title: '前端面試簡報',
+    subtitle: '講者: 梁藝礬 (Chris)',
     content: [
       '6-7 年前端開發經驗 | 擅長 Vue.js | 架構設計與效能優化',
       '結合邏輯思維與新技術熱情，致力於打造高效能的使用者體驗'
@@ -47,45 +69,59 @@ const slides = [
     ]
   },
   {
-    type: 'project',
-    title: '重點專案 I - 富揚創新 (技術深耕)',
-    subtitle: '大型系統維護與架構升級',
-    mainPoints: [
-      '專案背景：同時維護 3 個後台系統，並開發全新的前/後台',
-      '面臨挑戰：需兼顧 SEO 排名與使用者操作流暢度 (效能優化)'
-    ],
-    solutions: [
-      { title: '技術升級', desc: '導入 Vue3 + Element Plus + TailwindCSS' },
-      { title: '架構革新', desc: '採用 Astro Island 架構，實作 SSR + CSR' },
-      { title: '狀態管理', desc: '使用 Pinia 進行模組化管理' }
-    ],
-    result: '網站載入速度顯著提升，SEO 更友善，並建立可複用的元件庫'
+    type: 'work-exp',
+    title: '職涯起步 - 辰城科技',
+    role: 'Junior 前端工程師',
+    period: '2018/03 - 2020/06',
+    techStack: ['Vue.js 2 (Vuex, Webpack)', 'Element UI', 'HTML / SCSS / JS (ES6)', 'WebSocket', 'RESTful API'],
+    description: '在資深同仁指導下，從基礎開始快速累積實戰經驗，建立堅實的前端開發觀念。',
+    achievements: [
+      { title: '奠定基礎', desc: '熟悉運用 Vue2, ES6語法與 Element UI 進行組件化開發，並使用 Webpack 打包。' },
+      { title: '實務應用', desc: '處理跨瀏覽器相容性問題 (Cross-browser Compatibility) 與 RWD 響應式網頁切版。' },
+      { title: '進階功能', desc: '實作 WebSocket 即時聊天室功能，並深入理解 RESTful API 串接流程。' }
+    ]
   },
   {
-    type: 'project',
-    title: '重點專案 II - 艾克森科技 (獨立實戰)',
-    subtitle: '從零建置後台管理系統',
-    mainPoints: [
-      '專案背景：小型團隊，需快速構建高品質的後台系統'
-    ],
-    solutions: [
-      { title: '獨立架構設計', desc: '實作路由權限控制 (Router Guard)、元件封裝' },
-      { title: '數據視覺化', desc: '整合 Chart.js 呈現即時統計數據' },
-      { title: '穩定性優化', desc: '開發多 API Domain 線路測試機制，自動切換最佳連線' }
-    ],
-    result: '成功交付系統，確保不同區域使用者皆能獲得最佳連線體驗'
+    type: 'work-exp',
+    title: '團隊協作與技術深耕 - 富揚創新',
+    role: '前端工程師',
+    period: '2020/09 - 2025/04',
+    techStack: ['Vue 3 (Composition API)', 'Astro (Island Arch)', 'Pinia / Vite', 'Element Plus / Tailwind', 'Performance Tuning'],
+    description: '跨團隊協作 (PM/美術/後端)，負責大型舊系統維護與新專案架構導入，專注於效能與 SEO 優化。',
+    achievements: [
+      { title: 'SSR 與 SEO', desc: '使用 Astro 框架，結合 SSR (靜態渲染) 與 CSR (局部互動)，提升載入速度與 SEO 。' },
+      { title: '接觸新技術', desc: '專案推進至 Vue3 + El Plus生態系，導入 Pinia 狀態管理與 Vite 建置工具。' },
+      { title: '底層原理研究', desc: '深入研究 Virtual DOM 更新機制與雙向綁定原理，並應用於元件封裝與複用策略。' },
+      { title: '架構規劃', desc: '實作 Router 權限控制與元件做封裝與複用，提升程式碼可維護性。' }
+    ]
+  },
+  {
+    type: 'work-exp',
+    title: '架構設計與獨立實戰 - 艾克森科技',
+    role: 'Senior 前端工程師',
+    period: '2025/06 - 2025/10',
+    techStack: ['System Architecture', 'Vue 2 / 3', 'Chart.js', 'Axios Interceptors', 'Route/State Management'],
+    description: '獨立負責小型團隊的後台系統建置，從無到有設計架構，並不僅限於 UI 實作。',
+    achievements: [
+      { title: '獨立架構設計', desc: '從零打造後台管理系統，親自設計元件封裝、路由規劃與全域狀態管理策略。' },
+      { title: '穩定性優化', desc: '設計多 API Domain 線路測試機制，自動切換最佳連線，確保跨區域使用者體驗。' },
+      { title: '數據視覺化', desc: '整合 Chart.js，將後端 API 數據轉化為即時動態圖表。' },
+      { title: '流程優化', desc: '封裝 Axios 攔截器統一處理 API 請求與錯誤，優化開發流程與代碼品質。' }
+    ]
   },
   {
     type: 'tech',
     title: '近期技術亮點 - Side Project',
-    subtitle: 'AI 驅動的現代化 RWD 網頁 (Antigravity)',
+    subtitle: 'AI 驅動的現代化 RWD 網頁 (Antigravity - Gemini3)',
     overview: '整合 Google Gemini API 的 RWD 智能對話網站',
-    stack: 'Vue 3 (Composition API) + Vite + Pinia + UnoCSS',
+    stack: 'Vue 3 + Vite + Pinia + UnoCSS + Firebase + Vitest',
     highlights: [
-      'AI 整合：串接 Gemini API，實作 Streaming 打字機效果',
-      'UI/UX：使用 UnoCSS 實作 Dark/Light Mode 主題切換',
-      '自動化：撰寫 Node.js 腳本自動同步 i18n 翻譯檔',
-      '進階功能：封裝 Custom Directives 處理表格凍結 (Sticky Columns)'
+      'AI 整合：串接 Google Gemini API，實作 Streaming 打字機效果',
+      '雲端整合：整合 Firebase Database，實現聊天記錄即時同步',
+      'API 模擬：使用 Mocki.io 建立 Fake API，模擬真實後端資料交互',
+      '單元測試：導入 Vitest 及 vue/test-utils，為核心元件建立基本測試',
+      'UI/UX：使用 UnoCSS 實作 Dark/Light Mode 主題切換與 RWD',
+      '自動化：撰寫 Node.js 腳本自動同步 i18n 翻譯檔'
     ]
   },
   {
@@ -94,9 +130,9 @@ const slides = [
     subtitle: '即戰力與團隊契合度',
     items: [
       '1. 深厚的 Vue 生態系經驗：6+ 年實戰經驗，能快速上手並解決複雜問題',
-      '2. 解決問題的思維：不只寫 Code，更懂得架構優化 (SSR、Hydration、效能調校)',
+      '2. 高效率開發：不只寫 Code，更懂得靈活運用 AI 快速開發及解決問題',
       '3. 優秀的團隊合作者：個性隨和且善於溝通，能成為技術與產品間的橋樑',
-      '4. 擁抱新技術：持續將 AI、新框架 (Astro/UnoCSS) 應用於實務，保持競爭力'
+      '4. 擁抱新技術：持續學習 AI、新框架 (UnoCSS)、unit test 並應用於實務，保持競爭力'
     ]
   },
   {
@@ -112,7 +148,19 @@ const slides = [
 </script>
 
 <template>
-  <div class="presentation-container w-full h-[calc(100vh-73px)] bg-slate-900 text-white flex flex-col overflow-hidden">
+  <div class="presentation-container fixed inset-0 z-[9999] w-screen h-screen bg-slate-900 text-white flex flex-col overflow-hidden">
+    
+    <!-- Close Button -->
+    <button 
+      @click="closePresentation"
+      class="absolute top-6 right-6 z-50 p-3 bg-slate-800/50 hover:bg-red-500 rounded-full text-white/70 hover:text-white transition-all backdrop-blur-sm group shadow-lg border border-white/10"
+      title="Close (ESC)"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
     <!-- Main Carousel -->
     <el-carousel 
       indicator-position="outside" 
@@ -123,7 +171,7 @@ const slides = [
     >
       <el-carousel-item v-for="(slide, index) in slides" :key="index" class="h-full">
         <!-- Slide Content Wrapper -->
-        <div class="h-full w-full flex flex-col items-center justify-center p-4 md:p-10 relative overflow-y-auto custom-scrollbar">
+        <div class="h-full w-full flex flex-col items-center justify-center p-4 md:px-8 pb-14 relative overflow-y-auto custom-scrollbar">
           
           <!-- Background Decor -->
           <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -132,7 +180,7 @@ const slides = [
           </div>
 
           <!-- Slide Content -->
-          <div class="relative z-10 max-w-5xl w-full text-center slide-content pb-12">
+          <div class="relative z-10 max-w-6xl w-full text-center slide-content h-full flex flex-col justify-center">
             
             <!-- Type: Cover -->
             <div v-if="slide.type === 'cover'" class="space-y-8 animate-fade-in-up">
@@ -173,33 +221,51 @@ const slides = [
               </div>
             </div>
 
-            <!-- Type: Project -->
-            <div v-else-if="slide.type === 'project'" class="text-left animate-fade-in-up w-full">
-              <h2 class="text-4xl font-bold text-blue-400 border-b border-blue-500/30 pb-4 mb-6">{{ slide.title }}</h2>
-              <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Left Details -->
-                <div class="lg:col-span-1 space-y-6">
-                  <div class="bg-blue-900/20 p-6 rounded-xl border border-blue-500/20">
-                    <h3 class="text-xl font-bold text-blue-300 mb-4">專案概況</h3>
-                    <ul class="space-y-3 text-gray-300">
-                      <li v-for="(point, i) in slide.mainPoints" :key="i" class="flex items-start">
-                         <span class="mr-2 text-blue-500">•</span> {{ point }}
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="bg-green-900/20 p-6 rounded-xl border border-green-500/20">
-                    <h3 class="text-xl font-bold text-green-300 mb-2">成果</h3>
-                    <p class="text-gray-300">{{ slide.result }}</p>
-                  </div>
+            <!-- Type: Work Experience (New) -->
+            <div v-else-if="slide.type === 'work-exp'" class="text-left animate-fade-in-up w-full h-full flex flex-col overflow-hidden">
+              <!-- Header Section -->
+              <div class="flex-shrink-0 mb-4 border-b border-blue-500/30 pb-2 flex justify-between items-end">
+                <h2 class="text-2xl md:text-3xl font-bold text-blue-400">
+                  {{ slide.title }}
+                </h2>
+                <div class="hidden md:block text-right">
+                  <span class="text-lg text-white font-bold block">{{ slide.role }}</span>
+                  <span class="text-sm text-gray-400">{{ slide.period }}</span>
                 </div>
-                <!-- Right Solutions -->
-                <div class="lg:col-span-2 space-y-4">
-                  <h3 class="text-2xl font-bold text-white mb-4">解決方案</h3>
-                  <div v-for="(sol, i) in slide.solutions" :key="i" class="flex items-start p-4 bg-slate-800 rounded-lg hover:translate-x-2 transition-transform">
-                    <div class="flex-shrink-0 w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center text-xl font-bold mr-4">{{ i + 1 }}</div>
-                    <div>
-                      <h4 class="text-lg font-bold text-indigo-300">{{ sol.title }}</h4>
-                      <p class="text-gray-400">{{ sol.desc }}</p>
+              </div>
+              
+              <!-- Mobile only sub-header -->
+              <div class="md:hidden mb-2 text-gray-400 text-sm flex justify-between items-center">
+                <span class="font-bold text-white">{{ slide.role }}</span>
+                <span>{{ slide.period }}</span>
+              </div>
+
+              <!-- Content Grid -->
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0">
+                <!-- Left Column: Tech Stack & Overview -->
+                <div class="lg:col-span-4 bg-slate-800/40 p-5 rounded-xl border border-blue-500/20 flex flex-col overflow-y-auto custom-scrollbar">
+                   <div class="mb-4 flex-shrink-0">
+                     <h3 class="text-lg font-bold text-white mb-2">階段概述</h3>
+                     <p class="text-gray-300 text-sm leading-relaxed">{{ slide.description }}</p>
+                   </div>
+                   
+                   <div>
+                     <h3 class="text-lg font-bold text-green-400 mb-2">使用技術 (Tech Stack)</h3>
+                     <div class="flex flex-wrap gap-2">
+                       <span v-for="tech in slide.techStack" :key="tech" class="px-2 py-0.5 bg-slate-700/80 rounded text-xs text-blue-200 border border-slate-600">
+                         {{ tech }}
+                       </span>
+                     </div>
+                   </div>
+                </div>
+
+                <!-- Right Column: Key Achievements -->
+                <div class="lg:col-span-8 flex flex-col min-h-0 bg-slate-900/30 rounded-xl border border-slate-700/30 p-1">
+                  <h3 class="flex-shrink-0 text-xl font-bold text-white mb-2 px-3 pt-2">關鍵成就與職責</h3>
+                  <div class="flex-1 overflow-y-auto px-3 pb-2 custom-scrollbar space-y-3">
+                    <div v-for="(item, i) in slide.achievements" :key="i" class="group p-3 bg-slate-800 rounded hover:bg-slate-750 border-l-4 border-indigo-500 hover:border-indigo-400 transition-all">
+                      <h4 class="text-base font-bold text-indigo-300 mb-0.5 group-hover:text-indigo-200">{{ item.title }}</h4>
+                      <p class="text-gray-400 text-sm leading-relaxed">{{ item.desc }}</p>
                     </div>
                   </div>
                 </div>
@@ -275,9 +341,10 @@ const slides = [
 }
 
 /* Customize Element Plus Carousel */
+
 :deep(.el-carousel__indicators--outside) {
   position: absolute;
-  bottom: 20px;
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
 }
