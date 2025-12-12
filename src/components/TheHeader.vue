@@ -106,7 +106,7 @@ onUnmounted(() => {
             <div 
               ref="scrollContainer"
               @scroll="checkScroll"
-              class="flex-1 flex items-center space-x-6 overflow-x-auto scroll-smooth px-2"
+              class="flex-1 flex items-center space-x-6 overflow-x-auto scroll-smooth px-2 py-2"
               style="scrollbar-width: none; -ms-overflow-style: none;"
             >
               <!-- 導航連結 -->

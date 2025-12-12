@@ -13,7 +13,8 @@ const { t } = useI18n()
 const formatPrice = (price) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD'
+    currency: 'USD',
+    maximumFractionDigits: 0
   }).format(price)
 }
 

@@ -250,7 +250,7 @@ const getColumnFixed = (key) => {
 
                 <!-- Price -->
                 <span v-else-if="col.key === 'price'" class="font-medium text-indigo-600 dark:text-indigo-400">
-                   ${{ Number(scope.row.price).toFixed(2) }}
+                   ${{ Number(scope.row.price).toFixed(0) }}
                 </span>
 
                 <!-- 其他欄位 -->

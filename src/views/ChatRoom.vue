@@ -291,7 +291,7 @@ const triggerAIResponse = async (userText) => {
       responseText = aiResponses[Math.floor(Math.random() * aiResponses.length)]
     
       if (userText.includes('價') || userText.includes('錢') || userText.includes('price')) {
-        responseText = "關於價格的部分，我們目前有幾種方案：\n\n- **基礎版**：免費試用\n- **專業版**：每月 $9.99\n- **企業版**：請聯繫業務代表\n\n您對哪個方案感興趣呢？"
+        responseText = "關於價格的部分，我們目前有幾種方案：\n\n- **基礎版**：免費試用\n- **專業版**：每月 $10\n- **企業版**：請聯繫業務代表\n\n您對哪個方案感興趣呢？"
       }
       
       // Easter Egg
