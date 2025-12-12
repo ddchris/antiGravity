@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "vitest",
     "i18n:check": "node ./scripts/i18n-check.cjs"
   },
   "dependencies": {
@@ -26,11 +27,15 @@
   "devDependencies": {
     "@unocss/preset-wind3": "^66.5.10",
     "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/test-utils": "^2.4.6",
     "csv-parse": "^6.1.0",
     "glob": "^13.0.0",
+    "happy-dom": "^20.0.11",
+    "jsdom": "^27.3.0",
     "node-fetch": "^3.3.2",
     "unocss": "^66.5.10",
     "vite": "^7.2.4",
+    "vitest": "^4.0.15",
     "vue-i18n-extract": "^2.0.7"
   }
 }
