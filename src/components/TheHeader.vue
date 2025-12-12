@@ -1,11 +1,12 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cartStore'
 import { useThemeStore } from '../stores/themeStore'
 import { useI18n } from 'vue-i18n'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
 import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 // 導入購物車 store 以讀取總數量
 const cartStore = useCartStore()
@@ -17,6 +18,28 @@ const changeLocale = (newLocale) => {
   locale.value = newLocale
   localStorage.setItem('locale', newLocale)
 }
+
+const router = useRouter()
+
+const handlePresentationClick = async () => {
+  try {
+    const { value } = await ElMessageBox.prompt('此頁面受保護，請輸入密碼', '身份驗證', {
+      confirmButtonText: '確認',
+      cancelButtonText: '取消',
+      inputType: 'password', // optional: mask with dots
+      inputErrorMessage: '密碼錯誤'
+    })
+    
+    if (value === 'chris') {
+      isMobileMenuOpen.value = false
+      router.push('/presentation')
+    } else {
+      ElMessage.error('密碼錯誤')
+    }
+  } catch {
+    // cancelled
+  }
+} // Removed extra brace if any. Ensure indentation is correct.
 
 const isMobileMenuOpen = ref(false)
 
@@ -169,6 +192,13 @@ onUnmounted(() => {
               >
                 {{ $t('header.about') }}
               </RouterLink>
+              <button
+                @click="handlePresentationClick"
+                class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap focus:outline-none"
+                :class="{ 'text-indigo-600 dark:text-indigo-400 font-bold': $route.path === '/presentation' }"
+              >
+                {{ $t('header.presentation') }}
+              </button>
             </div>
 
             <!-- Right Arrow -->
@@ -300,6 +330,14 @@ onUnmounted(() => {
           >
             {{ $t('header.about') }}
           </RouterLink>
+
+          <button
+            @click="handlePresentationClick"
+            class="text-left w-full text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors px-2 py-1 focus:outline-none"
+            :class="{ 'text-indigo-600 dark:text-indigo-400 font-bold bg-gray-100 dark:bg-gray-800 rounded': $route.path === '/presentation' }"
+          >
+            {{ $t('header.presentation') }}
+          </button>
         </div>
       </div>
     </nav>
