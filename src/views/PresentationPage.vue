@@ -4,11 +4,11 @@ import { ref } from 'vue'
 const slides = [
   {
     type: 'cover',
-    title: '資深前端工程師面試簡報',
-    subtitle: 'Chris',
+    title: '福能股份有限公司面試簡報',
+    subtitle: '講者:Yi Fan Liang',
     content: [
-      '6-7 年前端開發經驗 | Vue.js 專家 | 架構設計與效能優化',
-      '[副標題] 結合邏輯思維與新技術熱情，致力於打造高效能的使用者體驗'
+      '6-7 年前端開發經驗 | 擅長 Vue.js | 架構設計與效能優化',
+      '結合邏輯思維與新技術熱情，致力於打造高效能的使用者體驗'
     ]
   },
   {
@@ -16,9 +16,9 @@ const slides = [
     title: '關於我 (About Me)',
     subtitle: '背景與特質',
     list: [
-      { label: '學歷背景', text: '國立清華大學 材料系碩士 (邏輯思維強、擅長分析問題)' },
-      { label: '核心技能', text: 'Vue.js (Vue2/Vue3), Astro, TypeScript, Tailwind/UnoCSS, RWD' },
-      { label: '軟實力', text: '溝通協作 (PM/Backend/Design)、責任感 (時程/品質)、持續學習 (AI/SSR/Web Components)' }
+      { label: '學歷背景', text: '2010/7 - 2012/6 國立清華大學 材料系碩士', text2: '2006/9 - 2010/7 國立交通大學 材料所學士' },
+      { label: '核心技能', text: 'HTML, JavaScript, Vue.js (Vue2/Vue3), Tailwind/UnoCSS, Git' },
+      { label: '軟實力', text: '溝通協作 (PM/Backend/Design)、責任感 (時程/品質)、持續學習 (AI/Web Components/Unit test)' }
     ]
   },
   {
@@ -30,18 +30,18 @@ const slides = [
         year: '2025/06 - 2025/10',
         company: '艾克森科技有限公司',
         role: '資深前端工程師',
-        desc: '獨立打造後台管理系統，專注架構設計、流程優化與數據視覺化。'
+        desc: '獨立打造小型後台管理系統，專注架構設計、流程優化與數據視覺化。'
       },
       {
         year: '2020/09 - 2025/04',
         company: '富揚創新科技有限公司',
         role: '前端工程師',
-        desc: '4年8個月深耕。維護多系統並導入 Vue3、Astro 新技術，大幅提升效能。'
+        desc: '4年8個月深耕。維護多系統並接觸 Vue3、Astro 新技術，實作前端效能優化。'
       },
       {
         year: '2018/03 - 2020/06',
         company: '辰城科技',
-        role: 'Internet 程式設計師',
+        role: '前端工程師',
         desc: '前端基礎奠定：Vue2、Webpack、跨瀏覽器相容性處理。'
       }
     ]
@@ -148,13 +148,14 @@ const slides = [
             </div>
 
             <!-- Type: Normal Content / List -->
-            <div v-else-if="slide.type === 'content'" class="text-left space-y-8 animate-fade-in-up w-full">
-              <h2 class="text-4xl font-bold text-blue-400 border-b border-blue-500/30 pb-4 mb-8">{{ slide.title }}</h2>
+            <div v-else-if="slide.type === 'content'" class="text-left space-y-4 animate-fade-in-up w-full">
+              <h2 class="text-4xl font-bold text-blue-400 border-b border-blue-500/30 pb-4 mb-4">{{ slide.title }}</h2>
               <h3 class="text-2xl text-gray-300 mb-6">{{ slide.subtitle }}</h3>
-              <div class="grid gap-6">
+              <div class="grid gap-4">
                 <div v-for="(item, i) in slide.list" :key="i" class="bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 hover:bg-slate-800 transition-colors">
                   <span class="block text-xl font-bold text-indigo-300 mb-2">{{ item.label }}</span>
                   <p class="text-gray-300 text-lg">{{ item.text }}</p>
+                  <p class="text-gray-300 text-lg">{{ item.text2 }}</p>
                 </div>
               </div>
             </div>
