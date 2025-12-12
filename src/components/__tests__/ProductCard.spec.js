@@ -11,7 +11,7 @@ vi.mock('vue-i18n', () => ({
 }))
 
 describe('ProductCard.vue', () => {
-  it('renders product name and price correctly', () => {
+  it('正確渲染 Product Name 與 Price', () => {
     // Setup Pinia
     setActivePinia(createPinia())
 
@@ -49,7 +49,7 @@ describe('ProductCard.vue', () => {
     expect(wrapper.text()).toContain('$')
   })
   
-  it('emits add to cart action when button clicked', async () => {
+  it('點擊 Button 時觸發 Add to Cart Action', async () => {
      // We can mock the store to verify action call, 
      // or just check ui state change if component has local state change (isAdded)
      setActivePinia(createPinia())

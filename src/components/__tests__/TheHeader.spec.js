@@ -37,7 +37,7 @@ describe('TheHeader.vue', () => {
     setActivePinia(createPinia())
   })
 
-  it('renders correctly', () => {
+  it('正確渲染', () => {
     const wrapper = mount(TheHeader, {
       global: {
         stubs: {
@@ -52,7 +52,7 @@ describe('TheHeader.vue', () => {
     expect(wrapper.text()).toContain('header.brand')
   })
 
-  it('toggles mobile menu', async () => {
+  it('切換 Mobile Menu', async () => {
     const wrapper = mount(TheHeader, {
         global: { 
             stubs: { 'el-icon': true },
@@ -72,7 +72,7 @@ describe('TheHeader.vue', () => {
     expect(wrapper.vm.isMobileMenuOpen).toBe(true)
   })
 
-  it('displays cart count', async () => {
+  it('顯示 Cart Count', async () => {
     const cartStore = useCartStore()
     cartStore.cartItems = [{ id: 1, quantity: 2 }]
     
@@ -82,7 +82,7 @@ describe('TheHeader.vue', () => {
     expect(wrapper.text()).toContain('1')
   })
 
-  it('toggles theme', async () => {
+  it('切換 Theme', async () => {
     const themeStore = useThemeStore()
     const wrapper = mount(TheHeader, { global: { stubs: { 'el-icon': true }, mocks: { $t: (k) => k } } })
     

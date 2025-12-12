@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useThemeStore } from '../themeStore'
 
-describe('themeStore', () => {
+describe('Theme Store', () => {
     beforeEach(() => {
         setActivePinia(createPinia())
         // Reset DOM classList
@@ -12,13 +12,13 @@ describe('themeStore', () => {
         vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {})
     })
 
-    it('initializes with dark mode by default', () => {
+    it('預設初始化為 Dark Mode', () => {
         const store = useThemeStore()
         expect(store.isDark).toBe(true)
         expect(document.documentElement.classList.contains('dark')).toBe(true)
     })
 
-    it('toggles theme correctly', () => {
+    it('正確切換 Theme', () => {
         const store = useThemeStore()
         const setItemSpy = vi.spyOn(Storage.prototype, 'setItem')
         

@@ -17,7 +17,7 @@ vi.mock('echarts', () => ({
 }))
 
 describe('BaseChart.vue', () => {
-  it('initializes chart on mount', () => {
+  it('在 Mount 時初始化 Chart', () => {
     const option = { title: { text: 'Test Chart' } }
     
     mount(BaseChart, {
@@ -27,7 +27,7 @@ describe('BaseChart.vue', () => {
     expect(mockSetOption).toHaveBeenCalledWith(option)
   })
 
-  it('updates chart when option prop changes', async () => {
+  it('當 Option Prop 改變時更新 Chart', async () => {
     const option = { title: { text: 'Initial' } }
     const wrapper = mount(BaseChart, {
       props: { option }
@@ -43,7 +43,7 @@ describe('BaseChart.vue', () => {
     expect(mockSetOption).toHaveBeenCalledWith(newOption, true)
   })
   
-  it('disposes chart on unmount', () => {
+  it('在 Unmount 時銷毀 Chart', () => {
       const wrapper = mount(BaseChart, {
           props: { option: {} }
       })

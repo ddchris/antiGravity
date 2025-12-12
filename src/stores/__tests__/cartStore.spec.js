@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useCartStore } from '../cartStore'
 
-describe('cartStore', () => {
+describe('Cart Store', () => {
     beforeEach(() => {
         setActivePinia(createPinia())
         // Mock localStorage
@@ -10,7 +10,7 @@ describe('cartStore', () => {
         vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {})
     })
 
-    it('adds item to cart', () => {
+    it('成功加入 Item 到 Cart', () => {
         const store = useCartStore()
         const product = { id: 1, name: 'Item 1', price: 100 }
         
@@ -20,7 +20,7 @@ describe('cartStore', () => {
         expect(store.cartItems[0]).toEqual({ ...product, quantity: 1 })
     })
 
-    it('increments quantity if item exists', () => {
+    it('若 Item 已存在，應增加 Quantity', () => {
         const store = useCartStore()
         const product = { id: 1, name: 'Item 1', price: 100 }
         
@@ -31,7 +31,7 @@ describe('cartStore', () => {
         expect(store.cartItems[0].quantity).toBe(2)
     })
     
-    it('calculates total price correctly', () => {
+    it('正確計算 Total Price', () => {
         const store = useCartStore()
         store.addToCart({ id: 1, price: 100 })
         store.addToCart({ id: 1, price: 100 }) // qty 2
@@ -40,7 +40,7 @@ describe('cartStore', () => {
         expect(store.totalPrice).toBe(250)
     })
     
-    it('removes item when quantity decrements to 0', () => {
+    it('當 Quantity 減少至 0 時移除 Item', () => {
         const store = useCartStore()
         store.addToCart({ id: 1, price: 100 })
         

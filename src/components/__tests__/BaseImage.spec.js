@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import BaseImage from '../BaseImage.vue'
 
 describe('BaseImage.vue', () => {
-  it('renders image successfully', async () => {
+  it('成功渲染 Image', async () => {
     const wrapper = mount(BaseImage, {
       props: {
         src: 'test.jpg',
@@ -20,7 +20,7 @@ describe('BaseImage.vue', () => {
     expect(wrapper.vm.isLoading).toBe(false)
   })
 
-  it('shows loading spinner initially', () => {
+  it('初始時顯示 Loading Spinner', () => {
     const wrapper = mount(BaseImage, {
       props: { src: 'test.jpg' }
     })
@@ -28,7 +28,7 @@ describe('BaseImage.vue', () => {
     expect(wrapper.find('.animate-spin').exists()).toBe(true)
   })
 
-  it('handles error state', async () => {
+  it('處理 Error State', async () => {
     const wrapper = mount(BaseImage, {
       props: { src: 'invalid.jpg' }
     })
