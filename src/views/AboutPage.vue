@@ -1,10 +1,9 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n'
 
-const isVisible = ref(false)
 const { copy, isSupported } = useClipboard()
 const { t } = useI18n()
 
@@ -20,27 +19,52 @@ const handleCopy = (text, type) => {
   })
 }
 
+let observer = null
+
 onMounted(() => {
-  setTimeout(() => {
-    isVisible.value = true
-  }, 100)
+  observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible')
+        observer.unobserve(entry.target)
+      }
+    })
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  })
+
+  document.querySelectorAll('.animate-section').forEach((el) => {
+    observer.observe(el)
+  })
+})
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect()
+  }
 })
 
 const skills = {
-  '前端': [
-    'JavaScript (ES6~ES14)', 'TypeScript', 'HTML', 'CSS', 'Sass', 'TailwindCSS',
-    'Vue.js 2 & 3 (Vuex / Pinia)', 'Astro 框架'
+  '程式語言與框架': [
+    'JavaScript', 'TypeScript', 'HTML', 'CSS', 'Sass',
+    'Vue2', 'Vue3 (Vuex / Pinia、SPA、雙向綁定、Virtual DOM、元件封裝與複用)',
+    'Astro (SSR、CSR)'
   ],
   'UI 元件與前端開發': [
-    'Element UI / Element Plus / Vant', 'Chart.js', 'RWD 響應式網頁設計',
-    '元件設計', '路由設計與權限控制'
+    'Element UI / Element Plus / Vant',
+    'TailwindCSS', 'UnoCSS',
+    'Chart.js 即時統計圖表',
+    '元件設計', '路由設計', '權限控制', '全局狀態管理 (Vuex / Pinia 模組化)', 'RWD 響應式網頁設計'
   ],
   '前端效能與相容性': [
-    'CSR/SSR 性能優化', 'Hydration 控制', '跨瀏覽器相容性處理', 'DevTools / Postman'
+    'CSR / SSR 性能優化', 'Hydration 控制',
+    '跨瀏覽器相容性處理 (含 Babel-polyfill)', '網頁與行動裝置除錯 (DevTools / Postman)',
+    'WebSocket 即時通訊'
   ],
-  '開發工具與流程': [
-    'Git / GitHub / GitLab / SourceTree', 'npm / pnpm', 'Webpack / Jenkins',
-    'WebSocket', '多 API domain 連線測試'
+  '測試與開發工具': [
+    'Vitest', 'Vue Test Utils (VTU)',
+    'Git / GitHub / GitLab / SourceTree', 'npm / pnpm', 'Webpack 打包', 'Jenkins 部署', '多 API domain 連線測試'
   ]
 }
 
@@ -107,14 +131,13 @@ const downloadResume = () => {
           style="background-image: url('https://images.unsplash.com/photo-1526657782461-9fe13402a841?q=80&w=2070&auto=format&fit=crop'); background-size: 100% auto; z-index: 0; background-attachment: scroll;">
       </div>
     </div>
-    <!-- Content Wrapper with Animation -->
-    <div class="max-w-4xl mx-auto relative z-10 transition-opacity duration-700 ease-out"
-         :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'">
+    <!-- Content Wrapper -->
+    <div class="max-w-4xl mx-auto relative z-10">
       
-      <div class="space-y-8" style="transform: scale(0.9); transform-origin: top center; width: 111.11%; margin-left: -5.555%;">
+      <div class="space-y-5" style="transform: scale(0.9); transform-origin: top center; width: 111.11%; margin-left: -5.555%;">
       
       <!-- Hero Section -->
-      <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transform hover:scale-[1.01] transition-transform duration-300">
+      <div class="animate-section bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transform hover:scale-[1.01] transition-transform duration-300">
         <div class="md:flex">
           <div class="md:flex-shrink-0 bg-indigo-50 dark:bg-indigo-900/20 flex flex-col items-center justify-center p-8 md:w-1/3">
             <div class="relative w-48 h-48 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-lg">
@@ -159,7 +182,7 @@ const downloadResume = () => {
       </div>
 
       <!-- Education Section -->
-      <div>
+      <div class="animate-section">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -184,7 +207,7 @@ const downloadResume = () => {
       </div>
 
       <!-- Contact Information Section -->
-      <div>
+      <div class="animate-section">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -240,7 +263,7 @@ const downloadResume = () => {
       </div>
 
       <!-- Experience Section -->
-      <div>
+      <div class="animate-section">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -270,24 +293,29 @@ const downloadResume = () => {
       </div>
 
       <!-- Skills Section -->
-      <div>
+      <div class="animate-section">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
           </svg>
           {{ $t('about.skills') }}
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div v-for="(items, category) in skills" :key="category" 
                class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-md p-6 hover:translate-y-[-2px] transition-transform duration-300">
             <h3 class="text-lg font-bold text-indigo-600 dark:text-indigo-400 mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">
               {{ category }}
             </h3>
             <div class="flex flex-wrap gap-2">
-              <span v-for="skill in items" :key="skill" 
-                    class="px-3 py-1 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-sm border border-gray-200 dark:border-gray-600">
+              <el-tag 
+                v-for="skill in items" 
+                :key="skill"
+                type="success"
+                effect="light"
+                class="text-sm"
+              >
                 {{ skill }}
-              </span>
+              </el-tag>
             </div>
           </div>
         </div>
@@ -299,6 +327,18 @@ const downloadResume = () => {
 </template>
 
 <style scoped>
+/* Scroll Animation */
+.animate-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.animate-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Print-friendly styles */
 @media print {
   /* Make header appear only on first page (change from fixed to static) */
