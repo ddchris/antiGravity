@@ -25,6 +25,7 @@
     "vue-router": "^4.6.3"
   },
   "devDependencies": {
+    "@types/node": "^25.0.1",
     "@unocss/preset-wind3": "^66.5.10",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/test-utils": "^2.4.6",
@@ -33,9 +34,11 @@
     "happy-dom": "^20.0.11",
     "jsdom": "^27.3.0",
     "node-fetch": "^3.3.2",
+    "typescript": "^5.9.3",
     "unocss": "^66.5.10",
     "vite": "^7.2.4",
     "vitest": "^4.0.15",
-    "vue-i18n-extract": "^2.0.7"
+    "vue-i18n-extract": "^2.0.7",
+    "vue-tsc": "^3.1.8"
   }
 }
