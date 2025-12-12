@@ -9,6 +9,11 @@ export const salesMockData = {
     }
     return months
   },
+  
+  categories: ['electronics', 'clothing', 'home', 'beauty', 'sports'],
+
+  // Cache for generated data
+  _data: {},
 
   _generateData(month) {
     if (this._data[month]) return this._data[month]
