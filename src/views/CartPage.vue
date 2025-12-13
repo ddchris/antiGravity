@@ -1,13 +1,18 @@
 <script setup>
 import { useCartStore } from '../stores/cartStore'
+import { useAuthStore } from '../stores/authStore'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import BaseImage from '../components/BaseImage.vue'
-import * as htmlToImage from 'html-to-image'
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox, ElMessage } from 'element-plus'
+import LoginModal from '../components/LoginModal.vue'
 
 const cartStore = useCartStore()
+const authStore = useAuthStore()
+const router = useRouter()
 const { t } = useI18n()
+const showLoginModal = ref(false)
 
 // 格式化價格為 USD
 const formatPrice = (price) => {
@@ -18,44 +23,32 @@ const formatPrice = (price) => {
   }).format(price)
 }
 
-// 截圖功能 - 保留深色模式背景
-const captureCart = async () => {
-  const target = document.getElementById('cart-capture-area')
-  if (!target) {
-    ElMessageBox.alert(t('cart.captureAreaNotFound') || '找不到截圖區域', t('error.title') || '錯誤', {
-      type: 'error',
-      confirmButtonText: t('error.confirm') || '確定'
-    })
+const handleSubmitOrder = async () => {
+  if (!authStore.isAuthenticated) {
+    showLoginModal.value = true
     return
   }
 
-  const isDark = document.documentElement.classList.contains('dark')
-  const bg = isDark ? '#1f2937' : '#ffffff'
-
   try {
-    const dataUrl = await htmlToImage.toPng(target, {
-      backgroundColor: bg,
-      cacheBust: true,
-      pixelRatio: window.devicePixelRatio * 1.5, // 更乾淨的輸出  
-      style: {
-        transform: 'scale(1)',      // 修 html-to-image 偶爾 scale 錯誤
-        'transform-origin': 'top left'
-      },
-      // 完整保留 Shadow DOM / filter / SVG 支援
-      includeShadowRoots: true,
-    })
+    await ElMessageBox.confirm(
+      t('order.confirm_msg'), 
+      t('order.confirm_title'), 
+      {
+        confirmButtonText: t('order.submit'),
+        cancelButtonText: t('account.cancel'), // assuming 'cancel' key exists or use hardcode
+        type: 'warning'
+      }
+    )
 
-    const link = document.createElement('a')
-    link.download = `shopping-cart-${Date.now()}.png`
-    link.href = dataUrl
-    link.click()
-
+    await cartStore.submitOrder(authStore.user.uid)
+    ElMessage.success(t('order.success'))
+    router.push('/account/orders')
+    
   } catch (err) {
-    console.error(err)
-    ElMessageBox.alert(`截圖失敗：${err.message}`, t('error.title') || '錯誤', {
-      type: 'error',
-      confirmButtonText: t('error.confirm') || '確定'
-    })
+    if (err !== 'cancel') {
+      console.error(err)
+      ElMessage.error(t('error.system'))
+    }
   }
 }
 </script>
@@ -185,17 +178,20 @@ const captureCart = async () => {
         </div>
 
         <!-- 截圖按鈕 - 在截圖區域外 -->
-        <div class="flex justify-center mt-6">
+        <!-- Submit Order Button -->
+        <div class="flex justify-end mt-8 border-t border-gray-200 dark:border-gray-700 pt-6">
           <button 
-            @click="captureCart"
-            class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium shadow-md hover:shadow-lg transition-all flex items-center space-x-2"
+            @click="handleSubmitOrder"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-lg"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            <span>{{ t('order.submit') }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
-            <span>{{ $t('cart.screenshot') }}</span>
           </button>
         </div>
+
+        <LoginModal v-model:visible="showLoginModal" @success="handleSubmitOrder" />
       </div>
 
       <!-- 空購物車提示 -->

@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { db } from '../firebase'
 
 // 定義商品介面
 export interface Product {
@@ -83,11 +85,30 @@ export const useCartStore = defineStore('cart', () => {
     }
   }
 
+  // 送出訂單
+  const submitOrder = async (userId: string) => {
+    try {
+      const orderData = {
+        userId,
+        items: cartItems.value,
+        totalPrice: totalPrice.value,
+        status: 'pending',
+        createdAt: serverTimestamp()
+      }
+      const docRef = await addDoc(collection(db, 'orders'), orderData)
+      cartItems.value = []
+      return docRef.id
+    } catch (error) {
+      throw error
+    }
+  }
+
   return {
     cartItems,
     addToCart,
     incrementQuantity,
     decrementQuantity,
+    submitOrder,
     totalPrice,
     totalQuantity
   }

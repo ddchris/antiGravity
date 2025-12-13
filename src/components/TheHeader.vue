@@ -3,15 +3,17 @@ import { RouterLink, useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cartStore'
 import { useThemeStore } from '../stores/themeStore'
 import { useI18n } from 'vue-i18n'
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useResizeObserver } from '@vueuse/core'
-import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+
 import { ElMessageBox, ElMessage } from 'element-plus'
+import { useAuthStore } from '../stores/authStore'
+import LoginModal from './LoginModal.vue'
 
 // 導入購物車 store 以讀取總數量
 const cartStore = useCartStore()
 const themeStore = useThemeStore()
-const { locale } = useI18n()
+const authStore = useAuthStore() // Added authStore
+const { t, locale } = useI18n()
 
 // 切換語系
 const changeLocale = (newLocale) => {
@@ -21,12 +23,60 @@ const changeLocale = (newLocale) => {
 
 const router = useRouter()
 
-const handlePresentationClick = async () => {
+const activeTab = ref(router.currentRoute.value.path)
+
+watch(
+  () => router.currentRoute.value.path,
+  (newPath) => {
+    activeTab.value = newPath
+  }
+)
+
+const handleTabClick = async (tab) => {
+  const path = tab.props.name
+  if (path === '/presentation') {
+    if (activeTab.value === '/presentation') return // Already there
+    
+    // Slight delay to prevent immediate visual switch before prompt if possible, 
+    // but el-tabs v-model updates fast. 
+    // We rely on the watch to set it back if we don't push.
+    // However, if we want to prevent the switch visual, we should use :before-leave.
+    // user wants simple "use tab", simple prompt is fine.
+    
+    try {
+      const { value } = await ElMessageBox.prompt('此頁面受保護，請輸入密碼', '身份驗證', {
+        confirmButtonText: '確認',
+        cancelButtonText: '取消',
+        inputType: 'password',
+        inputErrorMessage: '密碼錯誤'
+      })
+      
+      if (value === 'chris') {
+        isMobileMenuOpen.value = false
+        router.push(path)
+      } else {
+        ElMessage.error('密碼錯誤')
+        activeTab.value = router.currentRoute.value.path // Revert visual
+      }
+    } catch {
+      activeTab.value = router.currentRoute.value.path // Revert visual
+    }
+  } else {
+    router.push(path)
+  }
+}
+
+const handleMobilePresentationClick = async () => {
+  if (router.currentRoute.value.path === '/presentation') {
+     isMobileMenuOpen.value = false
+     return
+  }
+
   try {
     const { value } = await ElMessageBox.prompt('此頁面受保護，請輸入密碼', '身份驗證', {
       confirmButtonText: '確認',
       cancelButtonText: '取消',
-      inputType: 'password', // optional: mask with dots
+      inputType: 'password',
       inputErrorMessage: '密碼錯誤'
     })
     
@@ -41,7 +91,18 @@ const handlePresentationClick = async () => {
   }
 } // Removed extra brace if any. Ensure indentation is correct.
 
+const showLoginModal = ref(false)
 const isMobileMenuOpen = ref(false)
+
+const handleLogout = async () => {
+  try {
+    await authStore.logout()
+    ElMessage.success(t('auth.logout'))
+    router.push('/')
+  } catch (error) {
+    console.error('Logout failed:', error)
+  }
+}
 
 // Clock Logic
 const currentTime = ref('')
@@ -61,51 +122,22 @@ const updateTime = () => {
 // ... existing imports ...
 
 // Scroll Logic for Desktop Nav
-const scrollContainer = ref(null)
-const showLeftArrow = ref(false)
-const showRightArrow = ref(false)
 
-const checkScroll = () => {
-  const el = scrollContainer.value
-  if (!el) return
-  
-  // Create a tolerance (e.g. 1px) to avoid floating point issues
-  showLeftArrow.value = el.scrollLeft > 0
-  showRightArrow.value = Math.ceil(el.scrollLeft + el.clientWidth) < el.scrollWidth
-}
-
-const scroll = (direction) => {
-  const el = scrollContainer.value
-  if (!el) return
-  const scrollAmount = 200
-  if (direction === 'left') {
-    el.scrollBy({ left: -scrollAmount, behavior: 'smooth' })
-  } else {
-    el.scrollBy({ left: scrollAmount, behavior: 'smooth' })
-  }
-}
-
+// Scroll Logic Removed - Replaced with Element Plus Scrollbar
 onMounted(() => {
+  authStore.initAuth()
   updateTime()
   timer = setInterval(updateTime, 1000)
-  
-  // Check scroll initially
-  setTimeout(checkScroll, 100)
 })
-
-// Observe resize to update arrows
-useResizeObserver(scrollContainer, checkScroll)
-
-// ... existing unmounted ...
-
 
 onUnmounted(() => {
   if (timer) clearInterval(timer)
 })
+
 </script>
 
 <template>
-  <header class="sticky top-0 left-0 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-md z-50 transition-colors">
+  <header class="sticky top-0 left-0 w-full max-w-[100vw] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-md z-50 transition-colors overflow-x-hidden">
     <nav class="container mx-auto px-4 py-4">
       <div class="flex justify-between items-center">
         <!-- Logo / Brand Name -->
@@ -113,109 +145,99 @@ onUnmounted(() => {
           <RouterLink to="/">{{ $t('header.brand') }}</RouterLink>
         </div>
 
-        <div class="flex items-center space-x-2 md:space-x-6">
+        <div class="flex items-center space-x-2 md:space-x-6 flex-1 min-w-0 justify-end">
           <!-- Desktop Navigation -->
-          <div class="hidden md:flex items-center group max-w-[45vw] lg:max-w-[700px]">
-            <!-- Left Arrow -->
-            <button 
-              v-show="showLeftArrow"
-              @click="scroll('left')"
-              class="flex-shrink-0 mr-1 p-1.5 bg-white dark:bg-gray-800 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 text-indigo-600 dark:text-indigo-400 border border-gray-200 dark:border-gray-700 transition-colors z-10"
-              title="Scroll Left"
+          <!-- Desktop Navigation -->
+          <div class="hidden md:block flex-1 mx-4 min-w-0">
+            <el-tabs 
+              v-model="activeTab" 
+              @tab-click="handleTabClick"
+              class="header-tabs demo-tabs"
             >
-              <el-icon><ArrowLeft /></el-icon>
-            </button>
+              <el-tab-pane name="/cart">
+                <template #label>
+                  <div class="flex items-center">
+                    <div class="relative mr-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                      </svg>
+                      <span 
+                        v-if="cartStore.totalQuantity > 0"
+                        class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center"
+                      >
+                        {{ cartStore.totalQuantity }}
+                      </span>
+                    </div>
+                    <span>{{ $t('header.cart') }}</span>
+                  </div>
+                </template>
+              </el-tab-pane>
 
-            <div 
-              ref="scrollContainer"
-              @scroll="checkScroll"
-              class="flex-1 flex items-center space-x-6 overflow-x-auto scroll-smooth px-2 py-2"
-              style="scrollbar-width: none; -ms-overflow-style: none;"
-            >
-              <!-- 導航連結 -->
-              <RouterLink
-                to="/"
-                class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
-                active-class="text-indigo-600 dark:text-indigo-400 font-bold"
-              >
-                {{ $t('header.products') }}
-              </RouterLink>
-              <RouterLink
-                to="/admin/products"
-                class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
-                active-class="text-indigo-600 dark:text-indigo-400 font-bold"
-              >
-                {{ $t('management.title') }}
-              </RouterLink>
-              <RouterLink
-                to="/contact"
-                class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
-                active-class="text-indigo-600 dark:text-indigo-400 font-bold"
-              >
-                {{ $t('header.contact') }}
-              </RouterLink>
-              <!-- 購物車連結 -->
-              <RouterLink
-                to="/cart"
-                class="relative inline-block text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
-                active-class="text-indigo-600 dark:text-indigo-400 font-bold"
-              >
-                {{ $t('header.cart') }}
-                <span 
-                  v-if="cartStore.cartItems.length > 0"
-                  class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full text-xs h-5 w-5 flex items-center justify-center font-bold"
-                >
-                  {{ cartStore.cartItems.length }}
-                </span>
-              </RouterLink>
-
-              <RouterLink
-                to="/chat"
-                class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
-                active-class="text-indigo-600 dark:text-indigo-400 font-bold"
-              >
-                {{ $t('header.chat') }}
-              </RouterLink>
-
-              <RouterLink
-                to="/stats"
-                class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
-                active-class="text-indigo-600 dark:text-indigo-400 font-bold"
-              >
-                {{ $t('header.stats') }}
-              </RouterLink>
-
-              <RouterLink
-                to="/about"
-                class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap"
-                active-class="text-indigo-600 dark:text-indigo-400 font-bold"
-              >
-                {{ $t('header.about') }}
-              </RouterLink>
-              <button
-                @click="handlePresentationClick"
-                class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors whitespace-nowrap focus:outline-none"
-                :class="{ 'text-indigo-600 dark:text-indigo-400 font-bold': $route.path === '/presentation' }"
-              >
-                {{ $t('header.presentation') }}
-              </button>
-            </div>
-
-            <!-- Right Arrow -->
-             <button 
-              v-show="showRightArrow"
-              @click="scroll('right')"
-              class="flex-shrink-0 ml-1 p-1.5 bg-white dark:bg-gray-800 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 text-indigo-600 dark:text-indigo-400 border border-gray-200 dark:border-gray-700 transition-colors z-10"
-              title="Scroll Right"
-            >
-              <el-icon><ArrowRight /></el-icon>
-            </button>
+              <el-tab-pane :label="$t('header.products')" name="/" />
+              <el-tab-pane :label="$t('management.title')" name="/admin/products" />
+              <el-tab-pane v-if="authStore.isAuthenticated" :label="$t('header.contact')" name="/contact" />
+              <el-tab-pane :label="$t('header.chat')" name="/chat" />
+              <el-tab-pane :label="$t('header.stats')" name="/stats" />
+              <el-tab-pane :label="$t('header.about')" name="/about" />
+              <el-tab-pane :label="$t('header.presentation')" name="/presentation" />
+            </el-tabs>
           </div>
 
+          <!-- Desktop Right Actions (Auth & Clock) -->
+          <div class="hidden md:flex items-center gap-4 flex-shrink-0 mr-4">
+             <!-- Auth UI -->
+             <div class="flex items-center gap-3 flex-shrink-0">
+               <template v-if="!authStore.isInitialized">
+                 <img 
+                   v-if="authStore.userAvatar"
+                   :src="authStore.userAvatar"
+                   class="w-9 h-9 rounded-full border border-gray-300 object-cover flex-shrink-0"
+                   alt="User"
+                 />
+                 <div v-else class="w-9 h-9 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse border border-gray-300 flex-shrink-0"></div>
+               </template>
+               <template v-else>
+                 <template v-if="authStore.isAuthenticated">
+                   <span v-if="authStore.isAdmin" class="hidden lg:block text-xs font-bold text-red-500 border border-red-500 px-2 py-0.5 rounded uppercase flex-shrink-0">Admin</span>
+                   <el-dropdown trigger="click">
+                     <div class="flex items-center gap-2 cursor-pointer outline-none flex-shrink-0">
+                       <img 
+                         :src="authStore.userAvatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'" 
+                         class="w-9 h-9 rounded-full border border-gray-300 object-cover flex-shrink-0"
+                         alt="User"
+                       />
+                     </div>
+                     <template #dropdown>
+                       <el-dropdown-menu>
+                         <el-dropdown-item v-if="authStore.isAdmin">
+                           <span class="text-red-500 font-bold">{{ t('admin.title') }}</span>
+                         </el-dropdown-item>
+                         <el-dropdown-item @click="router.push('/account')">
+                           {{ t('account.title') }}
+                         </el-dropdown-item>
+                         <el-dropdown-item divided @click="handleLogout">
+                           {{ t('auth.logout') }}
+                         </el-dropdown-item>
+                       </el-dropdown-menu>
+                     </template>
+                   </el-dropdown>
+                 </template>
+                 <button 
+                   v-else 
+                   @click="showLoginModal = true"
+                   class="px-4 py-1.5 bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-medium rounded-full hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors shadow-sm flex-shrink-0 min-w-max"
+                 >
+                   {{ t('auth.login') }}
+                 </button>
+               </template>
+             </div>
 
-          <!-- Clock -->
-          <div class="hidden md:flex items-center justify-center mr-4 px-3 py-1 bg-gray-900 dark:bg-black rounded border border-gray-700 dark:border-gray-800 shadow-inner">
-            <span class="font-mono text-sm font-bold text-green-400 tracking-widest">{{ currentTime }}</span>
+             <!-- Clock -->
+             <div class="px-3 py-1 bg-gray-900 dark:bg-black rounded border border-gray-700 dark:border-gray-800 shadow-inner flex-shrink-0">
+               <span class="font-mono text-sm font-bold text-green-400 tracking-widest">{{ currentTime }}</span>
+             </div>
           </div>
 
           <!-- Always Visible Controls (Language & Theme) -->
@@ -282,6 +304,7 @@ onUnmounted(() => {
             {{ $t('management.title') }}
           </RouterLink>
           <RouterLink
+            v-if="authStore.isAuthenticated"
             to="/contact"
             class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors px-2 py-1"
             active-class="text-indigo-600 dark:text-indigo-400 font-bold bg-gray-100 dark:bg-gray-800 rounded"
@@ -332,7 +355,7 @@ onUnmounted(() => {
           </RouterLink>
 
           <button
-            @click="handlePresentationClick"
+            @click="handleMobilePresentationClick"
             class="text-left w-full text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors px-2 py-1 focus:outline-none"
             :class="{ 'text-indigo-600 dark:text-indigo-400 font-bold bg-gray-100 dark:bg-gray-800 rounded': $route.path === '/presentation' }"
           >
@@ -341,7 +364,10 @@ onUnmounted(() => {
         </div>
       </div>
     </nav>
-  </header>
+  
+  <!-- Login Component -->
+  <LoginModal v-model:visible="showLoginModal" />
+</header>
 </template>
 
 <style scoped>

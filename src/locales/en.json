@@ -132,5 +132,34 @@
     "networkErrorTitle": "Network Error",
     "sendFailed": "Failed to send request",
     "confirm": "OK"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "google": "Sign in with Google",
+    "facebook": "Sign in with Facebook"
+  },
+  "order": {
+    "submit": "Submit Order",
+    "confirm_title": "Confirm Submission",
+    "confirm_msg": "Are you sure you want to submit the order?",
+    "success": "Order Submitted!",
+    "id": "Order ID",
+    "date": "Date",
+    "total": "Total",
+    "status": "Status",
+    "items": "Items",
+    "pending": "Pending"
+  },
+  "account": {
+    "title": "My Account",
+    "my_orders": "My Orders",
+    "no_orders": "No orders yet",
+    "loading": "Loading...",
+    "guest_order_msg": "Please login to submit order",
+    "cancel": "Cancel"
+  },
+  "admin": {
+    "title": "Admin Dashboard"
   }
 }

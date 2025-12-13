@@ -15,7 +15,7 @@
     "total": "합계"
   },
   "stats": {
-    "title": "",
+    "title": "판매 통계 대시보드",
     "totalSales": "총 매출",
     "orders": "주문 수",
     "averageOrder": "평균 주문액",
@@ -29,16 +29,16 @@
       "Books": "도서",
       "Others": "기타"
     },
-    "barChartTitle": "",
+    "barChartTitle": "카테고리별 총 매출 비교",
     "categories": {
-      "Books": "",
-      "Clothing": "",
-      "Electronics": "",
-      "Home": ""
+      "Books": "도서",
+      "Clothing": "의류",
+      "Electronics": "전자기기",
+      "Home": "홈/리빙"
     },
-    "lineChartTitle": "",
-    "pieChartTitle": "",
-    "subTitle": ""
+    "lineChartTitle": "일일 판매 추세",
+    "pieChartTitle": "카테고리별 판매 비중",
+    "subTitle": "지난 6개월간의 판매 데이터 분석"
   },
   "contact": {
     "email": "이메일",
@@ -46,10 +46,10 @@
     "name": "이름",
     "send": "보내기",
     "title": "문의하기",
-    "required": "",
-    "successMessage": "",
-    "successTitle": "",
-    "validationError": ""
+    "required": "필수 항목입니다",
+    "successMessage": "메시지가 전송되었습니다!",
+    "successTitle": "전송 성공",
+    "validationError": "입력 내용을 확인해주세요"
   },
   "header": {
     "brand": "Store",
@@ -59,7 +59,7 @@
     "chat": "고객 서비스",
     "about": "내 소개",
     "presentation": "프레젠테이션",
-    "stats": ""
+    "stats": "판매 통계"
   },
   "about": {
     "title": "내 소개",
@@ -127,6 +127,35 @@
     "scrollTop": "맨 위로",
     "scrollBottom": "맨 아래로",
     "cancel": "취소"
+  },
+  "auth": {
+    "login": "로그인",
+    "logout": "로그아웃",
+    "google": "Google로 로그인",
+    "facebook": "Facebook으로 로그인"
+  },
+  "order": {
+    "submit": "주문하기",
+    "confirm_title": "주문 확인",
+    "confirm_msg": "주문을 완료하시겠습니까?",
+    "success": "주문이 완료되었습니다!",
+    "id": "주문 번호",
+    "date": "날짜",
+    "total": "총 금액",
+    "status": "상태",
+    "items": "주문 상품",
+    "pending": "처리 중"
+  },
+  "account": {
+    "title": "마이페이지",
+    "my_orders": "주문 내역",
+    "no_orders": "주문 내역이 없습니다",
+    "loading": "로딩 중...",
+    "guest_order_msg": "주문하려면 로그인해주세요",
+    "cancel": "취소"
+  },
+  "admin": {
+    "title": "관리자 대시보드"
   },
   "error": {
     "title": "오류",

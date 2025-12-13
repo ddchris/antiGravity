@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '../stores/authStore'
 import ProductListPage from '../views/ProductListPage.vue'
 import ProductManagementPage from '../views/ProductManagementPage.vue'
 import ContactPage from '../views/ContactPage.vue'
@@ -20,7 +21,8 @@ const router = createRouter({
     {
       path: '/contact',
       name: 'contact',
-      component: ContactPage
+      component: ContactPage,
+      meta: { requiresAuth: true }
     },
     {
       path: '/cart',
@@ -46,6 +48,22 @@ const router = createRouter({
       path: '/presentation',
       name: 'presentation',
       component: () => import('../views/PresentationPage.vue')
+    },
+    {
+      path: '/account',
+      component: () => import('../views/PersonalCenter.vue'),
+      redirect: '/account/orders',
+      children: [
+        {
+          path: 'orders',
+          name: 'MyOrders',
+          component: () => import('../views/MyOrders.vue')
+        }
+      ]
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/'
     }
   ],
   scrollBehavior(to, from, savedPosition) {
@@ -54,6 +72,15 @@ const router = createRouter({
     } else {
       return { top: 0, behavior: 'smooth' }
     }
+  }
+})
+
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+  if (to.meta.requiresAuth && authStore.isInitialized && !authStore.isAuthenticated) {
+    next('/')
+  } else {
+    next()
   }
 })
 

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, watch, h } from 'vue' // Added h
-import { db } from '../firebase/config'
+import { db } from '../firebase'
 import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, getDocs, writeBatch, deleteDoc } from 'firebase/firestore'
 import { useI18n } from 'vue-i18n'
 import { initWebComponent } from '../utils/web-component-proxy'
