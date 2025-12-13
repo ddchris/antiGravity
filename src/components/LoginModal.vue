@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useAuthStore } from '../stores/authStore'
 import { useI18n } from 'vue-i18n'
 import { ElMessageBox } from 'element-plus'
@@ -18,21 +18,21 @@ const { t } = useI18n()
 // Wrapper for v-model
 const dialogVisible = computed({
   get: () => props.visible,
-  set: (val) => emit('update:visible', val)
+  set: (val) => {
+    emit('update:visible', val)
+    if (!val) showInAppPrompt.value = false // Reset state on close
+  }
 })
 
-const isInAppBrowser = () => {
-  const ua = navigator.userAgent || navigator.vendor || window.opera
-  return (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1) || (ua.indexOf("Line") > -1)
-}
+const showInAppPrompt = ref(false)
 
 const handleGoogleLogin = async () => {
-  if (isInAppBrowser()) {
-    ElMessageBox.alert(
-      'Google 不支援在 Line/Facebook 等內建瀏覽器登入，請點擊右上角選單並選擇「在瀏覽器中開啟」(Open in default browser) 以繼續。',
-      '瀏覽器不支援',
-      { confirmButtonText: '了解' }
-    )
+  const ua = navigator.userAgent || navigator.vendor || window.opera
+  const isLine = (ua.indexOf("Line") > -1)
+  const isInApp = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1) || isLine
+
+  if (isInApp) {
+    showInAppPrompt.value = true
     return
   }
   
@@ -42,6 +42,37 @@ const handleGoogleLogin = async () => {
     dialogVisible.value = false
   } catch (err) {
     // Error handling is done in store
+  }
+}
+
+const openExternalBrowser = () => {
+  const currentUrl = window.location.href
+  const ua = navigator.userAgent || navigator.vendor || window.opera
+  
+  if (ua.indexOf("Line") > -1) {
+    // LINE: Use openExternalBrowser param
+    if (currentUrl.indexOf('?') > -1) {
+        window.location.href = currentUrl + '&openExternalBrowser=1'
+    } else {
+        window.location.href = currentUrl + '?openExternalBrowser=1'
+    }
+  } else {
+    // Other In-App Browsers (FB/IG): Try generic force methods
+    if (/android/i.test(ua)) {
+      // Android Intent to force Chrome
+      const urlObj = new URL(currentUrl)
+      // Scheme: intent://<host><path>#Intent;scheme=https;package=com.android.chrome;end
+      const intentUrl = `intent://${urlObj.host}${urlObj.pathname}${urlObj.search}#Intent;scheme=https;package=com.android.chrome;end`
+      window.location.href = intentUrl
+    } else if (/iPhone|iPad|iPod/i.test(ua)) {
+      // iOS: Try googlechrome://
+      // Note: This only works if Chrome is installed. Safari cannot be forced easily from FB webview.
+      const chromeUrl = currentUrl.replace(/^https?:/, 'googlechrome:')
+      window.location.href = chromeUrl
+    } else {
+      // Fallback
+      window.open(currentUrl, '_blank')
+    }
   }
 }
 
@@ -66,7 +97,7 @@ const handleFacebookLogin = async () => {
     append-to-body
     class="login-modal rounded-xl"
   >
-    <div class="flex flex-col gap-4 py-4">
+    <div v-if="!showInAppPrompt" class="flex flex-col gap-4 py-4">
       <button 
         @click="handleGoogleLogin"
         class="flex items-center justify-start gap-4 w-full bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 font-medium py-2.5 pl-14 pr-4 rounded-lg transition-all shadow-sm hover:shadow relative"
@@ -89,6 +120,32 @@ const handleFacebookLogin = async () => {
           </svg>
         </div>
         <span class="text-left">{{ t('auth.facebook') }}</span>
+      </button>
+    </div>
+
+    <div v-else class="flex flex-col gap-4 py-4 text-center">
+      <div class="text-amber-500 mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <p class="text-gray-700 dark:text-gray-300 font-medium">
+        Google 登入不支援此應用程式內建瀏覽器
+      </p>
+      <p class="text-gray-500 text-sm">
+        請點擊下方按鈕以 Chrome 或 Safari 開啟
+      </p>
+      <button 
+        @click="openExternalBrowser"
+        class="w-full bg-blue-600 text-white hover:bg-blue-700 font-medium py-2.5 rounded-lg transition-all shadow-sm hover:shadow mt-2"
+      >
+        開啟外部瀏覽器
+      </button>
+      <button 
+        @click="showInAppPrompt = false"
+        class="text-gray-500 hover:text-gray-700 text-sm mt-2 underline"
+      >
+        返回
       </button>
     </div>
   </el-dialog>

@@ -94,6 +94,13 @@ const handleMobilePresentationClick = async () => {
 const showLoginModal = ref(false)
 const isMobileMenuOpen = ref(false)
 
+const handleLoginSuccess = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
+
 const handleLogout = async () => {
   try {
     await authStore.logout()
@@ -143,10 +150,19 @@ const defaultAvatarUrl = computed(() => {
 })
 
 // Scroll Logic Removed - Replaced with Element Plus Scrollbar
-onMounted(() => {
+onMounted(async () => {
   authStore.initAuth()
   updateTime()
   timer = setInterval(updateTime, 1000)
+
+  // Auto-open login modal if redirected from LINE
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.get('openExternalBrowser') === '1') {
+    showLoginModal.value = true
+    // Clean URL
+    const newUrl = window.location.pathname + window.location.search.replace(/[\?&]openExternalBrowser=1/, '').replace(/^&/, '?').replace(/\?$/, '')
+    window.history.replaceState({}, '', newUrl)
+  }
 })
 
 onUnmounted(() => {
@@ -443,7 +459,7 @@ onUnmounted(() => {
     </nav>
   
   <!-- Login Component -->
-  <LoginModal v-model:visible="showLoginModal" />
+  <LoginModal v-model:visible="showLoginModal" @success="handleLoginSuccess" />
 </header>
 </template>
 
