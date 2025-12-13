@@ -132,7 +132,14 @@
     "login": "ログイン",
     "logout": "ログアウト",
     "google": "Googleでログイン",
-    "facebook": "Facebookでログイン"
+    "facebook": "Facebookでログイン",
+    "passwordProtectedMsg": "このページは保護されています。パスワードを入力してください",
+    "identityCheck": "本人確認",
+    "passwordError": "パスワードが間違っています"
+  },
+  "common": {
+    "confirm": "確認",
+    "cancel": "キャンセル"
   },
   "order": {
     "submit": "注文する",

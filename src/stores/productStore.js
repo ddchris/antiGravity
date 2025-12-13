@@ -10,7 +10,7 @@ export const useProductStore = defineStore('products', () => {
     // if (products.value.length > 0) return
 
     try {
-      const response = await request.get('https://mocki.io/v1/5f9cbcfe-4eef-4a25-bc94-99e52390a5bd')
+      const response = await request.get('https://mocki.io/v1/4165ca5d-9f73-40db-be80-a0a2c4f9dfea')
       
       // API 直接回傳 [...] (物件陣列 Array)
       const productList = response

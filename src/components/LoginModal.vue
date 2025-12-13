@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useAuthStore } from '../stores/authStore'
 import { useI18n } from 'vue-i18n'
+import { ElMessageBox } from 'element-plus'
 
 const props = defineProps({
   visible: {
@@ -20,7 +21,21 @@ const dialogVisible = computed({
   set: (val) => emit('update:visible', val)
 })
 
+const isInAppBrowser = () => {
+  const ua = navigator.userAgent || navigator.vendor || window.opera
+  return (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1) || (ua.indexOf("Line") > -1)
+}
+
 const handleGoogleLogin = async () => {
+  if (isInAppBrowser()) {
+    ElMessageBox.alert(
+      'Google 不支援在 Line/Facebook 等內建瀏覽器登入，請點擊右上角選單並選擇「在瀏覽器中開啟」(Open in default browser) 以繼續。',
+      '瀏覽器不支援',
+      { confirmButtonText: '了解' }
+    )
+    return
+  }
+  
   try {
     await authStore.loginWithGoogle()
     emit('success')

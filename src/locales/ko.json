@@ -132,7 +132,14 @@
     "login": "로그인",
     "logout": "로그아웃",
     "google": "Google로 로그인",
-    "facebook": "Facebook으로 로그인"
+    "facebook": "Facebook으로 로그인",
+    "passwordProtectedMsg": "이 페이지는 보호되어 있습니다. 비밀번호를 입력해주세요",
+    "identityCheck": "신원 확인",
+    "passwordError": "비밀번호가 틀렸습니다"
+  },
+  "common": {
+    "confirm": "확인",
+    "cancel": "취소"
   },
   "order": {
     "submit": "주문하기",

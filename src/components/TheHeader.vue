@@ -44,18 +44,18 @@ const handleTabClick = async (tab) => {
     // user wants simple "use tab", simple prompt is fine.
     
     try {
-      const { value } = await ElMessageBox.prompt('此頁面受保護，請輸入密碼', '身份驗證', {
-        confirmButtonText: '確認',
-        cancelButtonText: '取消',
+      const { value } = await ElMessageBox.prompt(t('auth.passwordProtectedMsg'), t('auth.identityCheck'), {
+        confirmButtonText: t('common.confirm'),
+        cancelButtonText: t('common.cancel'),
         inputType: 'password',
-        inputErrorMessage: '密碼錯誤'
+        inputErrorMessage: t('auth.passwordError')
       })
       
       if (value === 'chris') {
         isMobileMenuOpen.value = false
         router.push(path)
       } else {
-        ElMessage.error('密碼錯誤')
+        ElMessage.error(t('auth.passwordError'))
         activeTab.value = router.currentRoute.value.path // Revert visual
       }
     } catch {
@@ -73,18 +73,18 @@ const handleMobilePresentationClick = async () => {
   }
 
   try {
-    const { value } = await ElMessageBox.prompt('此頁面受保護，請輸入密碼', '身份驗證', {
-      confirmButtonText: '確認',
-      cancelButtonText: '取消',
+    const { value } = await ElMessageBox.prompt(t('auth.passwordProtectedMsg'), t('auth.identityCheck'), {
+      confirmButtonText: t('common.confirm'),
+      cancelButtonText: t('common.cancel'),
       inputType: 'password',
-      inputErrorMessage: '密碼錯誤'
+      inputErrorMessage: t('auth.passwordError')
     })
     
     if (value === 'chris') {
       isMobileMenuOpen.value = false
       router.push('/presentation')
     } else {
-      ElMessage.error('密碼錯誤')
+      ElMessage.error(t('auth.passwordError'))
     }
   } catch {
     // cancelled
@@ -157,7 +157,7 @@ onUnmounted(() => {
 
 <template>
   <header class="sticky top-0 left-0 w-full max-w-[100vw] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-md z-50 transition-colors overflow-x-hidden">
-    <nav class="container mx-auto px-4 py-4">
+    <nav class="container mx-auto px-4 py-2">
       <div class="flex justify-between items-center">
         <!-- Logo / Brand Name -->
         <div class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
@@ -167,7 +167,7 @@ onUnmounted(() => {
         <div class="flex items-center space-x-2 md:space-x-6 flex-1 min-w-0 justify-end">
           <!-- Desktop Navigation -->
           <!-- Desktop Navigation -->
-          <div class="hidden md:block flex-1 mx-4 min-w-0">
+          <div class="hidden md:block flex-1 ml-6 mt-2 min-w-0">
             <el-tabs 
               v-model="activeTab" 
               @tab-click="handleTabClick"
@@ -253,26 +253,28 @@ onUnmounted(() => {
                </template>
              </div>
 
-             <!-- Clock -->
-             <div class="px-3 py-1 bg-gray-900 dark:bg-black rounded border border-gray-700 dark:border-gray-800 shadow-inner flex-shrink-0">
-               <span class="font-mono text-sm font-bold text-green-400 tracking-widest">{{ currentTime }}</span>
+             <!-- Clock & Language Vertical Stack -->
+             <div class="hidden md:flex flex-col items-center justify-center gap-1 mx-2">
+                <!-- Clock -->
+                <div class="px-2 py-0.1 bg-gray-900 dark:bg-black rounded border border-gray-700 dark:border-gray-800 shadow-inner">
+                  <span class="font-mono text-xs font-bold text-green-400 tracking-widest">{{ currentTime }}</span>
+                </div>
+                <select 
+                  v-model="locale" 
+                  @change="changeLocale(locale)"
+                  aria-label="Select Language"
+                  class="text-center px-2 py-0.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer text-xs w-24"
+                >
+                  <option value="zh-TW">繁體中文</option>
+                  <option value="en">English</option>
+                  <option value="ja">日本語</option>
+                  <option value="ko">한국어</option>
+                </select>
              </div>
           </div>
 
           <!-- Always Visible Controls (Language & Theme) -->
           <div class="flex items-center space-x-2">
-            <!-- 語系切換 -->
-            <select 
-              v-model="locale" 
-              @change="changeLocale(locale)"
-              aria-label="Select Language"
-              class="text-white px-2 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer text-sm w-28"
-            >
-              <option value="zh-TW">繁體中文</option>
-              <option value="en">English</option>
-              <option value="ja">日本語</option>
-              <option value="ko">한국어</option>
-            </select>
 
             <!-- 深色模式切換 -->
             <button
@@ -380,6 +382,69 @@ onUnmounted(() => {
           >
             {{ $t('header.presentation') }}
           </button>
+
+          <!-- Mobile Auth & Language -->
+          <div class="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700 flex flex-col gap-4">
+             <!-- Language Switcher Mobile -->
+             <div class="flex items-center justify-between px-2">
+               <span class="text-gray-600 dark:text-gray-300 font-medium text-sm">Language</span>
+               <select 
+                  v-model="locale" 
+                  @change="changeLocale(locale)"
+                  class="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm rounded px-2 py-1 border border-gray-300 dark:border-gray-600 focus:outline-none"
+                >
+                  <option value="zh-TW">繁體中文</option>
+                  <option value="en">English</option>
+                  <option value="ja">日本語</option>
+                  <option value="ko">한국어</option>
+                </select>
+             </div>
+
+             <!-- Mobile Auth -->
+             <template v-if="authStore.isAuthenticated">
+               <div class="flex items-center gap-3 px-2">
+                  <img 
+                   :src="authStore.userAvatar || defaultAvatarUrl" 
+                   class="w-8 h-8 rounded-full border border-gray-300 object-cover"
+                   alt="User"
+                  />
+                  <span class="text-gray-700 dark:text-gray-200 font-medium">{{ authStore.userName || 'User' }}</span>
+               </div>
+               
+               <RouterLink
+                 to="/account"
+                 class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium px-2 py-1"
+                 @click="isMobileMenuOpen = false"
+               >
+                 {{ t('account.title') }}
+               </RouterLink>
+               
+               <RouterLink
+                 v-if="authStore.isAdmin"
+                 to="/admin/products"
+                 class="text-red-500 font-bold px-2 py-1"
+                 @click="isMobileMenuOpen = false"
+               >
+                 {{ t('admin.title') }}
+               </RouterLink>
+
+               <button 
+                 @click="handleLogout(); isMobileMenuOpen = false"
+                 class="text-left text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium px-2 py-1"
+               >
+                 {{ t('auth.logout') }}
+               </button>
+             </template>
+             
+             <template v-else>
+               <button 
+                 @click="showLoginModal = true; isMobileMenuOpen = false"
+                 class="mx-2 px-4 py-2 bg-indigo-600 text-white text-center rounded-lg hover:bg-indigo-700 font-bold shadow-md transition-colors"
+               >
+                 {{ t('auth.login') }}
+               </button>
+             </template>
+          </div>
         </div>
       </div>
     </nav>
@@ -390,6 +455,33 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* Scoped styles if needed, but Tailwind handles most */
+/* Right align tabs safely */
+:deep(.el-tabs__nav-scroll) {
+  /* Reset to default to allow scrolling logic */
+  display: block; 
+  width: 100%;
+}
+
+:deep(.el-tabs__nav) {
+  /* Use flex-end to align tabs to the right when no overflow */
+  display: flex;
+  justify-content: flex-end;
+  float: none; /* Ensure no float interference */
+}
+
+/* Reduce tab item padding to make underline tighter to text */
+:deep(.el-tabs__item) {
+  padding: 0 15px !important; /* Increased to adds approx 5px more spacing */
+}
+
+/* Remove default margin to ensure clean alignment */
+:deep(.el-tabs__header) {
+  margin: 0;
+}
+
+/* Hide the gray bottom track line to prevent it extending into empty space */
+:deep(.el-tabs__nav-wrap::after) {
+  display: none !important;
+}
 </style>
 
