@@ -50,8 +50,75 @@ export const useAuthStore = defineStore('auth', () => {
       await checkUserProfile(result.user)
     } catch (error: any) {
       console.error('Login Failed', error)
-      ElMessage.error(`Login Failed: ${error.message}`)
-      throw error
+
+      // Handle account linking when user already exists with different provider
+      if (error.code === 'auth/account-exists-with-different-credential') {
+        try {
+          const { linkWithCredential } = await import('firebase/auth')
+          const email = error.customData?.email
+
+          if (!email) {
+            ElMessage.error('無法取得帳號資訊')
+            throw error
+          }
+
+          // Ask user to link accounts
+          const { ElMessageBox } = await import('element-plus')
+          await ElMessageBox.confirm(
+            `此 Email (${email}) 已使用 Google 登入。是否連結 Facebook 帳號？`,
+            '帳號連結',
+            {
+              confirmButtonText: '連結',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }
+          )
+
+          // Sign in with Google first
+          ElMessage.info('請使用 Google 重新登入')
+          const googleResult = await signInWithPopup(auth, googleProvider)
+
+          // Link Facebook credential - use OAuthProvider for Firebase v9+
+          const { OAuthProvider } = await import('firebase/auth')
+          const credential = OAuthProvider.credentialFromError(error)
+
+          if (!credential) {
+            ElMessage.error('無法取得 Facebook 憑證')
+            throw new Error('No credential available')
+          }
+
+          await linkWithCredential(googleResult.user, credential)
+
+          // Try to get the latest user data with linked providers
+          await googleResult.user.reload()
+          const updatedUser = auth.currentUser
+
+          if (updatedUser) {
+            user.value = updatedUser
+            // Use the photoURL from the updated user
+            const photoURL = updatedUser.photoURL || ''
+            avatarUrl.value = photoURL
+            localStorage.setItem('user_avatar', photoURL)
+
+            await checkUserProfile(updatedUser)
+          }
+          ElMessage.success('Facebook 已連結！')
+
+        } catch (linkError: any) {
+          console.error('Linking error details:', linkError)
+          console.error('Error code:', linkError.code)
+          console.error('Error message:', linkError.message)
+
+          if (linkError !== 'cancel') {
+            const errorMsg = linkError.code ? `連結失敗: ${linkError.code}` : '連結失敗'
+            ElMessage.error(errorMsg)
+          }
+          throw linkError
+        }
+      } else {
+        ElMessage.error(`Login Failed: ${error.message}`)
+        throw error
+      }
     }
   }
 

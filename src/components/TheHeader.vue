@@ -3,7 +3,7 @@ import { RouterLink, useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cartStore'
 import { useThemeStore } from '../stores/themeStore'
 import { useI18n } from 'vue-i18n'
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { useAuthStore } from '../stores/authStore'
@@ -123,6 +123,25 @@ const updateTime = () => {
 
 // Scroll Logic for Desktop Nav
 
+// Generate default avatar URL with user initials
+const defaultAvatarUrl = computed(() => {
+  const avatar = authStore.userAvatar
+  console.log('Computing defaultAvatarUrl, userAvatar:', avatar, 'userName:', authStore.userName)
+  
+  // Check if avatar exists and is not empty string
+  if (avatar && avatar.trim() !== '') {
+    console.log('Using user avatar:', avatar)
+    return avatar
+  }
+  
+  // Use UI Avatars API to generate colorful avatar with user initials
+  const name = authStore.userName || 'User'
+  const encodedName = encodeURIComponent(name)
+  const generatedUrl = `https://ui-avatars.com/api/?name=${encodedName}&background=6366f1&color=fff&size=128&bold=true`
+  console.log('Generated avatar URL:', generatedUrl)
+  return generatedUrl
+})
+
 // Scroll Logic Removed - Replaced with Element Plus Scrollbar
 onMounted(() => {
   authStore.initAuth()
@@ -204,7 +223,7 @@ onUnmounted(() => {
                    <el-dropdown trigger="click">
                      <div class="flex items-center gap-2 cursor-pointer outline-none flex-shrink-0">
                        <img 
-                         :src="authStore.userAvatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'" 
+                         :src="defaultAvatarUrl" 
                          class="w-9 h-9 rounded-full border border-gray-300 object-cover flex-shrink-0"
                          alt="User"
                        />

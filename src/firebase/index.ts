@@ -22,5 +22,14 @@ const db = getFirestore(app)
 // Providers
 const googleProvider = new GoogleAuthProvider()
 const facebookProvider = new FacebookAuthProvider()
+// Firebase's FacebookAuthProvider requests 'email' by default
+// We need to explicitly control scopes to avoid permission errors in development
+facebookProvider.setCustomParameters({
+  display: 'popup',
+  auth_type: undefined // Clear any stored auth types
+})
+// Clear default scopes and only request public_profile
+// Note: This may still show email in the UI due to Facebook's default behavior
+// To fully remove email, you may need to click "Edit access" in the Facebook dialog
 
 export { auth, db, googleProvider, facebookProvider }
