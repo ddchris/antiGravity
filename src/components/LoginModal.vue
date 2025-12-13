@@ -94,26 +94,33 @@ const handleFacebookLogin = async () => {
   </el-dialog>
 </template>
 
-<style scoped>
-:deep(.el-dialog__header.show-close),
-:deep(.el-dialog__header) {
-  padding-top: 20px !important;
-  padding-right: 0 !important;
-  padding-bottom: 16px !important;
-  padding-left: 0 !important;
-  margin-right: 0 !important;
+
+
+<style>
+/* Global override for appended dialog */
+/* Global override for appended dialog */
+.el-dialog.login-modal .el-dialog__header.show-close,
+.el-dialog.login-modal .el-dialog__header {
+  padding: 10px 0 10px 0 !important;
+  margin: 0 !important;
   display: flex;
   justify-content: center;
   position: relative;
 }
 
-:deep(.el-dialog__title) {
+.el-dialog.login-modal .el-dialog__title {
   width: 100%;
   text-align: center;
+  flex: 1;
 }
 
-:deep(.el-dialog__headerbtn) {
-  right: 20px;
-  top: 20px;
+.el-dialog.login-modal .el-dialog__headerbtn {
+  position: absolute;
+  right: 20px !important;
+  top: 12px !important; /* Adjusted slightly to center vertically with 10px padding */
+  width: auto;
+  height: auto;
 }
 </style>
+
+

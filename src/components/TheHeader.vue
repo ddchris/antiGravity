@@ -283,10 +283,63 @@ onUnmounted(() => {
               :title="themeStore.isDark ? '切換到淺色模式' : '切換到深色模式'"
               :aria-label="themeStore.isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
             >
-              <span v-if="themeStore.isDark" class="text-xl md:text-2xl">☀️</span>
-              <span v-else class="text-xl md:text-2xl">🌙</span>
+              <span v-if="themeStore.isDark" class="text-lg md:text-2xl">☀️</span>
+              <span v-else class="text-lg md:text-2xl">🌙</span>
             </button>
           </div>
+
+          <!-- Mobile Language Switcher -->
+          <div class="md:hidden flex items-center mr-2">
+             <select 
+               v-model="locale" 
+               @change="changeLocale(locale)"
+               class="bg-transparent text-gray-800 dark:text-gray-200 text-base focus:outline-none cursor-pointer border-none p-0 w-12"
+               aria-label="Select Language"
+             >
+               <option value="zh-TW">繁</option>
+               <option value="en">En</option>
+               <option value="ja">JP</option>
+               <option value="ko">KR</option>
+             </select>
+          </div>
+
+          <!-- Mobile Login Button -->
+          <base-button
+            v-if="!authStore.isAuthenticated"
+            type="success"
+            size="small"
+            :name="t('auth.login')"
+            @click="showLoginModal = true"
+            class="md:hidden mr-2 !font-bold !rounded-lg"
+          />
+
+          <!-- Mobile User Avatar Dropdown -->
+          <el-dropdown 
+            v-if="authStore.isAuthenticated" 
+            trigger="click" 
+            class="md:hidden mr-1"
+          >
+             <button class="p-1 outline-none">
+               <img 
+                 :src="authStore.userAvatar || defaultAvatarUrl" 
+                 class="w-8 h-8 rounded-full border border-gray-300 object-cover"
+                 alt="User"
+               />
+             </button>
+             <template #dropdown>
+               <el-dropdown-menu>
+                 <el-dropdown-item v-if="authStore.isAdmin" @click="isMobileMenuOpen = false; router.push('/admin/products')">
+                   <span class="text-red-500 font-bold">{{ t('admin.title') }}</span>
+                 </el-dropdown-item>
+                 <el-dropdown-item @click="isMobileMenuOpen = false; router.push('/account')">
+                   {{ t('account.title') }}
+                 </el-dropdown-item>
+                 <el-dropdown-item divided @click="handleLogout(); isMobileMenuOpen = false">
+                   {{ t('auth.logout') }}
+                 </el-dropdown-item>
+               </el-dropdown-menu>
+             </template>
+          </el-dropdown>
 
           <!-- Mobile Menu Button -->
           <button 
@@ -383,68 +436,8 @@ onUnmounted(() => {
             {{ $t('header.presentation') }}
           </button>
 
-          <!-- Mobile Auth & Language -->
-          <div class="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700 flex flex-col gap-4">
-             <!-- Language Switcher Mobile -->
-             <div class="flex items-center justify-between px-2">
-               <span class="text-gray-600 dark:text-gray-300 font-medium text-sm">Language</span>
-               <select 
-                  v-model="locale" 
-                  @change="changeLocale(locale)"
-                  class="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm rounded px-2 py-1 border border-gray-300 dark:border-gray-600 focus:outline-none"
-                >
-                  <option value="zh-TW">繁體中文</option>
-                  <option value="en">English</option>
-                  <option value="ja">日本語</option>
-                  <option value="ko">한국어</option>
-                </select>
-             </div>
 
-             <!-- Mobile Auth -->
-             <template v-if="authStore.isAuthenticated">
-               <div class="flex items-center gap-3 px-2">
-                  <img 
-                   :src="authStore.userAvatar || defaultAvatarUrl" 
-                   class="w-8 h-8 rounded-full border border-gray-300 object-cover"
-                   alt="User"
-                  />
-                  <span class="text-gray-700 dark:text-gray-200 font-medium">{{ authStore.userName || 'User' }}</span>
-               </div>
-               
-               <RouterLink
-                 to="/account"
-                 class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium px-2 py-1"
-                 @click="isMobileMenuOpen = false"
-               >
-                 {{ t('account.title') }}
-               </RouterLink>
-               
-               <RouterLink
-                 v-if="authStore.isAdmin"
-                 to="/admin/products"
-                 class="text-red-500 font-bold px-2 py-1"
-                 @click="isMobileMenuOpen = false"
-               >
-                 {{ t('admin.title') }}
-               </RouterLink>
 
-               <button 
-                 @click="handleLogout(); isMobileMenuOpen = false"
-                 class="text-left text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium px-2 py-1"
-               >
-                 {{ t('auth.logout') }}
-               </button>
-             </template>
-             
-             <template v-else>
-               <button 
-                 @click="showLoginModal = true; isMobileMenuOpen = false"
-                 class="mx-2 px-4 py-2 bg-indigo-600 text-white text-center rounded-lg hover:bg-indigo-700 font-bold shadow-md transition-colors"
-               >
-                 {{ t('auth.login') }}
-               </button>
-             </template>
-          </div>
         </div>
       </div>
     </nav>
@@ -484,4 +477,3 @@ onUnmounted(() => {
   display: none !important;
 }
 </style>
-
