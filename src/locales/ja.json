@@ -1,4 +1,33 @@
 {
+  "checkout": {
+    "title": "注文確認",
+    "recipient_info": "受取人情報",
+    "recipient_name": "受取人名",
+    "recipient_phone": "携帯電話番号",
+    "delivery_method": "配送方法",
+    "store_select": "店舗選択",
+    "selected_store": "選択された店舗",
+    "payment_method": "支払方法",
+    "payment_cod": "代金引換",
+    "save_default": "デフォルトとして保存",
+    "save_success": "保存しました",
+    "submit_order": "注文を確定する",
+    "validation": {
+      "name_required": "受取人名を入力してください",
+      "name_length": "名前は2文字以上で入力してください",
+      "name_format": "名前は中国語、英語、スペースのみ使用可能です",
+      "phone_required": "携帯電話番号を入力してください",
+      "phone_format": "電話番号の形式が無効です (09xxxxxxxx または 8869xxxxxxxx)",
+      "store_required": "店舗を選択してください",
+      "select_city": "都市を選択",
+      "select_district": "地区を選択",
+      "search_placeholder": "店舗名または住所を検索",
+      "col_name": "店舗名",
+      "col_address": "住所",
+      "col_action": "操作",
+      "select": "選択"
+    }
+  },
   "cart": {
     "decrease": "数量を減らす",
     "empty": "カートは空です！",

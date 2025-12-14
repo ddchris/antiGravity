@@ -23,7 +23,7 @@ watch(() => authStore.isAuthenticated, (val) => {
 </script>
 
 <template>
-  <div class="container mx-auto px-4 py-8 mt-20 min-h-[calc(100vh-80px)]">
+  <div class="container mx-auto px-4 py-8 mt-6 min-h-[calc(100vh-80px)]">
     <div class="flex flex-col md:flex-row gap-6">
       
       <!-- Sidebar -->

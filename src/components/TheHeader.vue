@@ -131,13 +131,13 @@ const updateTime = () => {
 // Scroll Logic for Desktop Nav
 
 // Generate default avatar URL with user initials
+const imageLoadError = ref(false)
+
 const defaultAvatarUrl = computed(() => {
   const avatar = authStore.userAvatar
-  console.log('Computing defaultAvatarUrl, userAvatar:', avatar, 'userName:', authStore.userName)
   
-  // Check if avatar exists and is not empty string
-  if (avatar && avatar.trim() !== '') {
-    console.log('Using user avatar:', avatar)
+  // If we have an avatar and no error, use it
+  if (avatar && avatar.trim() !== '' && !imageLoadError.value) {
     return avatar
   }
   
@@ -145,12 +145,17 @@ const defaultAvatarUrl = computed(() => {
   const name = authStore.userName || 'User'
   const encodedName = encodeURIComponent(name)
   const generatedUrl = `https://ui-avatars.com/api/?name=${encodedName}&background=6366f1&color=fff&size=128&bold=true`
-  console.log('Generated avatar URL:', generatedUrl)
   return generatedUrl
+})
+
+// Reset error state when avatar changes
+watch(() => authStore.userAvatar, () => {
+  imageLoadError.value = false
 })
 
 // Scroll Logic Removed - Replaced with Element Plus Scrollbar
 onMounted(async () => {
+  // Init Logic
   authStore.initAuth()
   updateTime()
   timer = setInterval(updateTime, 1000)
@@ -240,6 +245,7 @@ onUnmounted(() => {
                      <div class="flex items-center gap-2 cursor-pointer outline-none flex-shrink-0">
                        <img 
                          :src="defaultAvatarUrl" 
+                         @error="imageLoadError = true"
                          class="w-9 h-9 rounded-full border border-gray-300 object-cover flex-shrink-0"
                          alt="User"
                        />
@@ -337,7 +343,8 @@ onUnmounted(() => {
           >
              <button class="p-1 outline-none">
                <img 
-                 :src="authStore.userAvatar || defaultAvatarUrl" 
+                 :src="defaultAvatarUrl"
+                 @error="imageLoadError = true" 
                  class="w-8 h-8 rounded-full border border-gray-300 object-cover"
                  alt="User"
                />

@@ -1,4 +1,33 @@
 {
+  "checkout": {
+    "title": "주문 확인",
+    "recipient_info": "수령인 정보",
+    "recipient_name": "수령인 이름",
+    "recipient_phone": "휴대전화 번호",
+    "delivery_method": "배송 방법",
+    "store_select": "매장 선택",
+    "selected_store": "선택된 매장",
+    "payment_method": "결제 방법",
+    "payment_cod": "착불 결제",
+    "save_default": "기본값으로 저장",
+    "save_success": "저장되었습니다",
+    "submit_order": "주문하기",
+    "validation": {
+      "name_required": "수령인 이름을 입력해주세요",
+      "name_length": "이름은 최소 2자 이상이어야 합니다",
+      "name_format": "이름은 중국어, 영어 또는 공백만 포함할 수 있습니다",
+      "phone_required": "휴대전화 번호를 입력해주세요",
+      "phone_format": "유효하지 않은 전화번호 형식입니다 (09xxxxxxxx 또는 8869xxxxxxxx)",
+      "store_required": "매장을 선택해주세요",
+      "select_city": "도시 선택",
+      "select_district": "지역 선택",
+      "search_placeholder": "매장명 또는 주소 검색",
+      "col_name": "매장명",
+      "col_address": "주소",
+      "col_action": "작업",
+      "select": "선택"
+    }
+  },
   "cart": {
     "decrease": "수량 감소",
     "empty": "장바구니가 비어있습니다!",

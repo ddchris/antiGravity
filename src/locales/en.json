@@ -1,4 +1,33 @@
 {
+  "checkout": {
+    "title": "Checkout",
+    "recipient_info": "Recipient Info",
+    "recipient_name": "Recipient Name",
+    "recipient_phone": "Recipient Phone",
+    "delivery_method": "Delivery Method",
+    "store_select": "Select Store",
+    "selected_store": "Selected Store",
+    "payment_method": "Payment Method",
+    "payment_cod": "Cash on Delivery",
+    "save_default": "Save as Default",
+    "save_success": "Default info saved",
+    "submit_order": "Place Order",
+    "validation": {
+      "name_required": "Please enter recipient name",
+      "name_length": "Name must be at least 2 characters",
+      "name_format": "Name can only contain Chinese, English or spaces",
+      "phone_required": "Please enter recipient phone",
+      "phone_format": "Invalid phone format (must be 09xxxxxxxx or 8869xxxxxxxx)",
+      "store_required": "Please select a store",
+      "select_city": "Select City",
+      "select_district": "Select District",
+      "search_placeholder": "Search store name or address...",
+      "col_name": "Store Name",
+      "col_address": "Address",
+      "col_action": "Action",
+      "select": "Select"
+    }
+  },
   "cart": {
     "decrease": "Decrease quantity",
     "empty": "Your cart is empty!",
@@ -12,7 +41,8 @@
     "screenshot": "Screenshot & Download",
     "subtotal": "Subtotal",
     "title": "Your Shopping Cart",
-    "total": "Total"
+    "total": "Total",
+    "proceed_to_checkout": "Proceed to Checkout"
   },
   "contact": {
     "email": "Email",
@@ -169,6 +199,7 @@
   },
   "common": {
     "confirm": "Confirm",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "back": "Back"
   }
 }

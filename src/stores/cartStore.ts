@@ -86,12 +86,13 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   // 送出訂單
-  const submitOrder = async (userId: string) => {
+  const submitOrder = async (userId: string, orderInfo?: any) => {
     try {
       const orderData = {
         userId,
         items: cartItems.value,
         totalPrice: totalPrice.value,
+        info: orderInfo || null, // Add customer & delivery info
         status: 'pending',
         createdAt: serverTimestamp()
       }

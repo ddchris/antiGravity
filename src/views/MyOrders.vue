@@ -84,7 +84,28 @@ const formatDate = (date) => {
           </div>
         </div>
 
-        <div>
+
+        
+        <!-- Order Info (Recipient, Delivery, Payment) -->
+        <div v-if="order.info" class="mt-4 pt-3 border-t border-gray-200 dark:border-gray-600 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+           <div>
+              <span class="text-xs text-gray-500 block mb-1">{{ t('checkout.recipient_info') }}</span>
+              <p class="text-gray-700 dark:text-gray-200 font-medium">{{ order.info.recipient?.name }} / {{ order.info.recipient?.phone }}</p>
+           </div>
+           <div>
+              <span class="text-xs text-gray-500 block mb-1">{{ t('checkout.delivery_method') }}</span>
+              <p class="text-gray-700 dark:text-gray-200 font-medium">{{ order.info.delivery?.method }} - {{ order.info.delivery?.storeName }}</p>
+              <p class="text-gray-500 text-xs">{{ order.info.delivery?.storeAddress }}</p>
+           </div>
+           <div>
+              <span class="text-xs text-gray-500 block mb-1">{{ t('checkout.payment_method') }}</span>
+              <p class="text-gray-700 dark:text-gray-200 font-medium">
+                {{ order.info.payment?.method === 'COD' ? t('checkout.payment_cod') : order.info.payment?.method }}
+              </p>
+           </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-gray-200 dark:border-gray-600">
           <span class="text-xs text-gray-500 uppercase tracking-wider block mb-2">{{ t('order.items') }}</span>
           <div class="flex flex-wrap gap-2">
             <div 
