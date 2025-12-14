@@ -135,18 +135,16 @@ const handleFacebookLogin = async () => {
       <p class="text-gray-500 text-sm">
         請點擊下方按鈕以 Chrome 或 Safari 開啟
       </p>
-      <button 
+      <base-button 
         @click="openExternalBrowser"
         class="w-full bg-blue-600 text-white hover:bg-blue-700 font-medium py-2.5 rounded-lg transition-all shadow-sm hover:shadow mt-2"
-      >
-        開啟外部瀏覽器
-      </button>
-      <button 
+        name="開啟外部瀏覽器"
+      />
+      <base-button 
         @click="showInAppPrompt = false"
         class="text-gray-500 hover:text-gray-700 text-sm mt-2 underline"
-      >
-        返回
-      </button>
+        name="返回"
+      />
     </div>
   </el-dialog>
 </template>

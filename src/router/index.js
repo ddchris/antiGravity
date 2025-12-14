@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/authStore'
+import { watch } from 'vue'
 import ProductListPage from '../views/ProductListPage.vue'
 import ProductManagementPage from '../views/ProductManagementPage.vue'
 import ContactPage from '../views/ContactPage.vue'
@@ -34,6 +35,36 @@ const router = createRouter({
       name: 'checkout',
       component: () => import('../views/CheckoutPage.vue'),
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/admin/orders',
+      name: 'OrderManagement',
+      component: () => import('../views/OrderManagement.vue'),
+      meta: { requiresAuth: true },
+      beforeEnter: async (to, from, next) => {
+        const authStore = useAuthStore()
+        
+        // Wait for auth initialization
+        if (!authStore.isInitialized) {
+          await new Promise(resolve => {
+            const unwatch = watch(
+              () => authStore.isInitialized,
+              (val) => {
+                if (val) {
+                  unwatch()
+                  resolve(true)
+                }
+              }
+            )
+          })
+        }
+
+        if (authStore.isAdmin) {
+          next()
+        } else {
+          next('/')
+        }
+      }
     },
     {
       path: '/about',

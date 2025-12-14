@@ -156,7 +156,6 @@ watch(() => authStore.userAvatar, () => {
 // Scroll Logic Removed - Replaced with Element Plus Scrollbar
 onMounted(async () => {
   // Init Logic
-  authStore.initAuth()
   updateTime()
   timer = setInterval(updateTime, 1000)
 
@@ -265,13 +264,12 @@ onUnmounted(() => {
                      </template>
                    </el-dropdown>
                  </template>
-                 <button 
+                 <base-button 
                    v-else 
+                   :name="t('auth.login')"
                    @click="showLoginModal = true"
                    class="px-4 py-1.5 bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-medium rounded-full hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors shadow-sm flex-shrink-0 min-w-max"
-                 >
-                   {{ t('auth.login') }}
-                 </button>
+                 />
                </template>
              </div>
 

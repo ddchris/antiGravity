@@ -39,6 +39,13 @@ setupCartPersistence()
 
 // 自定義指令
 import fixCol from './directives/fixCol'
+import { useAuthStore } from './stores/authStore'
+
 app.directive('fixCol', fixCol)
 
-app.mount('#app')
+const authStore = useAuthStore()
+authStore.initAuth()
+
+router.isReady().then(() => {
+  app.mount('#app')
+})

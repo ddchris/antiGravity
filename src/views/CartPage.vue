@@ -108,40 +108,40 @@ const handleSubmitOrder = async () => {
               <div class="flex items-start space-x-3">
                 <BaseImage :src="item.imageUrl" :alt="item.name" class-name="w-16 h-16 object-cover rounded-lg flex-shrink-0" />
                 <div class="flex-1 min-w-0">
-                  <h3 class="text-base font-bold text-gray-800 dark:text-gray-100 mb-1 truncate">{{ item.name }}</h3>
-                  <p class="text-indigo-600 dark:text-indigo-400 font-bold mb-2 text-sm">{{ formatPrice(item.price) }}</p>
+                  <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1 line-clamp-2">{{ item.name }}</h3>
+                  <p class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">{{ formatPrice(item.price) }}</p>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-600">
+                <div class="flex items-center space-x-2">
+                  <button
+                    @click="cartStore.decrementQuantity(item.id)"
+                    :class="[
+                      'w-7 h-7 rounded-full flex items-center justify-center font-bold text-white transition-all',
+                      item.quantity === 1 
+                        ? 'bg-orange-500 hover:bg-orange-600' 
+                        : 'bg-red-500 hover:bg-red-600'
+                    ]"
+                  >
+                     <span class="text-sm">{{ item.quantity === 1 ? '🗑️' : '−' }}</span>
+                  </button>
                   
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2">
-                      <button
-                        @click="cartStore.decrementQuantity(item.id)"
-                        :class="[
-                          'w-7 h-7 rounded-full flex items-center justify-center font-bold text-white transition-all',
-                          item.quantity === 1 
-                            ? 'bg-orange-500 hover:bg-orange-600' 
-                            : 'bg-red-500 hover:bg-red-600'
-                        ]"
-                      >
-                         <span class="text-sm">{{ item.quantity === 1 ? '🗑️' : '−' }}</span>
-                      </button>
-                      
-                      <span class="bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 py-1 px-3 rounded-full font-medium min-w-[2rem] text-center text-xs">
-                        {{ item.quantity }}
-                      </span>
-                      
-                      <button
-                        @click="cartStore.incrementQuantity(item.id)"
-                        class="w-7 h-7 rounded-full bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center font-bold text-white transition-all"
-                      >
-                        <span class="text-sm">+</span>
-                      </button>
-                    </div>
-                    
-                    <div class="text-right">
-                      <p class="text-xs text-gray-500 dark:text-gray-400">{{ $t('cart.subtotal') }}</p>
-                      <p class="font-bold text-indigo-600 dark:text-indigo-400 text-sm">{{ formatPrice(item.price * item.quantity) }}</p>
-                    </div>
-                  </div>
+                  <span class="bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 py-1 px-3 rounded-full font-medium min-w-[2rem] text-center text-xs">
+                    {{ item.quantity }}
+                  </span>
+                  
+                  <button
+                    @click="cartStore.incrementQuantity(item.id)"
+                    class="w-7 h-7 rounded-full bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center font-bold text-white transition-all"
+                  >
+                    <span class="text-sm">+</span>
+                  </button>
+                </div>
+                
+                <div class="text-right">
+                  <p class="text-xs text-gray-500 dark:text-gray-400">{{ $t('cart.subtotal') }}</p>
+                  <p class="font-bold text-indigo-600 dark:text-indigo-400 text-sm">{{ formatPrice(item.price * item.quantity) }}</p>
                 </div>
               </div>
             </div>
@@ -161,15 +161,12 @@ const handleSubmitOrder = async () => {
         <!-- 截圖按鈕 - 在截圖區域外 -->
         <!-- Submit Order Button -->
         <div class="flex justify-end mt-4 border-t border-gray-200 dark:border-gray-700 pt-4">
-          <button 
+          <base-button 
+            type="primary"
+            :name="t('cart.proceed_to_checkout')"
             @click="handleSubmitOrder"
-            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-base"
-          >
-            <span>{{ t('cart.proceed_to_checkout') }}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </button>
+            class="px-6 py-2 rounded-lg font-bold shadow-md hover:shadow-lg transition-all text-base"
+          />
         </div>
 
         <LoginModal v-model:visible="showLoginModal" @success="handleSubmitOrder" />

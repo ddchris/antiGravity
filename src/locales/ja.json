@@ -191,7 +191,31 @@
     "cancel": "キャンセル"
   },
   "admin": {
-    "title": "管理画面"
+    "title": "管理画面",
+    "orderManagement": "注文管理",
+    "table": {
+      "id": "注文ID",
+      "date": "日付",
+      "recipient": "受取人",
+      "address": "店舗住所",
+      "amount": "金額",
+      "status": "ステータス",
+      "note": "備考",
+      "action": "操作"
+    },
+    "status": {
+      "all": "すべて",
+      "pending": "処理中",
+      "shipped": "発送済み",
+      "delivered": "配達済み",
+      "problem": "問題あり"
+    },
+    "dialog": {
+      "updateStatus": "ステータス更新",
+      "notePlaceholder": "問題の理由を入力してください...",
+      "deleteConfirm": "本当に削除しますか？",
+      "updateSuccess": "更新しました"
+    }
   },
   "error": {
     "title": "エラー",

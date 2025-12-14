@@ -54,11 +54,9 @@ export const useCartStore = defineStore('cart', () => {
     }, 0)
   })
 
-  // 計算總數量 getter
+  // 計算總數量 getter (By Product Type)
   const totalQuantity = computed(() => {
-    return cartItems.value.reduce((total, item) => {
-      return total + item.quantity
-    }, 0)
+    return cartItems.value.length
   })
 
   // 增加商品數量 action

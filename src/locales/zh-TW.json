@@ -183,7 +183,31 @@
     "back": "返回"
   },
   "admin": {
-    "title": "後台管理"
+    "title": "後台管理",
+    "orderManagement": "訂單管理",
+    "table": {
+      "id": "訂單編號",
+      "date": "日期",
+      "recipient": "收件人",
+      "address": "門市地址",
+      "amount": "金額",
+      "status": "狀態",
+      "note": "備註",
+      "action": "操作"
+    },
+    "status": {
+      "all": "全部",
+      "pending": "處理中",
+      "shipped": "已發貨",
+      "delivered": "已送達",
+      "problem": "問題訂單"
+    },
+    "dialog": {
+      "updateStatus": "更新訂單狀態",
+      "notePlaceholder": "請輸入問題備註原因...",
+      "deleteConfirm": "確定要刪除此訂單嗎？",
+      "updateSuccess": "狀態更新成功"
+    }
   },
   "error": {
     "title": "錯誤",

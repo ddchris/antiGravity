@@ -352,9 +352,7 @@ const formatPrice = (price) => {
               <h2 class="text-base font-bold text-gray-700 dark:text-gray-200">
                 {{ t('checkout.recipient_info') }}
               </h2>
-              <el-button type="primary" link size="small" @click="saveAsDefault">
-                {{ t('checkout.save_default') }}
-              </el-button>
+              <base-button type="primary" link size="small" :name="t('checkout.save_default')" @click="saveAsDefault" />
             </div>
           
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -392,9 +390,7 @@ const formatPrice = (price) => {
             <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
               <div v-if="!selectedStore" class="text-center py-4">
                 <p class="text-gray-500 dark:text-gray-400 mb-4">{{ t('checkout.validation.store_required') }}</p>
-                <el-button type="primary" @click="openStoreDialog">
-                  {{ t('checkout.store_select') }}
-                </el-button>
+                <base-button type="primary" :name="t('checkout.store_select')" @click="openStoreDialog" />
               </div>
               <div v-else class="flex items-center justify-between">
                 <div>
@@ -404,9 +400,7 @@ const formatPrice = (price) => {
                   </p>
                   <p class="text-gray-500 text-xs mt-1">ID: {{ selectedStore.id }}</p>
                 </div>
-                <el-button type="primary" plain size="small" @click="openStoreDialog">
-                  {{ t('common.edit') || 'Change' }}
-                </el-button>
+                <base-button type="primary" plain size="small" :name="t('common.edit') || 'Change'" @click="openStoreDialog" />
               </div>
             </div>
           </div>
@@ -432,19 +426,12 @@ const formatPrice = (price) => {
                 </span>
               </div>
               
-              <button 
+              <base-button 
+                type="primary"
+                :name="t('checkout.submit_order')"
                 @click.prevent="handleSubmit"
-                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-lg shadow-lg hover:shadow-xl transition-all text-lg"
-              >
-                {{ t('checkout.submit_order') }}
-              </button>
-              
-              <!-- <button 
-                @click="router.push('/cart')"
-                class="w-full text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-sm text-center underline"
-              >
-                {{ t('common.cancel') || 'Return to Cart' }}
-              </button> -->
+                class="w-full !py-3.5 !text-lg !font-bold shadow-lg"
+              />
             </div>
           </div>
         </el-form>
@@ -494,7 +481,7 @@ const formatPrice = (price) => {
               <el-table-column prop="DisplayAddress" :label="t('checkout.validation.col_address')" min-width="200" />
               <el-table-column :label="t('checkout.validation.col_action')" width="80" align="center">
                 <template #default="scope">
-                   <el-button type="primary" size="small" link>{{ t('checkout.validation.select') }}</el-button>
+                   <base-button type="primary" size="small" link :name="t('checkout.validation.select')" />
                 </template>
               </el-table-column>
            </el-table>

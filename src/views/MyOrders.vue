@@ -1,22 +1,27 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { db, auth } from '../firebase'
-import { collection, query, where, orderBy, getDocs } from 'firebase/firestore'
+import { ref, onMounted, watch } from 'vue'
+import { db } from '../firebase'
+import { collection, query, where, getDocs } from 'firebase/firestore'
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
+import { useAuthStore } from '../stores/authStore'
 
 const { t } = useI18n()
+const authStore = useAuthStore()
 const orders = ref([])
 const loading = ref(true)
 
 const fetchOrders = async () => {
-  if (!auth.currentUser) return
+  if (!authStore.user) {
+    loading.value = false
+    return
+  }
 
   try {
     // Remove orderBy to avoid Firestore Composite Index creation error
     const q = query(
       collection(db, 'orders'),
-      where('userId', '==', auth.currentUser.uid)
+      where('userId', '==', authStore.user.uid)
     )
     
     const querySnapshot = await getDocs(q)
@@ -37,12 +42,26 @@ const fetchOrders = async () => {
 }
 
 onMounted(() => {
-  fetchOrders()
+  if (authStore.isInitialized) {
+    fetchOrders()
+  } else {
+    const unwatch = watch(
+      () => authStore.isInitialized,
+      (val) => {
+        if (val) {
+          unwatch()
+          fetchOrders()
+        }
+      }
+    )
+  }
 })
 
 const formatDate = (date) => {
   if (!date) return '-'
-  return new Intl.DateTimeFormat('zh-TW', { dateStyle: 'medium', timeStyle: 'short' }).format(date)
+  const d = new Date(date)
+  const pad = (n) => n.toString().padStart(2, '0')
+  return `${d.getFullYear()}/${pad(d.getMonth() + 1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
 }
 </script>
 

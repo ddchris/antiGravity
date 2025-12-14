@@ -50,15 +50,14 @@ const handleAddToCart = () => {
       <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">{{ product.description }}</p>
       <div class="flex justify-between items-center gap-4 mt-auto">
         <span class="text-lg font-bold text-indigo-600 dark:text-indigo-400">{{ formatPrice(product.price) }}</span>
-        <button 
+        <base-button 
           @click="handleAddToCart"
           :class="[
             'px-3 py-1.5 rounded-lg transition-colors text-xs font-medium whitespace-nowrap',
             isAdded ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'
           ]"
-        >
-          {{ isAdded ? t('product.added') : t('product.addToCart') }}
-        </button>
+          :name="isAdded ? t('product.added') : t('product.addToCart')"
+        />
       </div>
     </div>
   </div>

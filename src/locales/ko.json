@@ -191,7 +191,31 @@
     "cancel": "취소"
   },
   "admin": {
-    "title": "관리자 대시보드"
+    "title": "관리자 대시보드",
+    "orderManagement": "주문 관리",
+    "table": {
+      "id": "주문 ID",
+      "date": "날짜",
+      "recipient": "수령인",
+      "address": "매장 주소",
+      "amount": "금액",
+      "status": "상태",
+      "note": "비고",
+      "action": "작업"
+    },
+    "status": {
+      "all": "전체",
+      "pending": "처리 중",
+      "shipped": "배송됨",
+      "delivered": "배송 완료",
+      "problem": "문제 발생"
+    },
+    "dialog": {
+      "updateStatus": "상태 업데이트",
+      "notePlaceholder": "문제 원인을 입력하세요...",
+      "deleteConfirm": "이 주문을 삭제하시겠습니까?",
+      "updateSuccess": "업데이트 성공"
+    }
   },
   "error": {
     "title": "오류",

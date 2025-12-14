@@ -130,12 +130,11 @@ const handleSubmit = () => {
            <p v-if="errors.message" class="text-red-500 text-xs mt-1">{{ $t('contact.required') }}</p>
         </div>
 
-        <button
+        <base-button
           type="submit"
           class="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg"
-        >
-          {{ $t('contact.send') }}
-        </button>
+          :name="$t('contact.send')"
+        />
       </form>
     </div>
   </div>

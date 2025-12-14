@@ -51,6 +51,19 @@ watch(() => authStore.isAuthenticated, (val) => {
               </svg>
               {{ t('account.my_orders') }}
             </RouterLink>
+
+            <!-- Admin Link -->
+            <RouterLink 
+              v-if="authStore.isAdmin"
+              to="/admin/orders"
+              class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              active-class="bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 font-bold"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+              </svg>
+              {{ t('admin.orderManagement') }}
+            </RouterLink>
           </nav>
         </div>
       </aside>
