@@ -496,6 +496,26 @@ onUnmounted(() => {
 :deep(.el-tabs__nav-wrap::after) {
   display: none !important;
 }
+
+/* Hide native indicator to avoid misalignment */
+:deep(.el-tabs__active-bar) {
+  display: none !important;
+}
+
+/* Custom CSS-based indicator */
+:deep(.el-tabs__item.is-active) {
+  position: relative;
+}
+
+:deep(.el-tabs__item.is-active)::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--el-color-primary);
+}
 </style>
 
 
