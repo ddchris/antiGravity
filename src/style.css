@@ -248,6 +248,11 @@ select,
   .hidden-mobile {
     display: none !important;
   }
+
+  /* Spacer for Fixed Header on Mobile */
+  #app {
+    padding-top: 62px;
+  }
 }
 
 /* BaseButton Global Reset

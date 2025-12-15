@@ -172,7 +172,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header class="sticky top-0 left-0 w-full max-w-[100vw] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-md z-50 transition-colors overflow-x-hidden">
+  <header class="fixed md:sticky top-0 left-0 w-full max-w-[100vw] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-md z-50 transition-colors overflow-x-hidden">
     <nav class="container mx-auto px-4 py-2">
       <div class="flex justify-between items-center">
         <!-- Logo / Brand Name -->
