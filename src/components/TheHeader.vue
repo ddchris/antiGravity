@@ -37,12 +37,6 @@ const handleTabClick = async (tab) => {
   if (path === '/presentation') {
     if (activeTab.value === '/presentation') return // Already there
     
-    // Slight delay to prevent immediate visual switch before prompt if possible, 
-    // but el-tabs v-model updates fast. 
-    // We rely on the watch to set it back if we don't push.
-    // However, if we want to prevent the switch visual, we should use :before-leave.
-    // user wants simple "use tab", simple prompt is fine.
-    
     try {
       const { value } = await ElMessageBox.prompt(t('auth.passwordProtectedMsg'), t('auth.identityCheck'), {
         confirmButtonText: t('common.confirm'),
@@ -89,7 +83,9 @@ const handleMobilePresentationClick = async () => {
   } catch {
     // cancelled
   }
-} // Removed extra brace if any. Ensure indentation is correct.
+}
+
+
 
 const showLoginModal = ref(false)
 const isMobileMenuOpen = ref(false)
@@ -221,6 +217,7 @@ onUnmounted(() => {
               <el-tab-pane :label="$t('header.stats')" name="/stats" />
               <el-tab-pane :label="$t('header.about')" name="/about" />
               <el-tab-pane :label="$t('header.presentation')" name="/presentation" />
+
             </el-tabs>
           </div>
 
@@ -268,7 +265,7 @@ onUnmounted(() => {
                    v-else 
                    :name="t('auth.login')"
                    @click="showLoginModal = true"
-                   class="px-4 py-1.5 bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-medium rounded-full hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors shadow-sm flex-shrink-0 min-w-max"
+                   class="custom-auth-btn px-4 py-1.5 bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-medium rounded-full hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors shadow-sm flex-shrink-0 min-w-max"
                  />
                </template>
              </div>
@@ -452,10 +449,12 @@ onUnmounted(() => {
           <button
             @click="handleMobilePresentationClick"
             class="text-left w-full text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors px-2 py-1 focus:outline-none"
-            :class="{ 'text-indigo-600 dark:text-indigo-400 font-bold bg-gray-100 dark:bg-gray-800 rounded': $route.path === '/presentation' }"
+            :class="{ 'text-indigo-600 dark:text-indigo-400 font-bold bg-gray-100 dark:bg-gray-800 rounded': activeTab === '/presentation' }"
           >
             {{ $t('header.presentation') }}
           </button>
+
+
 
 
 
@@ -496,5 +495,23 @@ onUnmounted(() => {
 /* Hide the gray bottom track line to prevent it extending into empty space */
 :deep(.el-tabs__nav-wrap::after) {
   display: none !important;
+}
+</style>
+
+<style scoped>
+/* 
+  Fix for BaseButton (Web Component) styling issues.
+  Since BaseButton wraps ElButton and lacks Shadow DOM, the inner ElButton's default 
+  opaque background covers the customized background on the host BaseButton.
+  We force the inner button to be transparent so the host's Tailwind classes apply.
+*/
+:deep(.custom-auth-btn .el-button) {
+  background-color: transparent !important;
+  border: none !important;
+  color: inherit !important;
+  width: 100%;
+  height: 100%;
+  padding: 0 !important; /* Allow host padding to control spacing */
+  min-height: unset; /* Remove ElButton min-height constraint if needed */
 }
 </style>
