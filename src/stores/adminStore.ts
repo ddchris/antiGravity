@@ -92,7 +92,7 @@ export const useAdminStore = defineStore('admin', () => {
         if (note !== undefined) target.note = note
       }
 
-      ElMessage.success('Order status updated')
+      // ElMessage.success('Order status updated') // Removed to prevent double toast
     } catch (error: any) {
       console.error('Update Status Error:', error)
       ElMessage.error('Failed to update status')

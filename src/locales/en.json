@@ -224,6 +224,8 @@
   "common": {
     "confirm": "Confirm",
     "cancel": "Cancel",
-    "back": "Back"
+    "back": "Back",
+    "no_data": "No data found",
+    "edit": "Edit"
   }
 }

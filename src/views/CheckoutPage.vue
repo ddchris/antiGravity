@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted, computed, watch } from 'vue'
+import { ref, reactive, onMounted, computed, watch, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useCartStore } from '../stores/cartStore'
@@ -23,6 +23,11 @@ const allStores = ref([])
 const cityOptions = ref([])
 const districtOptions = ref([])
 const loadingStores = ref(false)
+const isMobile = ref(false)
+
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768
+}
 
 // Store Selection Filters
 const storeFilter = reactive({
@@ -93,6 +98,11 @@ watch(() => storeFilter.city, (newCity) => {
 })
 
 const filteredStores = computed(() => {
+  // Optimization: Don't show any stores if no filter is active
+  if (!storeFilter.city && !storeFilter.keyword) {
+    return []
+  }
+
   const isEn = currentLocale.value === 'en'
   const nameKey = isEn ? 'StoreName_En' : 'StoreName'
   const addressKey = isEn ? 'StoreAddress_En' : 'StoreAddress'
@@ -272,7 +282,12 @@ onMounted(() => {
     loadDefaultInfo()
   }
 
+  // Check mobile on mount
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+
   if (authStore.isInitialized) {
+    checkMobile() // Ensure it runs
     checkAuth()
   } else {
     const unwatch = watch(
@@ -285,6 +300,10 @@ onMounted(() => {
       }
     )
   }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
 })
 
 const formatPrice = (price) => {
@@ -474,12 +493,18 @@ const formatPrice = (price) => {
              v-loading="loadingStores"
              highlight-current-row
              @current-change="handleSelectStore"
+             @row-click="handleSelectStore"
              :border="false"
              :empty-text="t('common.no_data') || 'No stores found'"
            >
-              <el-table-column prop="DisplayName" :label="t('checkout.validation.col_name')" width="140" />
-              <el-table-column prop="DisplayAddress" :label="t('checkout.validation.col_address')" min-width="200" />
-              <el-table-column :label="t('checkout.validation.col_action')" width="80" align="center">
+              <el-table-column prop="DisplayName" :label="t('checkout.validation.col_name')" width="95" header-align="center" align="center" />
+              <el-table-column prop="DisplayAddress" :label="t('checkout.validation.col_address')" min-width="200" header-align="center" />
+              <el-table-column 
+                v-if="!isMobile"
+                :label="t('checkout.validation.col_action')" 
+                width="80" 
+                align="center"
+              >
                 <template #default="scope">
                    <base-button type="primary" size="small" link :name="t('checkout.validation.select')" />
                 </template>
@@ -500,5 +525,17 @@ const formatPrice = (price) => {
 <style scoped>
 :deep(.el-table__row) {
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  :deep(.el-table .cell) {
+    font-size: 12px !important; 
+    padding: 0 2px !important;
+    line-height: 1.3 !important;
+  }
+  
+  :deep(.el-table .el-table__cell) {
+    padding: 4px 0 !important;
+  }
 }
 </style>

@@ -243,6 +243,11 @@ select,
     overflow-x: hidden !important;
     width: 100dvw !important;
   }
+
+  /* Utility to hide elements on mobile */
+  .hidden-mobile {
+    display: none !important;
+  }
 }
 
 /* BaseButton Global Reset
@@ -265,12 +270,13 @@ base-button.btn-reset .el-button,
   font-size: inherit !important;
   border-radius: inherit !important;
   box-shadow: none !important;
-  transition: none !important; /* Let host handle transitions */
+  transition: none !important;
+  /* Let host handle transitions */
 }
 
 /* Ensure the inner span of el-button also doesn't interfere */
-base-button.btn-reset .el-button > span,
-.btn-reset .el-button > span {
+base-button.btn-reset .el-button>span,
+.btn-reset .el-button>span {
   display: flex;
   align-items: center;
   justify-content: center;
