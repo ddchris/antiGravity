@@ -65,14 +65,16 @@ describe('ProductCard.vue', () => {
     const wrapper = mount(ProductCard, {
       props: { product },
       global: {
-        stubs: { BaseImage: true }
+        stubs: { 
+          BaseImage: true
+        }
       }
     })
     
-    const btn = wrapper.find('button')
+    const btn = wrapper.find('base-button')
     await btn.trigger('click')
     
-    // Check button text change (product.added logic)
-    expect(wrapper.text()).toContain('product.added')
+    // Check button text change (product.added logic) via name attribute
+    expect(btn.attributes('name')).toBe('product.added')
   })
 })

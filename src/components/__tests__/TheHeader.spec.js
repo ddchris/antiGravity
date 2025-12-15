@@ -16,7 +16,10 @@ vi.mock('vue-router', () => ({
     props: ['to']
   },
   useRoute: () => ({ path: '/' }),
-  useRouter: () => ({ push: vi.fn() })
+  useRouter: () => ({ 
+    push: vi.fn(),
+    currentRoute: { value: { path: '/' } }
+  })
 }))
 
 vi.mock('vue-i18n', () => ({
