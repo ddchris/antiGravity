@@ -53,7 +53,7 @@ const handleAddToCart = () => {
         <base-button 
           @click="handleAddToCart"
           :class="[
-            'px-3 py-1.5 rounded-lg transition-colors text-xs font-medium whitespace-nowrap',
+            'btn-reset px-3 py-1.5 rounded-lg transition-colors text-xs font-medium whitespace-nowrap',
             isAdded ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'
           ]"
           :name="isAdded ? t('product.added') : t('product.addToCart')"

@@ -244,3 +244,36 @@ select,
     width: 100dvw !important;
   }
 }
+
+/* BaseButton Global Reset
+   Forces the inner Element Plus button to be transparent and unstyled
+   so the host BaseButton styles (Tailwind) take full effect. 
+*/
+base-button.btn-reset .el-button,
+.btn-reset .el-button {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  border-width: 0 !important;
+  color: inherit !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: unset !important;
+  line-height: inherit !important;
+  font-weight: inherit !important;
+  font-size: inherit !important;
+  border-radius: inherit !important;
+  box-shadow: none !important;
+  transition: none !important; /* Let host handle transitions */
+}
+
+/* Ensure the inner span of el-button also doesn't interfere */
+base-button.btn-reset .el-button > span,
+.btn-reset .el-button > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}

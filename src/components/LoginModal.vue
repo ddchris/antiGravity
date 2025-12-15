@@ -137,12 +137,12 @@ const handleFacebookLogin = async () => {
       </p>
       <base-button 
         @click="openExternalBrowser"
-        class="w-full bg-blue-600 text-white hover:bg-blue-700 font-medium py-2.5 rounded-lg transition-all shadow-sm hover:shadow mt-2"
+        class="btn-reset w-full bg-blue-600 text-white hover:bg-blue-700 font-medium py-2.5 rounded-lg transition-all shadow-sm hover:shadow mt-2"
         name="開啟外部瀏覽器"
       />
       <base-button 
         @click="showInAppPrompt = false"
-        class="text-gray-500 hover:text-gray-700 text-sm mt-2 underline"
+        class="btn-reset text-gray-500 hover:text-gray-700 text-sm mt-2 underline"
         name="返回"
       />
     </div>

@@ -265,7 +265,7 @@ onUnmounted(() => {
                    v-else 
                    :name="t('auth.login')"
                    @click="showLoginModal = true"
-                   class="custom-auth-btn px-4 py-1.5 bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-medium rounded-full hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors shadow-sm flex-shrink-0 min-w-max"
+                   class="btn-reset px-4 py-1.5 bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-medium rounded-full hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors shadow-sm flex-shrink-0 min-w-max"
                  />
                </template>
              </div>
@@ -498,20 +498,4 @@ onUnmounted(() => {
 }
 </style>
 
-<style scoped>
-/* 
-  Fix for BaseButton (Web Component) styling issues.
-  Since BaseButton wraps ElButton and lacks Shadow DOM, the inner ElButton's default 
-  opaque background covers the customized background on the host BaseButton.
-  We force the inner button to be transparent so the host's Tailwind classes apply.
-*/
-:deep(.custom-auth-btn .el-button) {
-  background-color: transparent !important;
-  border: none !important;
-  color: inherit !important;
-  width: 100%;
-  height: 100%;
-  padding: 0 !important; /* Allow host padding to control spacing */
-  min-height: unset; /* Remove ElButton min-height constraint if needed */
-}
-</style>
+

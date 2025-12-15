@@ -132,7 +132,7 @@ const handleSubmit = () => {
 
         <base-button
           type="submit"
-          class="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg"
+          class="btn-reset w-full bg-indigo-600 text-white font-bold py-3 rounded-lg hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg"
           :name="$t('contact.send')"
         />
       </form>
