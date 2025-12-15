@@ -250,7 +250,7 @@ const getStatusTagType = (status) => {
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <base-button :name="t('common.cancel')" @click="showDialog = false" />
+          <base-button :name="t('common.cancel')" @click="showDialog = false" class="mr-2" />
           <base-button type="primary" :name="t('common.confirm')" @click="handleUpdateStatus" />
         </span>
       </template>
