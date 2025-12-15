@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/authStore'
 import { useI18n } from 'vue-i18n'
 import { onMounted, watch } from 'vue'
+import { Loading } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -23,7 +24,12 @@ watch(() => authStore.isAuthenticated, (val) => {
 </script>
 
 <template>
-  <div class="container mx-auto px-4 py-8 mt-6 min-h-[calc(100vh-80px)]">
+  <!-- Loading State (Show only if NOT initialized AND NOT authenticated) -->
+  <div v-if="!authStore.isInitialized && !authStore.isAuthenticated" class="flex justify-center items-center py-20 min-h-[500px]">
+    <el-icon class="is-loading text-4xl text-gray-400"><Loading /></el-icon>
+  </div>
+
+  <div v-else class="container mx-auto px-4 py-8 mt-6 min-h-[calc(100vh-80px)]">
     <div class="flex flex-col md:flex-row gap-6">
       
       <!-- Sidebar -->

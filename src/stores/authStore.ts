@@ -11,9 +11,15 @@ import { auth, db, googleProvider, facebookProvider } from '../firebase'
 import { ElMessage } from 'element-plus'
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref<FirebaseUser | null>(null)
+  // Optimistic User from Cache to prevent flashing
+  const cachedUser = localStorage.getItem('user_cache')
+  const initialUser = cachedUser ? JSON.parse(cachedUser) : null
+
+  const user = ref<FirebaseUser | any>(initialUser)
   const userProfile = ref<any>(null) // Extra profile data from Firestore
-  const isAdmin = ref(false)
+  // Initialize isAdmin from cache if available
+  const isAdmin = ref(initialUser?.role === 'admin' || false)
+
   const isInitialized = ref(false)
   // Optimistic Avatar from Cache
   const avatarUrl = ref(localStorage.getItem('user_avatar') || '')
@@ -31,6 +37,14 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = result.user
       avatarUrl.value = result.user.photoURL || ''
       localStorage.setItem('user_avatar', result.user.photoURL || '')
+      // Cache minimal user info
+      localStorage.setItem('user_cache', JSON.stringify({
+        uid: result.user.uid,
+        email: result.user.email,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
+        role: 'user' // Default role for new login, will be updated by checkUserProfile
+      }))
 
       await checkUserProfile(result.user)
     } catch (error: any) {
@@ -46,6 +60,13 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = result.user
       avatarUrl.value = result.user.photoURL || ''
       localStorage.setItem('user_avatar', result.user.photoURL || '')
+      localStorage.setItem('user_cache', JSON.stringify({
+        uid: result.user.uid,
+        email: result.user.email,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
+        role: 'user' // Default
+      }))
 
       await checkUserProfile(result.user)
     } catch (error: any) {
@@ -99,6 +120,13 @@ export const useAuthStore = defineStore('auth', () => {
             const photoURL = updatedUser.photoURL || ''
             avatarUrl.value = photoURL
             localStorage.setItem('user_avatar', photoURL)
+            localStorage.setItem('user_cache', JSON.stringify({
+              uid: updatedUser.uid,
+              email: updatedUser.email,
+              displayName: updatedUser.displayName,
+              photoURL: updatedUser.photoURL,
+              role: 'user'
+            }))
 
             await checkUserProfile(updatedUser)
           }
@@ -132,6 +160,7 @@ export const useAuthStore = defineStore('auth', () => {
       // Clear Cache
       avatarUrl.value = ''
       localStorage.removeItem('user_avatar')
+      localStorage.removeItem('user_cache')
 
     } catch (error: any) {
       ElMessage.error(`Logout Failed: ${error.message}`)
@@ -150,6 +179,14 @@ export const useAuthStore = defineStore('auth', () => {
       userProfile.value = data
       // Check Admin Role
       isAdmin.value = data.role === 'admin'
+
+      // Update cache with actual role
+      const currentCache = localStorage.getItem('user_cache')
+      if (currentCache) {
+        const cacheObj = JSON.parse(currentCache)
+        cacheObj.role = data.role
+        localStorage.setItem('user_cache', JSON.stringify(cacheObj))
+      }
     } else {
       // Create new user document
       const newProfile = {
@@ -175,6 +212,18 @@ export const useAuthStore = defineStore('auth', () => {
         avatarUrl.value = photo
         localStorage.setItem('user_avatar', photo)
 
+        // Preserve existing cache role if available, or default to null until checkUserProfile
+        const existingCache = localStorage.getItem('user_cache')
+        const existingRole = existingCache ? JSON.parse(existingCache).role : null
+
+        localStorage.setItem('user_cache', JSON.stringify({
+          uid: currentUser.uid,
+          email: currentUser.email,
+          displayName: currentUser.displayName,
+          photoURL: currentUser.photoURL,
+          role: existingRole
+        }))
+
         await checkUserProfile(currentUser)
       } else {
         userProfile.value = null
@@ -182,6 +231,7 @@ export const useAuthStore = defineStore('auth', () => {
         // Clear Cache only if we are sure user is logged out (which this callback confirms)
         avatarUrl.value = ''
         localStorage.removeItem('user_avatar')
+        localStorage.removeItem('user_cache')
       }
       isInitialized.value = true
     })

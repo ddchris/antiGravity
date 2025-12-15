@@ -1,11 +1,14 @@
 <script setup>
 import { ref, onMounted, computed, reactive, watch } from 'vue'
 import { useAdminStore } from '../stores/adminStore'
+import { useAuthStore } from '../stores/authStore'
 import { useI18n } from 'vue-i18n'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { Loading } from '@element-plus/icons-vue'
 
 const { t } = useI18n()
 const adminStore = useAdminStore()
+const authStore = useAuthStore()
 
 // State
 const currentPage = ref(1)
@@ -102,7 +105,12 @@ const getStatusTagType = (status) => {
 </script>
 
 <template>
-  <div class="container mx-auto px-4 py-8 mt-6 min-h-[calc(100vh-80px)]">
+  <!-- Loading State (Show only if NOT initialized AND NOT authenticated) -->
+  <div v-if="!authStore.isInitialized && !authStore.isAuthenticated" class="flex justify-center items-center py-20 min-h-[500px]">
+    <el-icon class="is-loading text-4xl text-gray-400"><Loading /></el-icon>
+  </div>
+
+  <div v-else class="container mx-auto px-4 py-8 mt-6 min-h-[calc(100vh-80px)]">
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
