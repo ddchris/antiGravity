@@ -165,53 +165,29 @@ const LANGUAGE_MAP = {
     'ko': '한국어'
 }
 
-// Real AI Service (Google Gemini) - Using Axios
+// Real AI Service (Google Gemini) - Using Backend Proxy
 const callRealGemini = async (text) => {
-    if (!GEMINI_API_KEY || GEMINI_API_KEY.startsWith('sk-proj')) throw new Error("No Gemini API Key (or using OpenAI key mistakenly)")
+    // Get backend URL from environment variable
+    const apiUrl = import.meta.env.VITE_CHAT_API_URL
+    
+    if (!apiUrl) {
+        console.warn("VITE_CHAT_API_URL is not set. Using simulation.")
+// ...
+        throw new Error("Backend API URL not configured")
+    }
     
     // Get current language for AI response
     const currentLang = LANGUAGE_MAP[locale.value] || '繁體中文'
     
-    // 1. Dynamic Model Discovery (Fixes 404 issues)
-    // We first list available models to find one that actually exists for this Key/Region
-    let targetModel = 'models/gemini-1.5-flash' // Default fallback
-    
+    console.log("Calling Backend:", apiUrl)
+
+    // Call Backend Function
+    // The backend handles the API Key and Model Selection securely
     try {
-        const { data: listData } = await axios.get(
-            `https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}`
-        )
-        
-        if (listData.models) {
-            // Find the best available model (Prefer Flash -> 1.5 -> Pro)
-            // Must support 'generateContent'
-            const validModel = listData.models.find(m => 
-                m.supportedGenerationMethods && 
-                m.supportedGenerationMethods.includes('generateContent') &&
-                (m.name.includes('flash') || m.name.includes('1.5'))
-            ) || listData.models.find(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes('generateContent'))
-            
-            if (validModel) {
-            targetModel = validModel.name
-            console.log("Selected Gemini Model:", targetModel)
-            }
-        }
-    } catch (e) {
-        console.warn("Model discovery failed, trying default:", e)
-    }
-    
-    // 2. Call Generate Content (With Retry Logic)
-    // Note: targetModel comes as 'models/gemini-xxx'
-    const url = `https://generativelanguage.googleapis.com/v1beta/${targetModel}:generateContent?key=${GEMINI_API_KEY}`
-    
-    let data;
-    let attempts = 0;
-    const maxAttempts = 3;
-    
-    while (attempts < maxAttempts) {
-        try {
-            const response = await axios.post(url, {
-                systemInstruction: {
-                    parts: [{ text: `你是一位超級親切、活潑又專業的AI助手！😊 請使用${currentLang}回覆。
+        const response = await axios.post(apiUrl, {
+            message: text,
+            systemInstruction: {
+                parts: [{ text: `你是一位超級親切、活潑又專業的AI助手！😊 請使用${currentLang}回覆。
 
 回覆風格指南：
 🎨 每個段落或重點前面加上相關的 emoji
@@ -225,42 +201,29 @@ const callRealGemini = async (text) => {
 • 這是 **重點** 說明
 • 第二點說明
 👉 **推薦** 去這裡玩！` }]
-                },
-                contents: [{ parts: [{ text: text }] }]
-            })
-            
-            // Axios returns response object, .data contains the actual body
-            data = response.data
-            console.log('Gemini API Response:', data)
-            
-            break; // Success
-        } catch (e) {
-            // Check for 503 status (overloaded)
-            if (e.response && e.response.status === 503) {
-                attempts++;
-                console.warn(`Gemini 503 (Overloaded). Retrying ${attempts}/${maxAttempts}...`);
-                await new Promise(r => setTimeout(r, 1500)); // Wait 1.5s
-                continue;
             }
-            
-            attempts++;
-            if (attempts >= maxAttempts) throw e;
-            await new Promise(r => setTimeout(r, 1500));
+        })
+        
+        const data = response.data
+        console.log('Backend Response:', data)
+        
+        // Validate response structure
+        if (!data) throw new Error("No data received from API")
+        if (data.error) throw new Error(data.error.message || data.error)
+        if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+            console.error('Invalid response structure:', data)
+            throw new Error("No response content")
         }
+        
+        const resultText = data.candidates[0].content.parts[0].text
+        console.log('Extracted AI Text:', resultText)
+        
+        return resultText
+
+    } catch (e) {
+        console.error("Backend Call Failed:", e)
+        throw e // Trigger fallback in triggerAIResponse
     }
-    
-    // Validate response structure
-    if (!data) throw new Error("No data received from API")
-    if (data.error) throw new Error(data.error.message)
-    if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
-        console.error('Invalid response structure:', data)
-        throw new Error("No response content")
-    }
-    
-    const resultText = data.candidates[0].content.parts[0].text
-    console.log('Extracted AI Text:', resultText)
-    
-    return resultText
 }
 
 // AI Response Logic (Simulated or Real)
