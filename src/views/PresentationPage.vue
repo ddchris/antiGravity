@@ -263,7 +263,7 @@ const slides = [
                 <!-- Right Column: Key Achievements -->
                 <div class="lg:col-span-8 flex flex-col min-h-0 bg-slate-900/30 rounded-xl border border-slate-700/30 p-1">
                   <h3 class="flex-shrink-0 text-xl font-bold text-white mb-2 px-3 pt-2">關鍵成就與職責</h3>
-                  <div class="flex-1 overflow-y-auto px-3 pb-2 custom-scrollbar space-y-3">
+                  <div class="flex-1 overflow-y-auto px-3 pb-2 custom-scrollbar space-y-2">
                     <div v-for="(item, i) in slide.achievements" :key="i" class="group p-3 bg-slate-800 rounded hover:bg-slate-750 border-l-4 border-indigo-500 hover:border-indigo-400 transition-all">
                       <h4 class="text-base font-bold text-indigo-300 mb-0.5 group-hover:text-indigo-200">{{ item.title }}</h4>
                       <p class="text-gray-400 text-sm leading-relaxed">{{ item.desc }}</p>
