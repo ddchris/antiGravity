@@ -39,8 +39,8 @@ const slides = [
     subtitle: '背景與特質',
     list: [
       { label: '學歷背景', text: '2010/7 - 2012/6 國立清華大學 材料系碩士', text2: '2006/9 - 2010/7 國立交通大學 材料所學士' },
-      { label: '核心技能', text: 'HTML, JavaScript, Vue.js (Vue2/Vue3), Tailwind/UnoCSS, Git' },
-      { label: '軟實力', text: '溝通協作 (PM/Backend/Design)、責任感 (時程/品質)、持續學習 (AI/Web Components/Unit test)' }
+      { label: '核心技能', text: 'HTML, JavaScript,CSS, Vue' },
+      { label: '軟實力', text: '有效溝通協作 (PM/後端/美術)、任務兼顧 (時程/品質)、持續學習 (AI/Web Components/Unit test)' }
     ]
   },
   {
@@ -76,9 +76,9 @@ const slides = [
     techStack: ['Vue.js 2 (Vuex, Webpack)', 'Element UI', 'HTML / SCSS / JS (ES6)', 'WebSocket', 'RESTful API'],
     description: '在資深同仁指導下，從基礎開始快速累積實戰經驗，建立堅實的前端開發觀念。',
     achievements: [
-      { title: '奠定基礎', desc: '熟悉運用 Vue2, ES6語法與 Element UI 進行組件化開發，並使用 Webpack 打包。' },
-      { title: '實務應用', desc: '處理跨瀏覽器相容性問題 (Cross-browser Compatibility) 與 RWD 響應式網頁切版。' },
-      { title: '進階功能', desc: '實作 WebSocket 即時聊天室功能，並深入理解 RESTful API 串接流程。' }
+      { title: '奠定基礎', desc: '新手 => 資深同仁帶領熟悉 Vue2,Element UI 語法, RESTful API 串接,Webpack 打包。後期: ES6' },
+      { title: '實務經驗', desc: '處理跨瀏覽器相容性問題 與 RWD 響應式網頁切版。' },
+      { title: '進階功能', desc: '主管指導下 => 實作 WebSocket 小型聊天室功能。' }
     ]
   },
   {
@@ -86,13 +86,14 @@ const slides = [
     title: '團隊協作與技術深耕 - 富揚創新',
     role: '前端工程師',
     period: '2020/09 - 2025/04',
-    techStack: ['Vue 3 (Composition API)', 'Astro (Island Arch)', 'Pinia / Vite', 'Element Plus / Tailwind', 'Performance Tuning'],
+    techStack: ['Vue 3', 'Pinia / Vite', 'Element Plus / Tailwind', 'Astro', 'Performance Tuning'],
     description: '跨團隊協作 (PM/美術/後端)，負責大型舊系統維護與新專案架構導入，專注於效能與 SEO 優化。',
     achievements: [
-      { title: 'SSR 與 SEO', desc: '使用 Astro 框架，結合 SSR (靜態渲染) 與 CSR (局部互動)，提升載入速度與 SEO 。' },
-      { title: '接觸新技術', desc: '專案推進至 Vue3 + El Plus生態系，導入 Pinia 狀態管理與 Vite 建置工具。' },
-      { title: '底層原理研究', desc: '深入研究 Virtual DOM 更新機制與雙向綁定原理，並應用於元件封裝與複用策略。' },
-      { title: '架構規劃', desc: '實作 Router 權限控制與元件做封裝與複用，提升程式碼可維護性。' }
+      { title: '專案概述', desc: '維護 => 三後台(HTML、JS、CSS vue2), 開發 => 一個新後台及一個新前台' },
+      { title: '技術過渡', desc: '後期專案新技術 => Vue3 + El Plus生態系，導入 Pinia 狀態管理與 Vite 打包, Astro框架。' },
+      { title: '架構規劃認知', desc: '實作 Router 權限控制、元件做封裝與複用。' },
+      { title: '底層原理研究', desc: '進一步了解 Virtual DOM 更新機制、 v-model 雙向綁定原理。' },
+      { title: 'SSR + CSR', desc: '使用 Astro 框架，結合 SSR (靜態渲染) 與 CSR (局部互動)，提升載入速度與 SEO 。' },
     ]
   },
   {
