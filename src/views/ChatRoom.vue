@@ -155,7 +155,7 @@ const sendMessage = async () => {
 // AI Configuration
 // WARNING: exposing API Key in frontend code is risky for production.
 // Get your FREE Key here: https://aistudio.google.com/app/apikey(https://aistudio.google.com/)
-const GEMINI_API_KEY = 'AIzaSyAKKEBVt-_JKQmSAAgsEdPepWcoSrZXq3I' // input your key here: 'AIza...'
+const GEMINI_API_KEY = '' // input your key here: 'AIza...'
 
 // Language mapping for AI responses
 const LANGUAGE_MAP = {
