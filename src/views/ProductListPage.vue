@@ -55,7 +55,7 @@ onUnmounted(() => {
     <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8 text-center">{{ $t('product.featured') }}</h1>
 
     <!-- 商品網格 -->
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
       <ProductCard
         v-for="product in displayedProducts"
         :key="product.id"

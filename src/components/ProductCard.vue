@@ -36,7 +36,7 @@ const handleAddToCart = () => {
 <template>
   <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col">
     <!-- 商品圖片 -->
-    <div class="h-48 overflow-hidden bg-gray-200 dark:bg-gray-600 flex-shrink-0">
+    <div class="aspect-[4/3] w-full overflow-hidden bg-gray-200 dark:bg-gray-600 flex-shrink-0">
       <BaseImage
         :src="product.imageUrl"
         :alt="product.name"
