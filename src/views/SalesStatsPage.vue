@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import BaseChart from '../components/BaseChart.vue'
+import GanttChart from '../components/GanttChart.vue'
 import { salesMockData } from '../mock/salesData'
 
 const { t, locale } = useI18n()
@@ -202,12 +203,17 @@ const barChartOption = computed(() => {
         </div>
       </div>
 
-      <!-- Bar Chart -->
       <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
         <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 mb-4">{{ $t('stats.barChartTitle') }}</h3>
         <div class="h-[350px]">
           <BaseChart :option="barChartOption" :key="locale" />
         </div>
+      </div>
+
+      <!-- Gantt Chart -->
+      <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 mb-4">{{ $t('stats.ganttChartTitle') }}</h3>
+        <GanttChart :key="locale" />
       </div>
     </div>
   </div>

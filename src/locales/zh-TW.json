@@ -78,6 +78,12 @@
       "beauty": "美妝",
       "sports": "運動",
       "books": "書籍"
+    },
+    "ganttChartTitle": "專案甘特圖",
+    "tasks": {
+      "taskA": "任務 A",
+      "taskB": "任務 B",
+      "taskC": "任務 C"
     }
   },
   "about": {

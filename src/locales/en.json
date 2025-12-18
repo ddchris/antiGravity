@@ -78,6 +78,12 @@
       "beauty": "Beauty",
       "sports": "Sports",
       "books": "Books"
+    },
+    "ganttChartTitle": "Project Gantt Chart",
+    "tasks": {
+      "taskA": "Task A",
+      "taskB": "Task B",
+      "taskC": "Task C"
     }
   },
   "about": {
