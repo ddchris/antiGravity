@@ -176,9 +176,11 @@
     "logout": "Logout",
     "google": "Sign in with Google",
     "facebook": "Sign in with Facebook",
+    "line": "Sign in with LINE",
     "passwordProtectedMsg": "This page is protected, please enter password",
     "identityCheck": "Identity Verification",
-    "passwordError": "Incorrect password"
+    "passwordError": "Incorrect password",
+    "quotaExceeded": "LINE Login Quota Exceeded (Max 49 users)"
   },
   "order": {
     "submit": "Submit Order",

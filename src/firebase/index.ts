@@ -26,10 +26,14 @@ const facebookProvider = new FacebookAuthProvider()
 // We need to explicitly control scopes to avoid permission errors in development
 facebookProvider.setCustomParameters({
   display: 'popup',
-  auth_type: undefined // Clear any stored auth types
+  auth_type: 'reauthenticate'
 })
-// Clear default scopes and only request public_profile
-// Note: This may still show email in the UI due to Facebook's default behavior
-// To fully remove email, you may need to click "Edit access" in the Facebook dialog
 
-export { auth, db, googleProvider, facebookProvider }
+// LINE Provider (OIDC)
+import { OAuthProvider } from 'firebase/auth'
+const lineProvider = new OAuthProvider('oidc.line') // Ensure this matches your Firebase Console provider ID
+lineProvider.setCustomParameters({
+  // prompt: 'consent' // Force consent prompt if needed
+})
+
+export { auth, db, googleProvider, facebookProvider, lineProvider }

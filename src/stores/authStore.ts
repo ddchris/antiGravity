@@ -7,7 +7,7 @@ import {
   type User as FirebaseUser
 } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
-import { auth, db, googleProvider, facebookProvider } from '../firebase'
+import { auth, db, googleProvider, facebookProvider, lineProvider } from '../firebase'
 import { ElMessage } from 'element-plus'
 
 export const useAuthStore = defineStore('auth', () => {
@@ -50,6 +50,66 @@ export const useAuthStore = defineStore('auth', () => {
     } catch (error: any) {
       console.error('Login Failed', error)
       ElMessage.error(`Login Failed: ${error.message}`)
+      throw error
+    }
+  }
+
+  const loginWithLine = async () => {
+    try {
+      const result = await signInWithPopup(auth, lineProvider)
+
+      // Check quota for NEW users
+      // 1. Check if user profile exists
+      const userRef = doc(db, 'users', result.user.uid)
+      const userSnap = await getDoc(userRef)
+
+      if (!userSnap.exists()) {
+        // 2. Check and Increment Quota
+        const { runTransaction } = await import('firebase/firestore')
+        const configRef = doc(db, 'config', 'line_login')
+
+        try {
+          await runTransaction(db, async (transaction) => {
+            const configSnap = await transaction.get(configRef)
+
+            let currentCount = 0
+            if (configSnap.exists()) {
+              currentCount = configSnap.data().count || 0
+            }
+
+            const MAX_USERS = 49
+            if (currentCount >= MAX_USERS) {
+              throw new Error('Quota Exceeded')
+            }
+
+            // Increment
+            transaction.set(configRef, { count: currentCount + 1 }, { merge: true })
+          })
+        } catch (e: any) {
+          if (e.message === 'Quota Exceeded') {
+            await signOut(auth)
+            user.value = null
+            throw new Error('LINE 登入人數已達上限 (49人)，暫無法註冊')
+          }
+          throw e
+        }
+      }
+
+      user.value = result.user
+      avatarUrl.value = result.user.photoURL || ''
+      localStorage.setItem('user_avatar', result.user.photoURL || '')
+      localStorage.setItem('user_cache', JSON.stringify({
+        uid: result.user.uid,
+        email: result.user.email,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
+        role: 'user'
+      }))
+
+      await checkUserProfile(result.user)
+    } catch (error: any) {
+      console.error('LINE Login Failed', error)
+      ElMessage.error(`LINE Login Failed: ${error.message}`)
       throw error
     }
   }
@@ -237,6 +297,26 @@ export const useAuthStore = defineStore('auth', () => {
     })
   }
 
+  const isLineLoginFull = ref(false)
+
+  const checkLineQuota = async () => {
+    try {
+      const configRef = doc(db, 'config', 'line_login')
+      const configSnap = await getDoc(configRef)
+      if (configSnap.exists()) {
+        const count = configSnap.data().count || 0
+        // Max 49 users
+        isLineLoginFull.value = count >= 49
+      } else {
+        isLineLoginFull.value = false
+      }
+    } catch (error) {
+      console.error('Failed to check LINE quota', error)
+      // Default to false if check fails, let backend reject if needed
+      isLineLoginFull.value = false
+    }
+  }
+
   return {
     user,
     isAdmin,
@@ -244,8 +324,11 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
     userAvatar,
     userName,
+    isLineLoginFull,
+    checkLineQuota,
     loginWithGoogle,
     loginWithFacebook,
+    loginWithLine,
     logout,
     initAuth
   }

@@ -1,6 +1,12 @@
-import { onRequest } from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
-import axios from "axios";
+import * as functions from "firebase-functions";
+
+// Start writing functions
+// https://firebase.google.com/docs/functions/typescript
+
+export const helloWorld = functions.https.onRequest((request, response) => {
+  functions.logger.info("Hello logs!", { structuredData: true });
+  response.send("Hello from Firebase!");
+});
 
 // Define the secret to be used
 // Note: You must run `firebase functions:secrets:set GEMINI_API_KEY` before deploying

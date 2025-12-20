@@ -162,6 +162,7 @@
     "logout": "ログアウト",
     "google": "Googleでログイン",
     "facebook": "Facebookでログイン",
+    "line": "LINEでログイン",
     "passwordProtectedMsg": "このページは保護されています。パスワードを入力してください",
     "identityCheck": "本人確認",
     "passwordError": "パスワードが間違っています"

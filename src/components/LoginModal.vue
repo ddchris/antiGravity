@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useAuthStore } from '../stores/authStore'
 import { useI18n } from 'vue-i18n'
 import { ElMessageBox } from 'element-plus'
@@ -21,6 +21,20 @@ const dialogVisible = computed({
   set: (val) => {
     emit('update:visible', val)
     if (!val) showInAppPrompt.value = false // Reset state on close
+  }
+})
+
+// Initial check
+onMounted(() => {
+  if (props.visible) {
+    authStore.checkLineQuota()
+  }
+})
+
+watch(() => props.visible, (newVal) => {
+  if (newVal) {
+    showInAppPrompt.value = false
+    authStore.checkLineQuota()
   }
 })
 
@@ -85,6 +99,16 @@ const handleFacebookLogin = async () => {
     // Error handling
   }
 }
+
+const handleLineLogin = async () => {
+  try {
+    await authStore.loginWithLine()
+    emit('success')
+    dialogVisible.value = false
+  } catch (err) {
+    // Error handling
+  }
+}
 </script>
 
 <template>
@@ -121,6 +145,33 @@ const handleFacebookLogin = async () => {
         </div>
         <span class="text-left">{{ t('auth.facebook') }}</span>
       </button>
+
+      <!-- LINE Login -->
+      <button
+        v-if="!authStore.isLineLoginFull"
+        @click="handleLineLogin"
+        class="flex items-center justify-start gap-4 w-full bg-[#06C755] text-white hover:bg-[#05b64d] font-medium py-2.5 pl-14 pr-4 rounded-lg transition-all shadow-sm hover:shadow relative"
+      >
+        <div class="w-6 h-6 flex items-center justify-center absolute left-6">
+          <!-- White LINE Logo -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="100%"
+            height="100%"
+            viewBox="0 0 256 256"
+          >
+            <path
+              fill="#fff"
+              d="M217.156 109.97c-3.1-40.457-37.49-72.396-79.317-72.396-44.594 0-80.73 35.535-80.73 79.38 0 39.544 28.31 72.35 66.273 78.1 2.87.416 6.84-1.294 7.846-5.83.155-.705 1.054-6.22 1.054-6.22s.636-3.837-2.315-5.592c-9.088-5.405-14.885-15.006-14.885-25.928 0-16.7 13.535-30.237 30.237-30.237s30.237 13.536 30.237 30.237c0 10.9-5.776 20.48-14.832 25.892-2.95 1.764-2.3 5.602-2.3 5.602l1.096 6.57s.76 4.31-.05 7.42c-.52 2.01-2.43 7.88-3.77 9.59-3.08 3.93-11.45 10.15-27.1 7.23-5.22-.97-10.23-2.67-14.93-4.99-31.54-15.7-48.49-51.2-39.75-86.43 10.59-42.75 49.03-73.49 93.58-73.49 53.68 0 97.2 43.52 97.2 97.2 0 49.33-36.95 89.96-84.81 96.22-3.14.41-6.19.62-9.19.62-22.14 0-42.3-8.82-57.17-23.21-1.37-1.33-3.66-1.16-4.8.36l-3.32 4.43c-1.07 1.43-.88 3.44.37 4.67 17.58 17.26 41.67 27.91 68.32 27.91 3.51 0 7.02-.23 10.51-.69 56.46-7.39 99.88-55.51 99.88-113.63 0-4.04-.23-8.08-.65-12.06z"
+            />
+            <path
+              fill="#fff"
+              d="M192.54 139.38h-18.78c-1.8 0-3.35-1.46-3.35-3.35v-27.9c0-1.8 1.46-3.35 3.35-3.35h18.78c1.8 0 3.35 1.46 3.35 3.35s-1.46 3.35-3.35 3.35h-15.43v21.2h15.43c1.8 0 3.35 1.46 3.35 3.35s-1.55 3.35-3.35 3.35zM153.33 139.38h-4.08c-1.8 0-3.35-1.46-3.35-3.35v-20.65l-13.84 19.33c-.56.81-1.52 1.32-2.52 1.32h-4.08c-1.8 0-3.35-1.46-3.35-3.35v-27.9c0-1.8 1.46-3.35 3.35-3.35s3.35 1.46 3.35 3.35v20.64l13.85-19.32c.56-.81 1.52-1.32 2.52-1.32h4.08c1.8 0 3.35 1.46 3.35 3.35v27.9c.08 1.8-1.38 3.35-3.28 3.35zM113.89 139.38h-4.08c-1.8 0-3.35-1.46-3.35-3.35v-27.9c0-1.8 1.46-3.35 3.35-3.35s3.35 1.46 3.35 3.35v27.9c0 1.8-1.54 3.35-3.27 3.35zM96.09 135.94v-24.46h-15.43c-1.8 0-3.35-1.46-3.35-3.35s1.46-3.35 3.35-3.35h18.78c1.8 0 3.35 1.46 3.35 3.35v27.9c0 1.8-1.46 3.35-3.35 3.35-1.89-.09-3.35-1.55-3.35-3.44z"
+            />
+          </svg>
+        </div>
+        <span class="text-left">{{ t('auth.line') }}</span>
+      </button>
     </div>
 
     <div v-else class="flex flex-col gap-4 py-4 text-center">
@@ -148,8 +199,6 @@ const handleFacebookLogin = async () => {
     </div>
   </el-dialog>
 </template>
-
-
 
 <style>
 /* Global override for appended dialog */

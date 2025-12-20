@@ -162,6 +162,7 @@
     "logout": "로그아웃",
     "google": "Google로 로그인",
     "facebook": "Facebook으로 로그인",
+    "line": "LINE으로 로그인",
     "passwordProtectedMsg": "이 페이지는 보호되어 있습니다. 비밀번호를 입력해주세요",
     "identityCheck": "신원 확인",
     "passwordError": "비밀번호가 틀렸습니다"
