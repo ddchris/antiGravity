@@ -235,5 +235,17 @@
     "networkErrorTitle": "네트워크 오류",
     "sendFailed": "요청을 보내지 못했습니다",
     "confirm": "확인"
+  },
+  "relax": {
+    "tab_name": "휴식",
+    "title": "전류봉 게임",
+    "instructions": "벽이나 장애물에 닿지 않도록 마우스를 이동하세요!",
+    "level": "레벨",
+    "score": "시간",
+    "restart": "다시 시작",
+    "retry": "다시 시도",
+    "failed": "찌릿! 벽에 부딪혔습니다!",
+    "victory": "축하합니다! 모든 레벨을 통과했습니다!",
+    "play_again": "다시하기"
   }
 }

@@ -235,5 +235,18 @@
     "networkErrorTitle": "ネットワークエラー",
     "sendFailed": "リクエストの送信に失敗しました",
     "confirm": "OK"
+  },
+  "relax": {
+    "tab_name": "リラックス",
+    "title": "イライラ棒",
+    "instructions": "壁や障害物に触れずにマウスをゴールまで導いてください！",
+    "level": "レベル",
+    "score": "タイム",
+    "restart": "リスタート",
+    "retry": "やり直す",
+    "failed": "ビリビリ！壁に当たりました！",
+    "victory": "おめでとう！全レベルクリア！",
+    "play_again": "もう一度プレイ",
+    "start_here": "ここからスタート"
   }
 }

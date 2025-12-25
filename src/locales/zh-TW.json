@@ -236,5 +236,18 @@
     "networkErrorTitle": "網路錯誤",
     "sendFailed": "請求發送失敗",
     "confirm": "確定"
+  },
+  "relax": {
+    "tab_name": "放鬆一下",
+    "title": "電流急急棒",
+    "instructions": "移動滑鼠通過路徑，千萬不要碰到牆壁或障礙物！",
+    "level": "關卡",
+    "score": "時間",
+    "restart": "重新開始",
+    "retry": "再試一次",
+    "failed": "滋！你被電到了！",
+    "victory": "太強了！恭喜全破！",
+    "play_again": "再玩一次",
+    "start_here": "從這裡開始"
   }
 }

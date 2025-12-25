@@ -87,6 +87,11 @@ const router = createRouter({
       component: () => import('../views/PresentationPage.vue')
     },
     {
+      path: '/relax',
+      name: 'relax',
+      component: () => import('../views/RelaxPage.vue')
+    },
+    {
       path: '/account',
       component: () => import('../views/PersonalCenter.vue'),
       redirect: '/account/orders',

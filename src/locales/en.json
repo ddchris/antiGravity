@@ -235,5 +235,17 @@
     "back": "Back",
     "no_data": "No data found",
     "edit": "Edit"
+  },
+  "relax": {
+    "title": "Wire Loop",
+    "instructions": "Guide your mouse through the path without touching the walls or obstacles!",
+    "level": "Level",
+    "score": "Time",
+    "restart": "Restart",
+    "retry": "Try Again",
+    "failed": "Zap! You hit the wall!",
+    "victory": "Champion! You beat all levels!",
+    "play_again": "Play Again",
+    "start_here": "Start Here"
   }
 }
