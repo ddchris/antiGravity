@@ -241,11 +241,21 @@
     "instructions": "Guide your mouse through the path without touching the walls or obstacles!",
     "level": "Level",
     "score": "Time",
-    "restart": "Restart",
-    "retry": "Try Again",
-    "failed": "Zap! You hit the wall!",
-    "victory": "Champion! You beat all levels!",
+    "restart": "Restart Game",
+    "retry": "Retry",
+    "failed": "Bzzzt! Try Again!",
+    "victory": "You are the Champion!",
     "play_again": "Play Again",
-    "start_here": "Start Here"
+    "start_here": "Start Here",
+    "enter_name": "Enter your name",
+    "submit_score": "Submit Score",
+    "leaderboard": "Leaderboard",
+    "total_time": "Total Time",
+    "your_score": "Your Score",
+    "name": "Name",
+    "tab_game": "Wire Loop Game",
+    "tab_leaderboard": "Leaderboard",
+    "total_deaths": "Total Deaths",
+    "game_start": "Game Start!"
   }
 }

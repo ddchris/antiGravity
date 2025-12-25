@@ -244,10 +244,20 @@
     "level": "關卡",
     "score": "時間",
     "restart": "重新開始",
-    "retry": "再試一次",
-    "failed": "滋！你被電到了！",
-    "victory": "太強了！恭喜全破！",
+    "retry": "重試",
+    "failed": "滋滋滋！失敗了！",
+    "victory": "恭喜通關！",
     "play_again": "再玩一次",
-    "start_here": "從這裡開始"
+    "start_here": "從這裡開始",
+    "enter_name": "輸入你的名字",
+    "submit_score": "送出成績",
+    "leaderboard": "排行榜",
+    "total_time": "總時間",
+    "your_score": "你的成績",
+    "name": "名字",
+    "tab_game": "電流急急棒",
+    "tab_leaderboard": "風雲榜",
+    "total_deaths": "總死亡次數",
+    "game_start": "遊戲開始！"
   }
 }

@@ -242,11 +242,21 @@
     "instructions": "壁や障害物に触れずにマウスをゴールまで導いてください！",
     "level": "レベル",
     "score": "タイム",
-    "restart": "リスタート",
-    "retry": "やり直す",
-    "failed": "ビリビリ！壁に当たりました！",
-    "victory": "おめでとう！全レベルクリア！",
+    "restart": "最初から",
+    "retry": "リトライ",
+    "failed": "ブッブー！失敗！",
+    "victory": "クリアおめでとう！",
     "play_again": "もう一度プレイ",
-    "start_here": "ここからスタート"
+    "start_here": "ここからスタート",
+    "enter_name": "名前を入力",
+    "submit_score": "スコア送信",
+    "leaderboard": "ランキング",
+    "total_time": "合計時間",
+    "your_score": "あなたのスコア",
+    "name": "名前",
+    "tab_game": "イライラ棒",
+    "tab_leaderboard": "ランキング",
+    "total_deaths": "総死亡回数",
+    "game_start": "ゲームスタート！"
   }
 }

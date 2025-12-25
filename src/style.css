@@ -24,8 +24,8 @@ body {
       #fbc2eb 100%);
   background-attachment: fixed;
   background-size: 200% 200%;
-  animation: gradientShift 10s ease infinite;
-  
+  animation: gradientShift 60s ease infinite;
+
   /* Disable Text Selection Globally */
   user-select: none;
   -webkit-user-select: none;
