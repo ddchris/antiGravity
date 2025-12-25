@@ -237,6 +237,7 @@
     "edit": "Edit"
   },
   "relax": {
+    "tab_name": "Relax",
     "title": "Wire Loop",
     "instructions": "Guide your mouse through the path without touching the walls or obstacles!",
     "level": "Level",
