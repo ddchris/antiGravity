@@ -521,7 +521,7 @@ const IconSend = {
       <!-- Messages Area -->
       <div 
         ref="messagesContainer" 
-        class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-900 scroll-smooth"
+        class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-900 scroll-smooth allow-select"
       >
         <div v-if="messages.length === 0" class="text-center text-gray-500 mt-10">
             <p>{{ $t('chat.welcome') || 'Start a conversation...' }}</p>

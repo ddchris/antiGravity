@@ -25,6 +25,10 @@ body {
   background-attachment: fixed;
   background-size: 200% 200%;
   animation: gradientShift 10s ease infinite;
+  
+  /* Disable Text Selection Globally */
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* Dark mode background override */
@@ -35,11 +39,14 @@ body {
       #1a1a1a 100%);
 }
 
-/* Restore cursor for interactive elements */
+/* Restore cursor and selection for interactive elements */
 input,
 textarea,
-[contenteditable] {
+[contenteditable],
+.allow-select {
   cursor: text;
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 a,

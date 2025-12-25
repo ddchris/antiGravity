@@ -3,7 +3,9 @@ import { onMounted, onUnmounted, ref, computed, watch } from 'vue'
 import { useGameStore } from '../stores/gameStore'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const { t } = useI18n()
 const gameStore = useGameStore()
 const { currentLevel, gameState, timer } = storeToRefs(gameStore)
@@ -37,8 +39,8 @@ const levels = [
     {
         path: "M 50 50 L 750 50 L 750 150 L 100 150 L 100 250 L 750 250 L 750 350 L 50 350",
         strokeWidth: 40,
-        start: { x: 20, y: 20, w: 60, h: 60 },
-        end: { x: 20, y: 320, w: 60, h: 60 },
+        start: { x: 20, y: 320, w: 60, h: 60 },
+        end: { x: 20, y: 20, w: 60, h: 60 },
         obstacles: [
             // Row 1 (y=50): Vertical Chopper (Perpendicular)
             { type: 'rect', x: 400, y: 50, w: 15, h: 40, animation: ['moveY'], speed: 3, range: 40 },
@@ -46,6 +48,8 @@ const levels = [
             { type: 'star', x: 300, y: 150, w: 25, h: 25, animation: ['orbit', 'rotate'], orbitRadius: 50, orbitSpeed: 0.05, rotateSpeed: 5 },
             // Row 3 (y=250): Vertical Bouncer (Perpendicular)
             { type: 'circle', x: 600, y: 250, r: 15, animation: ['moveY'], speed: 4, range: 50 },
+            // Row 3.5 (y=300): Horizontal Patroller
+            { type: 'rect', x: 200, y: 300, w: 20, h: 20, animation: ['moveX'], speed: 2, range: 60 },
             // Row 4 (y=350): Wide Orbit (Sweeping)
             { type: 'triangle', x: 400, y: 350, w: 25, h: 25, animation: ['orbit', 'rotate'], orbitRadius: 60, orbitSpeed: -0.06, rotateSpeed: 8 }
         ]
@@ -59,12 +63,18 @@ const levels = [
         obstacles: [
             // Left Loop (Center approx 200, 150)
             { type: 'star', x: 200, y: 150, w: 30, h: 30, animation: ['orbit', 'rotate'], orbitRadius: 60, orbitSpeed: 0.03, rotateSpeed: 4 },
+            { type: 'circle', x: 200, y: 150, r: 10, animation: ['orbit'], orbitRadius: 40, orbitSpeed: -0.05 }, // Added
+            
             // Right Loop (Center approx 500, 350)
             { type: 'circle', x: 500, y: 350, r: 10, animation: ['orbit'], orbitRadius: 50, orbitSpeed: -0.05 },
+            { type: 'star', x: 500, y: 350, w: 25, h: 25, animation: ['orbit', 'rotate'], orbitRadius: 70, orbitSpeed: 0.04, rotateSpeed: -5 }, // Added
+            
             // Center Intersection (350, 250)
             { type: 'rect', x: 350, y: 250, w: 10, h: 80, animation: ['rotate'], rotateSpeed: 1.5 },
+            
             // End Straight (650-750)
-            { type: 'triangle', x: 700, y: 250, w: 25, h: 25, animation: ['moveX', 'rotate'], speed: 2, range: 40, rotateSpeed: 5 }
+            { type: 'triangle', x: 700, y: 250, w: 25, h: 25, animation: ['moveX', 'rotate'], speed: 2, range: 40, rotateSpeed: 5 },
+            { type: 'rect', x: 600, y: 250, w: 15, h: 60, animation: ['moveY'], speed: 1, range: 30 } // Added
         ]
     },
     // Level 4: Ninja Star Alley
@@ -77,32 +87,58 @@ const levels = [
             // Zigzag points: (150,100), (250,400), (350,100)...
             // Orbiting around peaks/troughs to block paths
             { type: 'star', x: 150, y: 250, w: 20, h: 20, animation: ['orbit', 'rotate'], orbitRadius: 80, orbitSpeed: 0.05, rotateSpeed: 8 },
+            { type: 'circle', x: 250, y: 400, r: 10, animation: ['orbit'], orbitRadius: 40, orbitSpeed: -0.06 }, // Added
+            
             { type: 'star', x: 350, y: 250, w: 20, h: 20, animation: ['orbit', 'rotate'], orbitRadius: 80, orbitSpeed: -0.05, rotateSpeed: 8 },
+            { type: 'circle', x: 350, y: 100, r: 10, animation: ['orbit'], orbitRadius: 40, orbitSpeed: 0.06 }, // Added
+
             // Horizontal Chaos in middle
             { type: 'rect', x: 450, y: 250, w: 15, h: 15, animation: ['moveY', 'moveX', 'rotate'], speed: 5, range: 150, rotateSpeed: 5 },
+            { type: 'rect', x: 250, y: 250, w: 15, h: 15, animation: ['moveY'], speed: 3, range: 80 }, // Added
+            
             // End section
             { type: 'triangle', x: 650, y: 250, w: 25, h: 25, animation: ['orbit'], orbitRadius: 70, orbitSpeed: 0.06 },
-            { type: 'circle', x: 550, y: 250, r: 15, animation: ['moveY'], speed: 6, range: 150 }
+            { type: 'circle', x: 550, y: 250, r: 15, animation: ['moveY'], speed: 6, range: 150 },
+            { type: 'triangle', x: 750, y: 100, w: 20, h: 20, animation: ['rotate', 'moveY'], speed: 2, range: 50, rotateSpeed: 10 } // Added
         ]
     },
-    // Level 5: The Melting Pot (Boss Level)
+    // Level 5: The Galaxy Core (Boss Level)
     {
-        // Curved Snake Path (Quadratic curves dipping down)
-        path: "M 50 50 Q 400 120, 750 50 L 750 150 Q 400 220, 50 150 L 50 250 Q 400 320, 750 250 L 750 350 Q 400 420, 50 350 L 50 450 Q 400 520, 750 450",
-        strokeWidth: 40,
-        start: { x: 20, y: 20, w: 60, h: 60 },
-        end: { x: 700, y: 420, w: 60, h: 60 },
+        // "The Infinity Loop" - A compact, high-density challenge
+        // Path: Start Top-Left, Loop Center, Loop Right, End Top-Right
+        path: "M 50 150 C 50 50, 300 50, 400 250 C 500 450, 750 450, 750 250 C 750 50, 500 50, 400 250 C 300 450, 50 450, 50 350",
+        strokeWidth: 45,
+        start: { x: 20, y: 120, w: 60, h: 60 },
+        end: { x: 20, y: 320, w: 60, h: 60 },
         obstacles: [
-            // Wave 1 (y~85): Cycloid Star
-            { type: 'star', x: 400, y: 85, w: 30, h: 30, animation: ['moveX', 'orbit', 'rotate'], speed: 2, range: 250, orbitRadius: 40, orbitSpeed: 0.1, rotateSpeed: 5 },
-            // Wave 2 (y~185): Sine Wave Circle
-            { type: 'circle', x: 400, y: 185, r: 15, animation: ['moveX', 'wave'], speed: 3, range: 250, waveAxis: 'y', waveAmplitude: 30, waveSpeed: 0.2 },
-            // Wave 3 (y~285): The Shredder (Rotating Bar)
-            { type: 'rect', x: 400, y: 285, w: 20, h: 100, animation: ['rotate', 'moveX'], speed: 1.5, range: 150, rotateSpeed: 4 },
-            // Wave 4 (y~385): Fast Triangle Patrol
-            { type: 'triangle', x: 400, y: 385, w: 25, h: 25, animation: ['moveX', 'wave'], speed: 4, range: 300, waveAxis: 'y', waveAmplitude: 20, waveSpeed: 0.1 },
-            // Wave 5 (y~485): Final Guard
-            { type: 'rect', x: 600, y: 460, w: 15, h: 40, animation: ['orbit', 'rotate'], orbitRadius: 50, orbitSpeed: -0.08, rotateSpeed: 6 }
+            // 1. The Gatekeeper (Spinning Bar at entry)
+            // Reduced speed: 2 -> 1.5
+            { type: 'rect', x: 200, y: 150, w: 15, h: 120, animation: ['rotate', 'moveY'], rotateSpeed: 1.5, speed: 1.5, range: 60 },
+            
+            // 2. The Left Loop System (x=200, y=250)
+            // Reduced orbitSpeed: 0.05/0.06 -> 0.03/0.04
+            { type: 'circle', x: 200, y: 250, r: 8, animation: ['orbit'], orbitRadius: 80, orbitSpeed: -0.04 },
+            { type: 'circle', x: 200, y: 250, r: 8, animation: ['orbit'], orbitRadius: 100, orbitSpeed: 0.03 },
+
+            // 3. The Black Hole (Center x=400, y=250)
+            // Reduced speeds: rotate -5 -> -3, orbit 0.08 -> 0.05
+            { type: 'star', x: 400, y: 250, w: 40, h: 40, animation: ['rotate'], rotateSpeed: -3 },
+            { type: 'circle', x: 400, y: 250, r: 10, animation: ['orbit'], orbitRadius: 60, orbitSpeed: 0.05 },
+            { type: 'circle', x: 400, y: 250, r: 10, animation: ['orbit'], orbitRadius: 60, orbitSpeed: 0.05, angle: 3.14 }, 
+            
+            // 4. Comet Shower (Right Loop x=600, y=250)
+            // Reduced speeds significantly
+            { type: 'triangle', x: 600, y: 250, w: 25, h: 25, animation: ['orbit', 'rotate'], orbitRadius: 140, orbitSpeed: -0.03, rotateSpeed: 8 },
+            { type: 'triangle', x: 600, y: 250, w: 25, h: 25, animation: ['orbit', 'rotate'], orbitRadius: 160, orbitSpeed: 0.04, rotateSpeed: 8 },
+            { type: 'triangle', x: 600, y: 250, w: 20, h: 20, animation: ['orbit', 'rotate'], orbitRadius: 120, orbitSpeed: 0.05, rotateSpeed: -6 },
+
+            // 5. Far Right Sentinel (Far Right Turn x=750, y=250)
+            // Reduced speed 1.5 -> 1.2
+            { type: 'rect', x: 750, y: 250, w: 15, h: 50, animation: ['moveY', 'rotate'], speed: 1.2, range: 40, rotateSpeed: 2 },
+
+            // 6. The Crusher (Final Stretch x=200, y=350)
+            // Reduced speed 1.5 -> 1.2
+            { type: 'rect', x: 200, y: 350, w: 15, h: 100, animation: ['moveY', 'rotate'], speed: 1.2, range: 80, rotateSpeed: 1 }
         ]
     }
 ]
@@ -127,54 +163,80 @@ const initObstacles = () => {
     }))
 }
 
+const getStarPoints = (cx, cy, spikes, outerRadius, innerRadius) => {
+    let rot = Math.PI / 2 * 3
+    let x = cx
+    let y = cy
+    const step = Math.PI / spikes
+    let str = ""
+
+    for (let i = 0; i < spikes; i++) {
+        x = cx + Math.cos(rot) * outerRadius
+        y = cy + Math.sin(rot) * outerRadius
+        str += `${x},${y} `
+        rot += step
+
+        x = cx + Math.cos(rot) * innerRadius
+        y = cy + Math.sin(rot) * innerRadius
+        str += `${x},${y} `
+        rot += step
+    }
+    return str
+}
+
+// Animation Abstracter
+const getNextPosition = (obs) => {
+    // Rotation
+    if (obs.animation && obs.animation.includes('rotate')) {
+        obs.rotation = (obs.rotation + (obs.rotateSpeed || obs.speed || 1)) % 360
+    } 
+    
+    // 1. Update Base Position
+    if (obs.animation && obs.animation.includes('moveX')) {
+        obs.baseX += obs.speed * obs.direction
+        if (Math.abs(obs.baseX - obs.x) > obs.range) obs.direction *= -1
+    } 
+    
+    if (obs.animation && obs.animation.includes('moveY')) {
+        obs.baseY += obs.speed * obs.direction
+        if (Math.abs(obs.baseY - obs.y) > obs.range) obs.direction *= -1
+    }
+
+    // 2. Base -> Current
+    let nextX = obs.baseX
+    let nextY = obs.baseY
+
+    // Modifier: Orbit
+    if (obs.animation && obs.animation.includes('orbit')) {
+        obs.angle = (obs.angle || 0) + (obs.orbitSpeed || 0.05)
+        nextX = obs.baseX + obs.orbitRadius * Math.cos(obs.angle)
+        nextY = obs.baseY + obs.orbitRadius * Math.sin(obs.angle)
+    }
+
+    // Modifier: Wave
+    if (obs.animation && obs.animation.includes('wave')) {
+        obs.waveAngle = (obs.waveAngle || 0) + (obs.waveSpeed || 0.1)
+        const offset = Math.sin(obs.waveAngle) * (obs.waveAmplitude || 20)
+        
+        if (obs.waveAxis === 'x') {
+            nextX += offset
+        } else {
+            nextY += offset
+        }
+    }
+    
+    obs.currentX = nextX
+    obs.currentY = nextY
+}
+
 const updateObstacles = () => {
-    const now = Date.now()
     obstacleState.value.forEach(obs => {
-        // Multi-animation support (can move AND rotate)
-        if (obs.animation && obs.animation.includes('rotate')) {
-            obs.rotation = (obs.rotation + (obs.rotateSpeed || obs.speed)) % 360
-        } 
-        
-        // 1. Update Base Position (Patrol/Linear Movement)
-        if (obs.animation && obs.animation.includes('moveX')) {
-            obs.baseX += obs.speed * obs.direction
-            if (Math.abs(obs.baseX - obs.x) > obs.range) obs.direction *= -1
-        } 
-        
-        if (obs.animation && obs.animation.includes('moveY')) {
-            obs.baseY += obs.speed * obs.direction
-            if (Math.abs(obs.baseY - obs.y) > obs.range) obs.direction *= -1
-        }
-
-        // 2. Calculate Render Position (Apply modifiers to Base)
-        obs.currentX = obs.baseX
-        obs.currentY = obs.baseY
-
-        // Modifier: Orbit (overrides position relative to base)
-        if (obs.animation && obs.animation.includes('orbit')) {
-            obs.angle = (obs.angle || 0) + (obs.orbitSpeed || 0.05)
-            obs.currentX = obs.baseX + obs.orbitRadius * Math.cos(obs.angle)
-            obs.currentY = obs.baseY + obs.orbitRadius * Math.sin(obs.angle)
-        }
-
-        // Modifier: Wave (adds sine offset)
-        if (obs.animation && obs.animation.includes('wave')) {
-            obs.waveAngle = (obs.waveAngle || 0) + (obs.waveSpeed || 0.1)
-            const offset = Math.sin(obs.waveAngle) * (obs.waveAmplitude || 20)
-            
-            if (obs.waveAxis === 'x') {
-                obs.currentX += offset
-            } else {
-                obs.currentY += offset // default wave on Y
-            }
-        }
+        getNextPosition(obs)
     })
     
-    // Collision check must happen continuously for moving obstacles even if mouse doesn't move
-    // But checking every frame on mouse pos might be expensive. 
-    // Optimization: Only check if game is playing.
+    // Optimization: Check dynamic obstacles every frame (Math-based)
     if (gameState.value === 'playing') {
-       checkCollision(lastMouseX, lastMouseY)
+       checkObstacleCollision(cursorX.value, cursorY.value)
     }
     
     animationFrame = requestAnimationFrame(updateObstacles)
@@ -185,7 +247,7 @@ watch(currentLevel, () => {
 })
 
 onMounted(() => {
-    gameStore.resetGame() // Reset to Level 1
+    gameStore.resetGame() 
     initObstacles()
     animationFrame = requestAnimationFrame(updateObstacles)
 })
@@ -195,76 +257,76 @@ onUnmounted(() => {
     gameStore.stopTimer()
 })
 
-// Interaction Logic
-let lastMouseX = 0
-let lastMouseY = 0
+// Math-based Collision for Moving Objects (Faster than ElementFromPoint)
+// SVG Ref
+const svgRef = ref(null)
 
-const handleMouseMove = (e) => {
-    if (gameState.value !== 'playing' && gameState.value !== 'idle') return
+// Math-based Collision for Moving Objects (Faster than ElementFromPoint)
+const checkObstacleCollision = (mx, my) => {
+    if (!svgRef.value) return
     
-    const svg = e.currentTarget
-    const rect = svg.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
+    const rect = svgRef.value.getBoundingClientRect()
     
-    lastMouseX = x
-    lastMouseY = y
+    // Convert Screen Coords (mx, my) to SVG Local Coords (lx, ly)
+    // Scale factor is (800 / rect.width) in case of CSS resizing
+    const scaleX = 800 / rect.width
+    const scaleY = 500 / rect.height
     
-    checkCollision(x, y)
-}
+    const lx = (mx - rect.left) * scaleX
+    const ly = (my - rect.top) * scaleY
+    
+    // Check if cursor is roughly inside the game board first (optional but good sanity check)
+    if (lx < 0 || lx > 800 || ly < 0 || ly > 500) return
 
-const checkCollision = (x, y) => {
-    // 1. Check if over Start Zone (to start game)
-    if (gameState.value === 'idle') {
-        const start = currentLevelData.value.start
-        if (x >= start.x && x <= start.x + start.w && y >= start.y && y <= start.y + start.h) {
-            gameStore.startGame()
+    const cursorRadius = 6 // approx radius of cursor ball
+    
+    for (const obs of obstacleState.value) {
+        // Simple bounding box/circle check
+        // For rect:
+        if (obs.type === 'rect') {
+             // Precise Oriented Bounding Box (OBB) Check
+             // 1. Translate point to local rect space (origin at rect center)
+             const cx = obs.currentX + obs.w / 2
+             const cy = obs.currentY + obs.h / 2
+             const dx = lx - cx
+             const dy = ly - cy
+             
+             // 2. Rotate point opposite to rect rotation to align axes
+             const rad = -obs.rotation * (Math.PI / 180)
+             const localX = dx * Math.cos(rad) - dy * Math.sin(rad)
+             const localY = dx * Math.sin(rad) + dy * Math.cos(rad)
+             
+             // 3. AABB Check with Cursor Radius Buffer
+             // Using simpler box check is often enough (localX within w/2, localY within h/2)
+             // Adding cursorRadius to bounds creates a "rounded box" hit area which feels fair
+             if (Math.abs(localX) < (obs.w / 2 + cursorRadius * 0.6) && 
+                 Math.abs(localY) < (obs.h / 2 + cursorRadius * 0.6)) {
+                 gameStore.failGame()
+                 return
+             }
+        } else {
+            // Circle / Star / Triangle -> Use Circle Approx
+            let r = obs.r || (obs.w / 2)
+            const dist = Math.hypot(lx - obs.currentX, ly - obs.currentY)
+            if (dist < (r + cursorRadius * 0.8)) {
+                gameStore.failGame()
+                return
+            }
         }
-        return
     }
-
-    if (gameState.value !== 'playing') return
-
-    // 2. Check overlap with Elements
-    // Since we are in an SVG, simple point detection can be tricky with vanilla JS logic vs visual logic.
-    // The easiest robust way is checking "what element is under point" using document.elementFromPoint
-    // But that requires converting relative SVG coords back to screen coords.
-    
-    // Instead we rely on the event target or use logic. 
-    // Logic is better because elementFromPoint might pick the SVG container if path is thin? 
-    // Actually path with stroke-width is clickable/hoverable.
-    
-    // HOWEVER, "stay inside path" usually means "fail if background".
-    // SVG Path has complex shapes. "isPointInStroke" is canvas API. SVG has `isPointInFill` but mostly for geometry.
-    // Let's use `document.elementFromPoint`! It works great for this.
-    
-    // Get absolute screen coords
-    // (Note: handleMouseMove gives relative, but for elementFromPoint we need clientX/Y)
-    // We need to store clientX/Y from the event or approximate.
-    // Let's assume the collision check inside animation loop uses last valid clientX/Y.
-    // We'll update that in move handler.
 }
 
+// Interaction Logic
 const cursorX = ref(0)
 const cursorY = ref(0)
 const cursorVisible = ref(false)
-let lastClientX = 0
-let lastClientY = 0
 
 const handleScreenMouseMove = (e) => {
-    // Update custom cursor pos
     cursorX.value = e.clientX
     cursorY.value = e.clientY
     
-    // Check bounds to show/hide cursor inside game area? 
-    // Actually we want it everywhere if it replaces system cursor, or just in game.
-    // Let's keep it simple: Show custom cursor when hovering the SVG container.
-    
-    lastClientX = e.clientX
-    lastClientY = e.clientY
-    
     if (gameState.value === 'idle') {
-        const el = document.elementFromPoint(lastClientX, lastClientY)
+        const el = document.elementFromPoint(e.clientX, e.clientY)
         if (el && el.classList.contains('start-zone')) {
              gameStore.startGame()
         }
@@ -272,19 +334,20 @@ const handleScreenMouseMove = (e) => {
     }
     
     if (gameState.value === 'playing') {
-        const el = document.elementFromPoint(lastClientX, lastClientY)
-        if (!el) return
+        // Static Environment Check (Walls/Path) - Only on Move
+        const el = document.elementFromPoint(e.clientX, e.clientY)
+        if (!el) return // Off screen?
         
         if (el.classList.contains('end-zone')) {
             gameStore.completeLevel()
             return
         }
         
-        if (el.classList.contains('obstacle')) {
-             gameStore.failGame()
-             return
-        }
-        
+        // Safety Check: Must be on Safe Zone or Start Zone
+        // If we hit background (SVG element?) or anything NOT safe/start/end
+        // Note: elementFromPoint returns the top-most. 
+        // If custom cursor is pointer-events-none, we hit the SVG contents.
+        // Safe Zone path is on top of electric bg?
         if (!el.classList.contains('safe-zone') && !el.classList.contains('start-zone')) {
              gameStore.failGame()
         }
@@ -367,15 +430,23 @@ const handleMouseLeave = () => {
     </div>
 
     <!-- Game Board -->
-    <div class="relative bg-gray-900 border-4 border-gray-700 shadow-2xl rounded-lg overflow-hidden">
+    <div 
+        class="relative bg-gray-900 border-4 border-gray-700 shadow-2xl rounded-lg overflow-hidden"
+        :style="{ 
+            cursor: gameState !== 'idle' ? 'none' : 'default',
+            userSelect: 'none',
+            WebkitUserSelect: 'none'
+        }"
+    >
         <svg 
+            ref="svgRef"
             :width="width" 
             :height="height" 
             @mousemove="handleScreenMouseMove"
             @mouseenter="handleMouseEnter"
             @mouseleave="handleMouseLeave"
             class="block touch-none"
-            :class="{ 'cursor-none': gameState !== 'idle' }"
+            :style="{ cursor: gameState !== 'idle' ? 'none' : 'default' }"
         >
             <!-- Background -->
             
@@ -383,7 +454,7 @@ const handleMouseLeave = () => {
             <path 
                 :d="currentLevelData.path" 
                 fill="none" 
-                stroke="#fde047" 
+                stroke="#86efac" 
                 :stroke-width="currentLevelData.strokeWidth + 15"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -448,21 +519,9 @@ const handleMouseLeave = () => {
                     class="obstacle fill-orange-500 stroke-orange-300"
                 />
                 <!-- New Star Obstacle -->
-                <!-- Simple 5-point star points approximation relative to center -->
                 <polygon
                     v-if="obs.type === 'star'"
-                    :points="`
-                        ${obs.currentX},${obs.currentY - obs.h/2} 
-                        ${obs.currentX + obs.w * 0.2},${obs.currentY - obs.h * 0.1} 
-                        ${obs.currentX + obs.w/2},${obs.currentY - obs.h * 0.1} 
-                        ${obs.currentX + obs.w * 0.25},${obs.currentY + obs.h * 0.15} 
-                        ${obs.currentX + obs.w * 0.35},${obs.currentY + obs.h/2} 
-                        ${obs.currentX},${obs.currentY + obs.h * 0.25} 
-                        ${obs.currentX - obs.w * 0.35},${obs.currentY + obs.h/2} 
-                        ${obs.currentX - obs.w * 0.25},${obs.currentY + obs.h * 0.15} 
-                        ${obs.currentX - obs.w/2},${obs.currentY - obs.h * 0.1} 
-                        ${obs.currentX - obs.w * 0.2},${obs.currentY - obs.h * 0.1}
-                    `"
+                    :points="getStarPoints(obs.currentX, obs.currentY, 5, obs.w/2, obs.w*0.2)"
                     :transform="`rotate(${obs.rotation}, ${obs.currentX}, ${obs.currentY})`"
                     class="obstacle fill-orange-500 stroke-orange-300"
                 />
@@ -524,23 +583,23 @@ const handleMouseLeave = () => {
 
 /* Electric Effect */
 .electric-glow {
-    /* Stronger base glow */
-    filter: drop-shadow(0 0 10px #fde047) drop-shadow(0 0 20px #eab308);
+    /* Stronger base glow - Grass Green */
+    filter: drop-shadow(0 0 10px #86efac) drop-shadow(0 0 20px #4ade80);
     /* Slower, smoother animation for less flicker */
     animation: pulse-electric 1.5s ease-in-out infinite alternate;
 }
 
 @keyframes pulse-electric {
     0% {
-        stroke: #fde047; /* Yellow */
+        stroke: #86efac; /* Green 300 */
         /* Strong glow */
-        filter: drop-shadow(0 0 4px #fde047) drop-shadow(0 0 10px #eab308);
+        filter: drop-shadow(0 0 4px #86efac) drop-shadow(0 0 10px #4ade80);
         opacity: 0.85;
     }
     100% {
-        stroke: #fef08a; /* Lighter Yellow */
+        stroke: #bbf7d0; /* Green 200 */
         /* Intense glow */
-        filter: drop-shadow(0 0 8px #fde047) drop-shadow(0 0 15px #eab308);
+        filter: drop-shadow(0 0 8px #86efac) drop-shadow(0 0 15px #22c55e);
         opacity: 1;
     }
 }
