@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import request from '@/utils/request'
+import { mockProducts } from '@/mock/products'
 
 export const useProductStore = defineStore('products', () => {
   const products = ref([])
@@ -10,19 +10,19 @@ export const useProductStore = defineStore('products', () => {
     // if (products.value.length > 0) return
 
     try {
-      const response = await request.get('https://mocki.io/v1/4165ca5d-9f73-40db-be80-a0a2c4f9dfea')
+      // 模擬 API 請求延遲
+      await new Promise(resolve => setTimeout(resolve, 300))
       
-      // API 直接回傳 [...] (物件陣列 Array)
-      const productList = response
+      // 使用本地模擬數據取代失效的 mocki.io API
+      const productList = mockProducts
 
       if (Array.isArray(productList)) {
         products.value = productList
       } else {
-        console.error('Invalid product data format:', response)
+        console.error('Invalid product data format')
       }
     } catch (error) {
       console.error('Failed to fetch products:', error)
-      // 錯誤處理已由 request.js 的 interceptor 管理
     }
   }
 

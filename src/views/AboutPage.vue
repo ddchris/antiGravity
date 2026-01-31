@@ -49,7 +49,8 @@ const skills = {
   '程式語言與框架': [
     'JavaScript', 'TypeScript', 'HTML', 'CSS', 'Sass',
     'Vue2', 'Vue3 (Vuex / Pinia、SPA、雙向綁定、Virtual DOM、元件封裝與複用)',
-    'Astro (SSR、CSR)'
+    'Astro (SSR、CSR)',
+    'Node.js (Express, Knex)', 'MySQL'
   ],
   'UI 元件與前端開發': [
     'Element UI / Element Plus / Vant',

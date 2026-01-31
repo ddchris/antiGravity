@@ -117,7 +117,7 @@ const levels = [
             { type: 'circle', x: 350, y: 100, r: 10, animation: ['orbit'], orbitRadius: 40, orbitSpeed: 0.06 }, // Added
 
             // Horizontal Chaos in middle
-            { type: 'rect', x: 450, y: 250, w: 15, h: 15, animation: ['moveY', 'moveX', 'rotate'], speed: 5, range: 150, rotateSpeed: 5 },
+            // Removed chaotic rect as per user request
             { type: 'rect', x: 250, y: 250, w: 15, h: 15, animation: ['moveY'], speed: 3, range: 80 }, // Added
             
             // End section
@@ -407,7 +407,7 @@ const handleMouseLeave = () => {
     
     <!-- Custom Cursor -->
     <div 
-        v-if="cursorVisible && gameState !== 'idle'"
+        v-if="cursorVisible && gameState !== 'idle' && currentView === 'game'"
         class="fixed pointer-events-none z-50 flex items-center justify-center"
         :style="{ left: cursorX + 'px', top: cursorY + 'px', transform: 'translate(-50%, -50%)' }"
     >
